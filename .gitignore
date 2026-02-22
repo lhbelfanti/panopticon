@@ -1,5 +1,13 @@
+# MacOS
 .DS_Store
+
+# JetBrains
+.idea/
+
+# Env
 .env
+
+# Dependencies
 /node_modules/
 
 # React Router
