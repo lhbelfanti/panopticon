@@ -1,5 +1,5 @@
 <p align="center">
-    <img alt="Panoptic - Adverse human behaviors detection system" src="media/panoptic-logo.png" width="300">
+    <img alt="Panoptic - Adverse human behaviors detection system" src="media/panopticon-logo.png" width="300">
 </p>
 <p align="center">Adverse human behaviors detection system using models based on Natural Language Processing, Machine Learning, and Transformers<p>
 <p align="center">
@@ -9,7 +9,7 @@
 
 ---
 
-# Panoptic
+# Panopticon
 
 Adverse human behaviors detection system using models based on Natural Language Processing, Machine Learning, and Transformers.
 
