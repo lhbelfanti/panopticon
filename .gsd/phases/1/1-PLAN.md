@@ -8,11 +8,13 @@ wave: 1
 
 ## Objective
 Establish the application root layout and the global navigation Sidebar, including the mock API for fetching the user's projects.
+For the whole project, use as reference the mocks from project 8383642106793118502 of the Stitch MCP Server.
 
 ## Context
 - .gsd/SPEC.md
 - .agent/skills/panopticon-guidelines/TASKS.md
 - .agent/skills/panopticon-guidelines/CODE_CONVENTIONS.md
+- MCP Server: https://stitch.googleapis.com/mcp (already configured)
 
 ## Tasks
 
