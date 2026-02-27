@@ -24,20 +24,40 @@ export const links: Route.LinksFunction = () => [
 ];
 
 import { useTranslation } from "react-i18next";
+import { useLoaderData } from "react-router";
+import { Sidebar } from "~/components/Sidebar";
+import { getProjects } from "~/services/api/projects/index.server";
+
+export async function loader() {
+  const projects = await getProjects();
+  return { projects };
+}
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const { i18n } = useTranslation();
 
+  // Conditionally hook into useLoaderData in case of early Error Boundaries rendering the Layout before loader runs
+  let projects = [];
+  try {
+    const data = useLoaderData<typeof loader>();
+    projects = data?.projects || [];
+  } catch (e) {
+    // ignore
+  }
+
   return (
-    <html lang={i18n.language ?? "en"}>
+    <html lang={i18n.language ?? "en"} className="dark">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <Links />
       </head>
-      <body className="min-h-screen bg-gray-50 text-gray-900">
-        {children}
+      <body className="min-h-screen bg-smoky-black text-light-gray font-sans flex">
+        <Sidebar projects={projects} />
+        <main className="flex-1 flex flex-col h-screen overflow-y-auto relative bg-smoky-black isolate">
+          {children}
+        </main>
         <ScrollRestoration />
         <Scripts />
       </body>
