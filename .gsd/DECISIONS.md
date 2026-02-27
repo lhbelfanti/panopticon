@@ -16,3 +16,15 @@
 
 ### Constraints
 - An artificial delay of 500ms - 1s will be introduced in all mock API calls to ensure loading states (spinners/skeletons) are built robustly and properly handle async latency.
+
+## Phase 2 Decisions
+
+**Date:** 2026-02-27
+
+### Scope
+- Form validation will remain simple and use native HTML5 validation and React state without extra libraries.
+- The Project View table pagination will be handled by the backend mock service, returning sliced arrays based on a `?page=X` query param, rather than doing it all client-side.
+
+### Approach
+- Chose: Custom Build (Option B) for the Project Entries table.
+- Reason: Provides maximum flexibility to tailor the table exactly to the design and requirements without the overhead or styling conflicts of a heavy library like TanStack Table.
