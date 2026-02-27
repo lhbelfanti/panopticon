@@ -24,9 +24,10 @@ export const links: Route.LinksFunction = () => [
 ];
 
 import { useTranslation } from "react-i18next";
-import { useLoaderData } from "react-router";
+import { useLoaderData, useLocation } from "react-router";
 import { Sidebar } from "~/components/Sidebar";
 import { getProjects } from "~/services/api/projects/index.server";
+import type { Project } from "~/services/api/projects/types";
 
 export async function loader() {
   const projects = await getProjects();
@@ -35,9 +36,11 @@ export async function loader() {
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const { i18n } = useTranslation();
+  const location = useLocation();
+  const isLoginPage = location.pathname.startsWith('/login');
 
   // Conditionally hook into useLoaderData in case of early Error Boundaries rendering the Layout before loader runs
-  let projects = [];
+  let projects: Project[] = [];
   try {
     const data = useLoaderData<typeof loader>();
     projects = data?.projects || [];
@@ -54,7 +57,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body className="min-h-screen bg-smoky-black text-light-gray font-sans flex">
-        <Sidebar projects={projects} />
+        {!isLoginPage && <Sidebar projects={projects} />}
         <main className="flex-1 flex flex-col h-screen overflow-y-auto relative bg-smoky-black isolate">
           {children}
         </main>
