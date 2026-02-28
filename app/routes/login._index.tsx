@@ -29,7 +29,7 @@ const Login = () => {
     const actionData = useActionData<typeof action>();
     const navigation = useNavigation();
     const isSubmitting = navigation.state === "submitting";
-    const [view, setView] = useState<"login" | "forgot">("login");
+    const [view, setView] = useState<"login" | "forgot" | "register">("login");
     const { i18n } = useTranslation();
 
     const toggleLanguage = () => {
@@ -53,12 +53,14 @@ const Login = () => {
                 <div className="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-primary rounded-full blur-[150px] opacity-10" />
 
                 <div className="z-10 flex flex-col items-center">
-                    <div className="flex items-center justify-center relative mb-8 w-full max-w-sm">
-                        <h1 className="text-5xl font-black text-primary tracking-tighter absolute w-full text-center opacity-20 whitespace-nowrap">PANOPTICON</h1>
-                        <img src="/panopticon-logo-no-text.png" alt="Panopticon Logo" className="w-48 h-auto drop-shadow-2xl z-10" />
+                    <div className="flex items-center justify-center relative mb-12 w-full max-w-lg">
+                        <h1 className="text-7xl lg:text-8xl font-black text-primary tracking-[0.3em] lg:tracking-[0.4em] absolute w-full text-center opacity-20 whitespace-nowrap pl-6">PANOPTICON</h1>
+                        <img src="/panopticon-logo-no-text.png" alt="Panopticon Logo" className="w-64 h-auto drop-shadow-2xl z-10" />
                     </div>
-                    <h2 className="text-3xl font-bold text-white-1 mb-4 text-center px-4 leading-tight">Plataforma de análisis de comportamientos humanos adversos</h2>
-                    <p className="text-light-gray-70 text-center max-w-md px-8">
+                    <h2 className="text-3xl font-bold text-white-1 mb-4 text-center px-4 leading-tight">
+                        Plataforma de análisis <br /> de comportamientos humanos adversos
+                    </h2>
+                    <p className="text-light-gray-70 text-center max-w-md px-8 mt-2">
                         Ecosistema avanzado para la detección temprana, investigación y diagnóstico de patrones de comportamiento.
                     </p>
                 </div>
@@ -69,9 +71,9 @@ const Login = () => {
                 <div className="w-full max-w-md bg-surface-dark/90 backdrop-blur-xl p-10 rounded-2xl border border-white/5 shadow-2xl transition-all duration-300">
 
                     <div className="flex flex-col items-center mb-8 lg:hidden">
-                        <div className="flex items-center justify-center relative mb-4">
-                            <h1 className="text-4xl font-black text-primary tracking-tighter absolute left-6 opacity-20">PANOPTICON</h1>
-                            <img src="/panopticon-logo-no-text.png" alt="Panopticon Logo" className="w-24 h-auto z-10 drop-shadow-2xl" />
+                        <div className="flex items-center justify-center relative mb-6 w-full max-w-xs">
+                            <h1 className="text-5xl font-black text-primary tracking-[0.2em] absolute w-full text-center opacity-20 pl-4 whitespace-nowrap">PANOPTICON</h1>
+                            <img src="/panopticon-logo-no-text.png" alt="Panopticon Logo" className="w-32 h-auto z-10 drop-shadow-2xl" />
                         </div>
                         <h2 className="text-xl font-bold text-white-1 text-center">Portal de Investigación</h2>
                     </div>
@@ -157,11 +159,11 @@ const Login = () => {
                                 </button>
 
                                 <p className="text-center text-sm text-light-gray-70 mt-4">
-                                    ¿No tiene una cuenta? <a href="#" className="text-primary hover:text-primary/70 font-medium tracking-wide">Regístrese ahora</a>
+                                    ¿No tiene una cuenta? <button type="button" onClick={() => setView("register")} className="text-primary hover:text-primary/70 font-medium tracking-wide bg-transparent border-none p-0 cursor-pointer">Regístrese ahora</button>
                                 </p>
                             </Form>
                         </>
-                    ) : (
+                    ) : view === "forgot" ? (
                         <div className="flex flex-col animate-in fade-in slide-in-from-right-4 duration-300">
                             <h1 className="text-3xl font-bold text-white-1 mb-2">Recuperar Contraseña</h1>
                             <p className="text-light-gray-70 mb-8">
@@ -195,6 +197,52 @@ const Login = () => {
                                     >
                                         Volver al inicio
                                     </button>
+                                </div>
+                            </form>
+                        </div>
+                    ) : (
+                        <div className="flex flex-col animate-in fade-in slide-in-from-right-4 duration-300">
+                            <h1 className="text-3xl font-bold text-white-1 mb-2">Crear Cuenta</h1>
+                            <p className="text-light-gray-70 mb-8">
+                                Complete el formulario para solicitar acceso
+                            </p>
+                            <form className="flex flex-col gap-6" onSubmit={(e) => { e.preventDefault(); setView("login"); }}>
+                                <div className="flex flex-col gap-2">
+                                    <label className="text-sm font-semibold text-light-gray tracking-wide" htmlFor="reg-name">
+                                        Nombre Completo
+                                    </label>
+                                    <input
+                                        type="text"
+                                        name="reg-name"
+                                        id="reg-name"
+                                        required
+                                        className="w-full bg-sidebar-dark border border-white/10 rounded-lg p-3.5 text-white-1 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all placeholder:opacity-30"
+                                        placeholder="Dra. Jane Doe"
+                                    />
+                                </div>
+                                <div className="flex flex-col gap-2">
+                                    <label className="text-sm font-semibold text-light-gray tracking-wide" htmlFor="reg-email">
+                                        Correo Electrónico Institucional
+                                    </label>
+                                    <input
+                                        type="email"
+                                        name="reg-email"
+                                        id="reg-email"
+                                        required
+                                        className="w-full bg-sidebar-dark border border-white/10 rounded-lg p-3.5 text-white-1 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all placeholder:opacity-30"
+                                        placeholder="usuario@investigacion.org"
+                                    />
+                                </div>
+                                <div className="flex flex-col gap-3 mt-2">
+                                    <button
+                                        type="submit"
+                                        className="w-full bg-primary hover:bg-primary/90 text-background-dark font-bold py-3.5 px-4 rounded-lg transition-transform hover:-translate-y-0.5 shadow-lg shadow-primary/20 flex items-center justify-center gap-2"
+                                    >
+                                        Solicitar Registro
+                                    </button>
+                                    <p className="text-center text-sm text-light-gray-70 mt-2">
+                                        ¿Ya tiene una cuenta? <button type="button" onClick={() => setView("login")} className="text-primary hover:text-primary/70 font-medium tracking-wide bg-transparent border-none p-0 cursor-pointer">Inicie sesión aquí</button>
+                                    </p>
                                 </div>
                             </form>
                         </div>
