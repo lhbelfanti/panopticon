@@ -1,4 +1,38 @@
 {
+    "login": {
+        "description": "Adverse Human Behaviors analysis platform",
+        "signIn": "Log In",
+        "subtitle": "Enter your credentials",
+        "username": "Username",
+        "email": "Email address",
+        "password": "Password",
+        "forgotPassword": "Forgot your password?",
+        "loginButton": "Access platform",
+        "loginButtonLoading": "Verifying...",
+        "noAccount": "Don't have an account?",
+        "registerNow": "Register now",
+        "recoverPassword": {
+            "title": "Recover password",
+            "subtitle": "Enter your email to receive a recovery link.",
+            "sendLink": "Send link",
+            "backToLogin": "Back to start"
+        },
+        "register": {
+            "title": "Create account",
+            "subtitle": "Complete the form to request access",
+            "firstName": "First name",
+            "lastName": "Last name",
+            "suggestedUsername": "Suggested username",
+            "email": "Institutional email",
+            "requestAccess": "Request access",
+            "haveAccount": "Already have an account?",
+            "loginHere": "Log in here"
+        },
+        "errors": {
+            "usernameRequired": "Username is required",
+            "loginFailed": "Login failed, please try again."
+        }
+    },
     "sidebar": {
         "home": "Home",
         "quickActions": "Quick Actions",

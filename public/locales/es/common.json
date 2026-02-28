@@ -1,4 +1,38 @@
 {
+    "login": {
+        "description": "Plataforma para el análisis de Comportamientos Humanos Adversos",
+        "signIn": "Iniciar sesión",
+        "subtitle": "Ingrese sus credenciales",
+        "username": "Nombre de usuario",
+        "email": "Correo electrónico",
+        "password": "Contraseña",
+        "forgotPassword": "¿Olvidó su contraseña?",
+        "loginButton": "Acceder a la plataforma",
+        "loginButtonLoading": "Verificando...",
+        "noAccount": "¿No tiene una cuenta?",
+        "registerNow": "Regístrese ahora",
+        "recoverPassword": {
+            "title": "Recuperar contraseña",
+            "subtitle": "Ingrese su correo electrónico para recibir un enlace de recuperación.",
+            "sendLink": "Enviar enlace",
+            "backToLogin": "Volver al inicio"
+        },
+        "register": {
+            "title": "Crear cuenta",
+            "subtitle": "Complete el formulario para solicitar acceso",
+            "firstName": "Nombre",
+            "lastName": "Apellido",
+            "suggestedUsername": "Nombre de usuario sugerido",
+            "email": "Correo electrónico",
+            "requestAccess": "Solicitar Registro",
+            "haveAccount": "¿Ya tiene una cuenta?",
+            "loginHere": "Inicie sesión aquí"
+        },
+        "errors": {
+            "usernameRequired": "El nombre de usuario es obligatorio",
+            "loginFailed": "Fallo al iniciar sesión, intente nuevamente."
+        }
+    },
     "sidebar": {
         "home": "Inicio",
         "quickActions": "Acciones Rápidas",

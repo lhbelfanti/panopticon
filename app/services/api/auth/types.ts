@@ -4,7 +4,7 @@ export interface SessionData {
 }
 
 export interface LogInRequestBodyDTO {
-    email: string;
+    username: string;
     password?: string; // Optional for mocks
 }
 

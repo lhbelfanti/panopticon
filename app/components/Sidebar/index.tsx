@@ -11,11 +11,11 @@ import {
     Folder,
     LogOut,
     UserCircle,
-    LibraryBig,
-    Globe
+    LibraryBig
 } from 'lucide-react';
 import type { SidebarProps } from './types';
 import { NavItem } from './NavItem';
+import { Logo } from '~/components/Logo';
 
 const cn = (...inputs: ClassValue[]) => {
     return twMerge(clsx(inputs));
@@ -28,10 +28,6 @@ export const Sidebar = (props: SidebarProps) => {
     const { t, i18n } = useTranslation();
 
     const toggleSidebar = () => setCollapsed(!collapsed);
-
-    const toggleLanguage = () => {
-        i18n.changeLanguage(i18n.language === "es" ? "en" : "es");
-    };
 
     return (
         <>
@@ -52,31 +48,12 @@ export const Sidebar = (props: SidebarProps) => {
 
                 {/* Header / Logo Component */}
                 <div className="flex flex-col items-center justify-center p-6 pt-14 border-b border-white/5 min-h-[10rem] relative overflow-hidden">
-                    <div className={cn("flex flex-col items-center justify-center w-full transition-all duration-300 relative")}>
-                        {/* Background Text (Behind Logo) */}
-                        {!collapsed && (
-                            <span className="absolute top-1/2 -translate-y-1/2 text-primary/10 font-black tracking-widest text-4xl select-none pointer-events-none drop-shadow-sm">
-                                PANOPTICON
-                            </span>
-                        )}
-                        <img src="/panopticon-logo-no-text.png" alt="Logo" className={cn("relative z-10 h-auto drop-shadow-2xl transition-all duration-300", collapsed ? "w-10" : "w-30")} />
-                        {!collapsed && (
-                            <span className="text-primary font-bold tracking-[0.2em] text-sm mt-3 relative z-10 drop-shadow-md">
-                                PANOPTICON
-                            </span>
-                        )}
-                    </div>
-                    {/* Language Toggle */}
-                    {!collapsed && (
-                        <button
-                            onClick={toggleLanguage}
-                            className="absolute top-4 right-4 z-20 flex items-center gap-1.5 text-[10px] font-semibold text-light-gray-70 hover:text-primary bg-background-dark px-2 py-1 rounded-md border border-white/10 transition-colors shadow-sm"
-                            title={t("sidebar.language")}
-                        >
-                            <Globe size={12} />
-                            {i18n.language === "es" ? "EN" : "ES"}
-                        </button>
-                    )}
+                    <Logo
+                        collapsed={collapsed}
+                        logoClassName={collapsed ? "w-10" : "w-30"}
+                        backgroundClassName="text-3xl top-1/2 -translate-y-1/2"
+                        textClassName="text-sm mt-3"
+                    />
                 </div>
 
                 {/* Navigation Links */}

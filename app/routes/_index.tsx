@@ -8,7 +8,7 @@ import { RecentActivity } from "~/components/Dashboard/RecentActivity";
 
 export const meta: MetaFunction = () => {
     return [
-        { title: "Panopticon - Dashboard" },
+        { title: "Panopticon" },
         { name: "description", content: "Adverse Human Behaviour Analysis Platform" },
     ];
 };

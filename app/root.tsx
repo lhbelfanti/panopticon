@@ -27,6 +27,7 @@ export const links: Route.LinksFunction = () => [
 import { useTranslation } from "react-i18next";
 import { useLoaderData, useLocation } from "react-router";
 import { Sidebar } from "~/components/Sidebar";
+import { LanguageSwitcher } from "~/components/LanguageSwitcher";
 import { getProjects } from "~/services/api/projects/index.server";
 import type { Project } from "~/services/api/projects/types";
 
@@ -58,11 +59,12 @@ export const Layout = (props: { children: React.ReactNode }) => {
         <Meta />
         <Links />
       </head>
-      <body className="min-h-screen bg-background-dark text-light-gray font-sans flex">
+      <body className="min-h-screen bg-background-dark text-light-gray font-sans flex relative">
         {!isLoginPage && <Sidebar projects={projects} />}
         <main className="flex-1 flex flex-col h-screen overflow-y-auto relative bg-background-dark isolate">
           {children}
         </main>
+        <LanguageSwitcher />
         <ScrollRestoration />
         <Scripts />
       </body>
