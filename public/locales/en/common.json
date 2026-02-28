@@ -1,4 +1,56 @@
 {
-    "greeting": "Hello World",
-    "welcome": "Welcome to React Router v7 Boilerplate"
+    "sidebar": {
+        "home": "Home",
+        "quickActions": "Quick Actions",
+        "newEntry": "New Entry (Prediction)",
+        "newProject": "New Project",
+        "yourProjects": "Your Projects",
+        "noActiveProjects": "No active projects",
+        "admin": "Administrator",
+        "thesis": "Degree Thesis",
+        "logout": "Log out"
+    },
+    "dashboard": {
+        "welcome": "Welcome! What do you want to do today?",
+        "subtitle": "Advanced text analysis platform",
+        "newProject": {
+            "title": "New Project",
+            "desc": "Set up a new analysis environment, import datasets and define your text mining goals.",
+            "action": "Create now \u2192"
+        },
+        "newPrediction": {
+            "title": "New Prediction",
+            "desc": "Execute AI models on texts in real-time to predict sentiments, categories or entities.",
+            "action": "Add new \u2192"
+        },
+        "summary": {
+            "title": "Activity summary",
+            "tweetsAnalyzed": "Analyzed tweets",
+            "activeProjects": "Active projects",
+            "averagePrecision": "Average precision",
+            "remainingTokens": "Remaining tokens",
+            "unlimited": "Unlimited"
+        },
+        "recentActivity": {
+            "title": "Recent activity",
+            "noActivity": "No recent activity."
+        }
+    },
+    "relativeTime": {
+        "created": "created {{time}}",
+        "modified": "modified {{time}}",
+        "deleted": "deleted {{time}}",
+        "secondsAgo": "a few seconds ago",
+        "minutesAgo": "{{count}} minute ago",
+        "minutesAgo_plural": "{{count}} minutes ago",
+        "hoursAgo": "{{count}} hour ago",
+        "hoursAgo_plural": "{{count}} hours ago",
+        "daysAgo": "{{count}} day ago",
+        "daysAgo_plural": "{{count}} days ago"
+    },
+    "status": {
+        "done": "done",
+        "processing": "processing",
+        "created": "created"
+    }
 }

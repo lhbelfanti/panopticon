@@ -1,4 +1,56 @@
 {
-    "greeting": "Hola Mundo",
-    "welcome": "Bienvenido a React Router v7 Boilerplate"
+    "sidebar": {
+        "home": "Inicio",
+        "quickActions": "Acciones Rápidas",
+        "newEntry": "Nueva Entrada (Predicción)",
+        "newProject": "Nuevo Proyecto",
+        "yourProjects": "Tus Proyectos",
+        "noActiveProjects": "No hay proyectos activos",
+        "admin": "Administrador",
+        "thesis": "Tesis de Grado",
+        "logout": "Cerrar sesión"
+    },
+    "dashboard": {
+        "welcome": "¡Bienvenido! ¿Qué deseas hacer hoy?",
+        "subtitle": "Plataforma de análisis de texto avanzada",
+        "newProject": {
+            "title": "Nuevo Proyecto",
+            "desc": "Configura un nuevo entorno de análisis, importa datasets y define tus objetivos de minería de texto.",
+            "action": "Crear ahora \u2192"
+        },
+        "newPrediction": {
+            "title": "Nueva Predicción",
+            "desc": "Ejecuta modelos de IA sobre textos en tiempo real para predecir sentimientos, categorías o entidades.",
+            "action": "Agregar nueva \u2192"
+        },
+        "summary": {
+            "title": "Resumen de actividad",
+            "tweetsAnalyzed": "Tweets analizados",
+            "activeProjects": "Proyectos activos",
+            "averagePrecision": "Precisión promedio",
+            "remainingTokens": "Tokens restantes",
+            "unlimited": "Ilimitado"
+        },
+        "recentActivity": {
+            "title": "Actividad reciente",
+            "noActivity": "No hay actividad reciente."
+        }
+    },
+    "relativeTime": {
+        "created": "creado {{time}}",
+        "modified": "modificado {{time}}",
+        "deleted": "eliminado {{time}}",
+        "secondsAgo": "hace unos segundos",
+        "minutesAgo": "hace {{count}} minuto",
+        "minutesAgo_plural": "hace {{count}} minutos",
+        "hoursAgo": "hace {{count}} hora",
+        "hoursAgo_plural": "hace {{count}} horas",
+        "daysAgo": "hace {{count}} día",
+        "daysAgo_plural": "hace {{count}} días"
+    },
+    "status": {
+        "done": "listo",
+        "processing": "procesando",
+        "created": "creado"
+    }
 }

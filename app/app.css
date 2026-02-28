@@ -15,6 +15,7 @@
   --color-white-2: hsl(0, 0%, 98%);
   --color-light-gray: hsl(0, 0%, 84%);
   --color-light-gray-70: hsla(0, 0%, 84%, 0.7);
+  --color-bittersweet-shimmer: hsl(0, 43%, 51%);
 }
 
 html,
