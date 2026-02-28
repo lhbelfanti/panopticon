@@ -47,9 +47,9 @@ Load for context:
   <action>
     Copy `media/panopticon-logo.png` and `media/panopticon-logo-no-text.png` into the `public/` directory so the frontend can serve them as `/panopticon-logo.png` and `/panopticon-logo-no-text.png`.
     Review Stitch screen `7b8c38ea93e548808882644ebc33511b` (Login / Registration).
-    Refactor `app/routes/login._index.tsx` using Tailwind to closely mimic the design. Pay special attention to EXACT color usage specified in the mockups. 
+    Refactor `app/routes/login._index.tsx` using Tailwind to closely mimic the design iteratively, applying the exact color mapping.
     Incorporate the correct logo: Use `<img src="/panopticon-logo.png" />` where the full logo is required, and use `<img src="/panopticon-logo-no-text.png" />` if space is constrained.
-    AVOID: Blindly pasting the Stitch HTML. Use our own clean React elements. Altering the server `login` logic must be avoided.
+    AVOID: Altering the server `login` logic must be avoided. Focus strictly on desktop sizes (no mobile breakpoints).
   </action>
   <verify>Route `login._index.tsx` mounts without compiling errors and matches mockup layout.</verify>
   <done>Login visual structure strongly resembles the Stitch mockup.</done>
@@ -63,10 +63,11 @@ Load for context:
   </files>
   <action>
     Review Stitch screen `b8e05ffb147d4d079904def35ddb5956` (Welcome Home Dashboard).
-    Refactor the Sidebar and Dashboard grid to visually match the layouts and element positioning presented in the design.
-    Pay strict attention to how the project color palette is applied across the mockups.
-    Incorporate the correct logos in the Sidebar: `/panopticon-logo.png` for expanded view, `/panopticon-logo-no-text.png` for collapsed views (where text doesn't fit).
-    AVOID: Literal HTML copy-pasting. Re-use existing data-binding loaders and build it idiomatically in React Router.
+    Refactor `_index.tsx` iteratively to match the layouts. Implement the Progress Bar for the "Remaining Tokens" Activity Summary widget. 
+    Refactor `Sidebar/index.tsx` iteratively. Include: A "Home" section (links to Welcome), "Quick Actions", and "Your Projects". Add hierarchical icons to these sections.
+    Include the collapse button at the top (right or behind logo) and the User Info + Logout button at the bottom.
+    Incorporate the correct logos in the Sidebar: `/panopticon-logo.png` for expanded view, `/panopticon-logo-no-text.png` for collapsed views.
+    AVOID: Re-building from scratch. Modify the existing Tailwind layouts. Do not build UI for mobile viewports, only desktop. Exclude non-MVP Sidebar items (e.g. Knowledge Base) seen in the mocks.
   </action>
   <verify>Navigation and dashboard routes match the visual layout and color mapping of the mockups.</verify>
   <done>Dashboard tiles and sidebar visually capture the MCP design payload correctly.</done>
