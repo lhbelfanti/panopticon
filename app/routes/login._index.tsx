@@ -42,9 +42,9 @@ const Login = () => {
             <button
                 onClick={toggleLanguage}
                 title="Cambiar idioma / Change language"
-                className="absolute top-6 right-6 lg:right-8 p-2.5 rounded-full bg-surface-dark border border-white/10 text-light-gray-70 hover:text-white-1 hover:bg-white/10 hover:border-white/20 transition-all z-50 shadow-lg"
+                className="absolute top-6 right-6 lg:right-8 p-3 rounded-full bg-surface-dark border border-white/10 text-light-gray-70 hover:text-white-1 hover:bg-white/10 hover:border-white/20 transition-all z-[100] shadow-xl cursor-pointer"
             >
-                <Globe size={20} />
+                <Globe size={22} />
             </button>
             {/* Left side - Branding/Image (Inspiration from typical 2-column auth layouts seen in modern portals) */}
             <div className="hidden lg:flex w-1/2 bg-background-dark flex-col justify-center items-center relative overflow-hidden border-r border-white/5">
@@ -52,10 +52,11 @@ const Login = () => {
                 <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-primary rounded-full blur-[150px] opacity-10" />
                 <div className="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-primary rounded-full blur-[150px] opacity-10" />
 
-                <div className="z-10 flex flex-col items-center">
+                <div className="z-10 flex flex-col items-center w-full px-8 relative">
                     <div className="flex items-center justify-center relative mb-12 w-full max-w-lg">
-                        <h1 className="text-7xl lg:text-8xl font-black text-primary tracking-[0.3em] lg:tracking-[0.4em] absolute w-full text-center opacity-20 whitespace-nowrap pl-6">PANOPTICON</h1>
-                        <img src="/panopticon-logo-no-text.png" alt="Panopticon Logo" className="w-64 h-auto drop-shadow-2xl z-10" />
+                        {/* PANOPTICON background text constrained to the left container */}
+                        <h1 className="text-[7rem] lg:text-[9rem] font-black text-primary tracking-[0.2em] lg:tracking-[0.3em] absolute w-full text-center opacity-10 whitespace-nowrap select-none overflow-hidden max-w-full">PANOPTICON</h1>
+                        <img src="/panopticon-logo-no-text.png" alt="Panopticon Logo" className="w-64 h-auto drop-shadow-2xl z-10 relative" />
                     </div>
                     <h2 className="text-3xl font-bold text-white-1 mb-4 text-center px-4 leading-tight">
                         Plataforma de análisis <br /> de comportamientos humanos adversos
