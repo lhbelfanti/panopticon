@@ -8,7 +8,11 @@
         "noActiveProjects": "No active projects",
         "admin": "Administrator",
         "thesis": "Degree Thesis",
-        "logout": "Log out"
+        "logout": "Log out",
+        "language": "Language",
+        "logoutConfirmTitle": "Log out",
+        "logoutConfirmDesc": "Are you sure you want to log out of your session?",
+        "cancel": "Cancel"
     },
     "dashboard": {
         "welcome": "Welcome! What do you want to do today?",
@@ -25,11 +29,12 @@
         },
         "summary": {
             "title": "Activity summary",
-            "tweetsAnalyzed": "Analyzed tweets",
+            "tweetsAnalyzed": "Analyzed entries",
             "activeProjects": "Active projects",
             "averagePrecision": "Average precision",
             "remainingTokens": "Remaining tokens",
-            "unlimited": "Unlimited"
+            "unlimited": "Unlimited",
+            "mostUsedModel": "Most used model"
         },
         "recentActivity": {
             "title": "Recent activity",
@@ -49,8 +54,9 @@
         "daysAgo_plural": "{{count}} days ago"
     },
     "status": {
-        "done": "done",
+        "done": "uploaded",
         "processing": "processing",
-        "created": "created"
+        "created": "created",
+        "analyzed": "analyzed"
     }
 }

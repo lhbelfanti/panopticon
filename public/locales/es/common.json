@@ -8,7 +8,11 @@
         "noActiveProjects": "No hay proyectos activos",
         "admin": "Administrador",
         "thesis": "Tesis de Grado",
-        "logout": "Cerrar sesión"
+        "logout": "Cerrar sesión",
+        "language": "Idioma",
+        "logoutConfirmTitle": "Cerrar sesión",
+        "logoutConfirmDesc": "¿Está seguro que desea cerrar su sesión?",
+        "cancel": "Cancelar"
     },
     "dashboard": {
         "welcome": "¡Bienvenido! ¿Qué deseas hacer hoy?",
@@ -25,11 +29,12 @@
         },
         "summary": {
             "title": "Resumen de actividad",
-            "tweetsAnalyzed": "Tweets analizados",
+            "tweetsAnalyzed": "Entradas analizadas",
             "activeProjects": "Proyectos activos",
             "averagePrecision": "Precisión promedio",
             "remainingTokens": "Tokens restantes",
-            "unlimited": "Ilimitado"
+            "unlimited": "Ilimitado",
+            "mostUsedModel": "Modelo más usado"
         },
         "recentActivity": {
             "title": "Actividad reciente",
@@ -49,8 +54,9 @@
         "daysAgo_plural": "hace {{count}} días"
     },
     "status": {
-        "done": "listo",
+        "done": "subido",
         "processing": "procesando",
-        "created": "creado"
+        "created": "creado",
+        "analyzed": "analizado"
     }
 }

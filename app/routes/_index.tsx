@@ -55,14 +55,6 @@ export default function Index() {
                                 v2.4.0
                             </span>
                         </p>
-                        <button
-                            onClick={toggleLanguage}
-                            className="flex items-center gap-1.5 text-xs font-semibold text-light-gray-70 hover:text-white-1 bg-surface-dark px-2.5 py-1 rounded-md border border-white/10 transition-colors ml-4"
-                            title="Toggle Language"
-                        >
-                            <Globe size={14} />
-                            {i18n.language === "es" ? "EN" : "ES"}
-                        </button>
                     </div>
                 </div>
             </div>
@@ -80,7 +72,7 @@ export default function Index() {
                             </div>
                             <h2 className="text-xl font-bold text-white-1">{t('dashboard.newProject.title')}</h2>
                         </div>
-                        <p className="text-light-gray-70 text-sm leading-relaxed pr-4">
+                        <p className="text-light-gray-70 text-sm leading-relaxed pr-4 w-[70%]">
                             {t('dashboard.newProject.desc')}
                         </p>
                     </div>
@@ -102,7 +94,7 @@ export default function Index() {
                             </div>
                             <h2 className="text-xl font-bold text-white-1">{t('dashboard.newPrediction.title')}</h2>
                         </div>
-                        <p className="text-light-gray-70 text-sm leading-relaxed pr-4">
+                        <p className="text-light-gray-70 text-sm leading-relaxed pr-4 w-[70%]">
                             {t('dashboard.newPrediction.desc')}
                         </p>
                     </div>
@@ -118,19 +110,22 @@ export default function Index() {
             <h2 className="text-lg font-bold text-white-1 mb-6 flex items-center gap-2">
                 {t('dashboard.summary.title')}
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-12">
 
                 {/* Widget 1 */}
                 <div className="bg-surface-dark p-4 rounded-xl border border-white/5 shadow-md flex flex-col hover:-translate-y-1 transition-transform">
                     <div className="flex justify-between items-start mb-3">
                         <span className="text-light-gray-70 text-sm font-medium tracking-tight">{t('dashboard.summary.tweetsAnalyzed')}</span>
                         <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary">
-                            <CopyPlus size={16} />
+                            <FileText size={16} />
                         </div>
                     </div>
-                    <span className="text-3xl font-extrabold text-white-1 tracking-tight">
-                        {summary.tweetsAnalyzed.toLocaleString()}
-                    </span>
+                    <div className="flex items-baseline gap-2">
+                        <span className="text-3xl font-extrabold text-white-1 tracking-tight">
+                            {summary.tweetsAnalyzed.toLocaleString()}
+                        </span>
+                        <span className="text-green-500 font-medium text-sm">85%</span>
+                    </div>
                 </div>
 
                 {/* Widget 2 */}
@@ -138,7 +133,7 @@ export default function Index() {
                     <div className="flex justify-between items-start mb-3">
                         <span className="text-light-gray-70 text-sm font-medium tracking-tight">{t('dashboard.summary.activeProjects')}</span>
                         <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary">
-                            <Server size={16} />
+                            <Folder size={16} />
                         </div>
                     </div>
                     <span className="text-3xl font-extrabold text-white-1 tracking-tight">
@@ -159,28 +154,41 @@ export default function Index() {
                     </span>
                 </div>
 
-                {/* Widget 4: Remaining Tokens */}
+                {/* Widget 4: Most Used Model */}
+                <div className="bg-surface-dark p-4 rounded-xl border border-white/5 shadow-md flex flex-col hover:-translate-y-1 transition-transform">
+                    <div className="flex justify-between items-start mb-3">
+                        <span className="text-light-gray-70 text-sm font-medium tracking-tight">{t('dashboard.summary.mostUsedModel')}</span>
+                        <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                            <Zap size={16} />
+                        </div>
+                    </div>
+                    <span className="text-xl font-extrabold text-white-1 tracking-tight">
+                        LLaMA-3-8B
+                    </span>
+                </div>
+
+                {/* Widget 5: Remaining Tokens (Inline width) */}
                 <div className="bg-surface-dark p-4 rounded-xl border border-white/5 shadow-md flex flex-col hover:-translate-y-1 transition-transform relative overflow-hidden">
-                    <div className="flex justify-between items-start mb-3 relative z-10">
+                    <div className="flex justify-between items-start mb-2 relative z-10">
                         <span className="text-light-gray-70 text-sm font-medium tracking-tight">{t('dashboard.summary.remainingTokens')}</span>
                         <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary">
                             <Zap size={16} />
                         </div>
                     </div>
-                    <div className="flex items-end gap-2 relative z-10">
-                        <span className="text-3xl font-extrabold text-white-1 tracking-tight">
+                    <div className="flex items-center gap-3 relative z-10">
+                        <span className="text-2xl font-extrabold text-white-1 tracking-tight">
                             {summary.remainingTokens ? (summary.remainingTokens / 1000000).toFixed(1) + 'M' : t('dashboard.summary.unlimited')}
                         </span>
-                    </div>
 
-                    {summary.remainingTokens !== undefined && (
-                        <div className="mt-4 w-full bg-white/5 rounded-full h-1.5 shadow-inner overflow-hidden relative z-10">
-                            <div
-                                className="bg-primary h-1.5 rounded-full"
-                                style={{ width: `${Math.min((summary.remainingTokens / 5000000) * 100, 100)}%` }}
-                            ></div>
-                        </div>
-                    )}
+                        {summary.remainingTokens !== undefined && (
+                            <div className="flex-1 bg-background-dark rounded-full h-1.5 shadow-inner overflow-hidden border border-white/5 mt-1">
+                                <div
+                                    className="bg-primary h-1.5 rounded-full"
+                                    style={{ width: `${Math.min((summary.remainingTokens / 5000000) * 100, 100)}%` }}
+                                ></div>
+                            </div>
+                        )}
+                    </div>
                 </div>
 
             </div>
