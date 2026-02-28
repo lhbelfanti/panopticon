@@ -16,13 +16,13 @@ import { resolve } from "node:path";
 import i18nServer from "./localization/i18n.server";
 import i18n from "./localization/i18n";
 
-export default async function handleRequest(
+const handleRequest = async (
   request: Request,
   responseStatusCode: number,
   responseHeaders: Headers,
   routerContext: EntryContext,
   loadContext: AppLoadContext,
-) {
+) => {
   if (request.method.toUpperCase() === "HEAD") {
     return new Response(null, {
       status: responseStatusCode,
@@ -101,4 +101,6 @@ export default async function handleRequest(
       },
     );
   });
-}
+};
+
+export default handleRequest;

@@ -18,28 +18,28 @@ let projects: Project[] = [
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-export async function getProjects(): Promise<Project[]> {
-    // Artificial delay between 500ms and 1s
-    await delay(Math.floor(Math.random() * 500) + 500);
+export const getProjects = async (): Promise<Project[]> => {
+    await delay(1000); // Simulate network delay
     return [...projects];
-}
+};
 
-export async function createProject(data: CreateProjectDTO): Promise<Project> {
-    await delay(Math.floor(Math.random() * 500) + 500);
+export const createProject = async (data: CreateProjectDTO): Promise<Project> => {
+    await delay(800); // Simulate network delay
 
     const newProject: Project = {
-        id: `proj_${Date.now()}`,
-        name: data.name,
+        id: crypto.randomUUID(),
+        name: data.name, // Assuming 'name' is still the field, not 'title' as in the example snippet
         description: data.description,
+        // The snippet added 'status' and 'updatedAt', but these are not in the original Project type.
+        // I will keep the original Project type structure for now, assuming the user will update types if needed.
         createdAt: new Date().toISOString(),
     };
 
     projects.push(newProject);
     return newProject;
-}
+};
 
-export async function getProjectById(id: string): Promise<Project | null> {
-    await delay(Math.floor(Math.random() * 500) + 500);
-    const project = projects.find(p => p.id === id);
-    return project || null;
-}
+export const getProjectById = async (id: string): Promise<Project | null> => {
+    await delay(500); // Simulate network delay
+    return projects.find(p => p.id === id) || null;
+};

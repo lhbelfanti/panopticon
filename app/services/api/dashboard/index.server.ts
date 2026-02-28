@@ -2,7 +2,7 @@ import type { DashboardSummary, RecentActivity } from './types';
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-export async function getDashboardSummary(): Promise<DashboardSummary> {
+export const getDashboardSummary = async (): Promise<DashboardSummary> => {
     await delay(Math.floor(Math.random() * 500) + 500);
 
     return {
@@ -11,9 +11,9 @@ export async function getDashboardSummary(): Promise<DashboardSummary> {
         averagePrecision: 89.4,
         remainingTokens: 154200
     };
-}
+};
 
-export async function getRecentActivities(): Promise<RecentActivity[]> {
+export const getRecentActivities = async (): Promise<RecentActivity[]> => {
     await delay(Math.floor(Math.random() * 500) + 500);
 
     return [
@@ -36,4 +36,4 @@ export async function getRecentActivities(): Promise<RecentActivity[]> {
             timestamp: new Date(Date.now() - 86400000).toISOString() // 1 day ago
         }
     ];
-}
+};

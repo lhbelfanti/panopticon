@@ -30,12 +30,13 @@ import { Sidebar } from "~/components/Sidebar";
 import { getProjects } from "~/services/api/projects/index.server";
 import type { Project } from "~/services/api/projects/types";
 
-export async function loader() {
+export const loader = async () => {
   const projects = await getProjects();
   return { projects };
-}
+};
 
-export function Layout({ children }: { children: React.ReactNode }) {
+export const Layout = (props: { children: React.ReactNode }) => {
+  const { children } = props;
   const { i18n } = useTranslation();
   const location = useLocation();
   const isLoginPage = location.pathname.startsWith('/login');
@@ -69,11 +70,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default function App() {
+const App = () => {
   return <Outlet />;
-}
+};
 
-export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
+export default App;
+
+export const ErrorBoundary = (props: Route.ErrorBoundaryProps) => {
+  const { error } = props;
   let message = "Oops!";
   let details = "An unexpected error occurred.";
   let stack: string | undefined;

@@ -8,7 +8,7 @@ import Backend from "i18next-http-backend";
 import { getInitialNamespaces } from "remix-i18next/client";
 import i18n from "./localization/i18n";
 
-async function hydrate() {
+const hydrate = async () => {
   await i18next
     .use(initReactI18next)
     .use(LanguageDetector)
