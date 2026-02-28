@@ -49,6 +49,7 @@ Load for context:
     Review Stitch screen `7b8c38ea93e548808882644ebc33511b` (Login / Registration).
     Refactor `app/routes/login._index.tsx` using Tailwind to closely mimic the design iteratively, applying the exact color mapping.
     Incorporate the correct logo: Use `<img src="/panopticon-logo.png" />` where the full logo is required, and use `<img src="/panopticon-logo-no-text.png" />` if space is constrained.
+    Update the .ico with a "panopticon.ico" version of the logo without text.
     AVOID: Altering the server `login` logic must be avoided. Focus strictly on desktop sizes (no mobile breakpoints).
   </action>
   <verify>Route `login._index.tsx` mounts without compiling errors and matches mockup layout.</verify>
