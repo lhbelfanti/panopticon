@@ -1,7 +1,7 @@
 import type { MetaFunction } from "react-router";
 import { Link, useLoaderData } from "react-router";
 import { getDashboardSummary, getRecentActivities } from "~/services/api/dashboard/index.server";
-import { CopyPlus, FileText, Activity, Server, Zap, CheckCircle2, Folder, Globe } from "lucide-react";
+import { CopyPlus, FileText, Activity, Server, Zap, CheckCircle2, Folder, Globe, TrendingUp } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 export const meta: MetaFunction = () => {
@@ -120,11 +120,17 @@ export default function Index() {
                             <FileText size={16} />
                         </div>
                     </div>
-                    <div className="flex items-baseline gap-2">
+                    <div className="flex items-baseline">
                         <span className="text-3xl font-extrabold text-white-1 tracking-tight">
                             {summary.tweetsAnalyzed.toLocaleString()}
                         </span>
-                        <span className="text-green-500 font-medium text-sm">85%</span>
+                        <span className="text-light-gray-70 text-lg font-medium ml-1">
+                            / 2,500
+                        </span>
+                        <div className="flex items-center gap-1 ml-4 bg-green-500/10 border border-green-500/20 px-2 py-0.5 rounded-lg text-green-400">
+                            <TrendingUp size={14} />
+                            <span className="font-bold text-sm">85%</span>
+                        </div>
                     </div>
                 </div>
 
@@ -198,8 +204,15 @@ export default function Index() {
                 {t('dashboard.recentActivity.title')}
             </h2>
             <div className="bg-surface-dark rounded-2xl border border-white/5 shadow-md overflow-hidden mb-8">
-                {recentActivities.map((activity, idx) => {
-                    const statusKey = activity.type === 'project_created' ? 'created' : 'done';
+                {recentActivities.map((activity: any, idx) => {
+                    let statusKey = 'done';
+                    if (activity.status) {
+                        statusKey = activity.status;
+                    } else if (activity.type === 'project_created') {
+                        statusKey = 'created';
+                    } else if (activity.type === 'predictions_made') {
+                        statusKey = 'processing';
+                    }
 
                     return (
                         <div

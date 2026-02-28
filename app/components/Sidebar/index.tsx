@@ -43,7 +43,7 @@ export function Sidebar({ projects }: SidebarProps) {
                 {/* Collapse Toggle */}
                 <button
                     onClick={toggleSidebar}
-                    className="absolute -right-3 top-8 bg-surface-dark hover:bg-primary border border-white/5 text-light-gray hover:text-background-dark rounded-full p-1 shadow-lg transition-colors z-50 flex items-center justify-center"
+                    className="absolute -right-3 top-8 bg-surface-dark hover:bg-primary border border-white/20 hover:border-transparent text-light-gray hover:text-background-dark rounded-full p-1.5 shadow-xl transition-colors z-50 flex items-center justify-center"
                     title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
                 >
                     {collapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
@@ -51,11 +51,12 @@ export function Sidebar({ projects }: SidebarProps) {
 
                 {/* Header / Logo Component */}
                 <div className="flex flex-col items-center justify-center p-6 border-b border-white/5 min-h-[5rem] relative">
-                    <div className={cn("flex items-center justify-center w-full transition-all duration-300")}>
-                        {collapsed ? (
-                            <img src="/panopticon-logo-no-text.png" alt="Panopticon" className="w-10 h-auto drop-shadow-md" />
-                        ) : (
-                            <img src="/panopticon-logo.png" alt="Panopticon" className="w-40 h-auto drop-shadow-md" />
+                    <div className={cn("flex items-center justify-center w-full transition-all duration-300 gap-3")}>
+                        <img src="/panopticon-logo-no-text.png" alt="Logo" className={cn("h-auto drop-shadow-md transition-all duration-300", collapsed ? "w-10" : "w-12")} />
+                        {!collapsed && (
+                            <span className="text-primary font-bold tracking-[0.15em] text-xl mt-1 drop-shadow-sm">
+                                PANOPTICON
+                            </span>
                         )}
                     </div>
                     {/* Language Toggle */}
@@ -137,24 +138,24 @@ export function Sidebar({ projects }: SidebarProps) {
                 {/* Footer / User Settings */}
                 <div className="mt-auto border-t border-white/5 p-4 bg-black/20">
                     <div className={cn("flex items-center", collapsed ? "justify-center" : "justify-between gap-2")}>
-                        <button className={cn("flex items-center gap-3 overflow-hidden text-left rounded-full hover:bg-white/5 transition-colors p-1.5", collapsed && "justify-center")}>
-                            <div className="flex-shrink-0 bg-surface-dark rounded-full p-2 border border-white/5 shadow-inner">
-                                <UserCircle size={24} className="text-primary group-hover:text-primary/80 transition-colors" />
+                        <button className={cn("group flex items-center gap-3 overflow-hidden text-left rounded-full hover:bg-primary transition-colors p-1.5", collapsed && "justify-center")}>
+                            <div className="flex-shrink-0 bg-surface-dark group-hover:bg-primary group-hover:border-transparent rounded-full p-2 border border-white/5 shadow-inner transition-colors">
+                                <UserCircle size={24} className="text-primary group-hover:text-background-dark transition-colors" />
                             </div>
                             {!collapsed && (
-                                <div className="flex flex-col min-w-0 pr-2">
-                                    <span className="text-sm font-semibold text-white-1 leading-tight truncate">{t("sidebar.admin")}</span>
-                                    <span className="text-xs text-light-gray-70 truncate">{t("sidebar.thesis")}</span>
+                                <div className="flex flex-col min-w-0 pr-2 transition-colors">
+                                    <span className="text-sm font-semibold text-white-1 group-hover:text-background-dark leading-tight truncate">{t("sidebar.admin")}</span>
+                                    <span className="text-xs text-light-gray-70 group-hover:text-background-dark/80 truncate">{t("sidebar.thesis")}</span>
                                 </div>
                             )}
                         </button>
                         {!collapsed && (
                             <button
                                 onClick={() => setShowLogoutModal(true)}
-                                className="flex-shrink-0 text-bittersweet-shimmer hover:opacity-80 transition-all p-2.5 rounded-full hover:bg-white/5 hover:scale-105"
+                                className="group flex-shrink-0 text-bittersweet-shimmer transition-all p-2.5 rounded-full hover:bg-bittersweet-shimmer hover:scale-105"
                                 title={t("sidebar.logout")}
                             >
-                                <LogOut size={18} />
+                                <LogOut size={18} className="group-hover:text-white-1 transition-colors" />
                             </button>
                         )}
                     </div>
