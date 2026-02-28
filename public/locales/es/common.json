@@ -92,5 +92,58 @@
         "processing": "procesando",
         "created": "creado",
         "analyzed": "analizado"
+    },
+    "projects": {
+        "new": {
+            "title": "Nuevo proyecto",
+            "subtitle": "Crea un nuevo entorno de análisis de texto.",
+            "name": "Nombre del proyecto",
+            "namePlaceholder": "ej. Cohorte Salud Mental 2024",
+            "description": "Descripción (Opcional)",
+            "descriptionPlaceholder": "Breve descripción de los objetivos del análisis...",
+            "behaviorsTitle": "Comportamientos Objetivo",
+            "behaviorsDesc": "Seleccione los comportamientos que desea identificar en el dataset.",
+            "modelsTitle": "Modelos ML",
+            "modelsDesc": "Seleccione los modelos para generar subproyectos para comparación.",
+            "submit": "Crear Proyecto",
+            "creating": "Creando..."
+        },
+        "behaviors": {
+            "suicidal_ideation": "Ideación Suicida",
+            "depression": "Depresión",
+            "anxiety": "Ansiedad",
+            "harassment": "Acoso escolar",
+            "hate_speech": "Discurso de odio"
+        },
+        "models": {
+            "bert_spanish": "BERT (Español)",
+            "roberta_english": "RoBERTa (Inglés)",
+            "llama3_zero_shot": "Llama 3 (Zero-Shot)",
+            "svm_baseline": "SVM Baseline"
+        },
+        "view": {
+            "subprojectsTitle": "Modelos CL y Subproyectos",
+            "subprojectsDesc": "Seleccione un modelo CL para visualizar las entradas analizadas y las predicciones.",
+            "behaviorsTracked": "Comportamientos Analizados",
+            "emptyModels": "No hay modelos CL configurados para este proyecto.",
+            "openSubproject": "Abrir predicciones \u2192"
+        },
+        "entries": {
+            "title": "Entradas Analizadas",
+            "backToProject": "Volver al proyecto",
+            "searchPlaceholder": "Buscar fragmento de texto...",
+            "allVerdicts": "Todos los Veredictos",
+            "tableId": "ID",
+            "tableText": "Texto Analizado",
+            "tableVerdict": "Veredicto",
+            "tableScore": "Confianza",
+            "tableActions": "Acciones",
+            "noResults": "No se encontraron entradas usando esos filtros.",
+            "pageOf": "Página {{page}} de {{totalPages}}",
+            "prev": "Anterior",
+            "next": "Siguiente",
+            "deleteEntry": "Eliminar entrada",
+            "exportCsv": "Exportar CSV"
+        }
     }
 }

@@ -147,36 +147,18 @@ export const Sidebar = (props: SidebarProps) => {
             </aside>
 
             {/* Global Styled Confirmation Modal Baseline (Matches Panopticon Dark Auth forms) */}
-            {showLogoutModal && (
-                <div className="fixed inset-0 z-[100] flex items-center justify-center bg-background-dark/80 backdrop-blur-sm p-4">
-                    <div className="bg-surface-dark border border-white/10 rounded-2xl shadow-2xl p-6 lg:p-8 w-full max-w-sm flex flex-col items-center animate-in fade-in zoom-in-95 duration-200">
-                        <div className="w-16 h-16 rounded-full bg-bittersweet-shimmer/10 flex items-center justify-center mb-6 text-bittersweet-shimmer">
-                            <LogOut size={28} />
-                        </div>
-                        <h3 className="text-xl font-bold text-white-1 mb-2 text-center">{t("sidebar.logoutConfirmTitle")}</h3>
-                        <p className="text-sm text-light-gray-70 text-center mb-8">
-                            {t("sidebar.logoutConfirmDesc")}
-                        </p>
-                        <div className="flex w-full gap-3">
-                            <button
-                                onClick={() => setShowLogoutModal(false)}
-                                className="flex-1 py-2.5 px-4 rounded-lg font-semibold text-light-gray hover:text-white-1 bg-white/5 hover:bg-white/10 transition-colors"
-                            >
-                                {t("sidebar.cancel")}
-                            </button>
-                            {/* Wait for actual backend session flush logic later, hard mocked action here */}
-                            <form action="/login" method="get" className="flex-1 flex">
-                                <button
-                                    type="submit"
-                                    className="flex-1 py-2.5 px-4 rounded-lg font-semibold bg-bittersweet-shimmer hover:bg-bittersweet-shimmer/80 text-white-1 transition-colors shadow-lg shadow-bittersweet-shimmer/20"
-                                >
-                                    {t("sidebar.logoutConfirmTitle")}
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            )}
+            <ConfirmationModal
+                isOpen={showLogoutModal}
+                onClose={() => setShowLogoutModal(false)}
+                icon={<LogOut size={28} />}
+                title={t("sidebar.logoutConfirmTitle")}
+                description={t("sidebar.logoutConfirmDesc")}
+                cancelText={t("sidebar.cancel")}
+                confirmText={t("sidebar.logoutConfirmTitle")}
+                confirmAction="/login"
+                confirmMethod="get"
+                isDestructive={true}
+            />
         </>
     );
 };

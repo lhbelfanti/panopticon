@@ -92,5 +92,58 @@
         "processing": "processing",
         "created": "created",
         "analyzed": "analyzed"
+    },
+    "projects": {
+        "new": {
+            "title": "New project",
+            "subtitle": "Create a new text analysis environment.",
+            "name": "Project Name",
+            "namePlaceholder": "e.g. Mental Health Cohort 2024",
+            "description": "Description (Optional)",
+            "descriptionPlaceholder": "Brief description of the analysis goals...",
+            "behaviorsTitle": "Target Behaviors",
+            "behaviorsDesc": "Select the behaviors you'd like to identify in the dataset.",
+            "modelsTitle": "ML Models",
+            "modelsDesc": "Select the models to generate subprojects for comparison.",
+            "submit": "Create Project",
+            "creating": "Creating..."
+        },
+        "behaviors": {
+            "suicidal_ideation": "Suicidal Ideation",
+            "depression": "Depression",
+            "anxiety": "Anxiety",
+            "harassment": "Harassment",
+            "hate_speech": "Hate Speech"
+        },
+        "models": {
+            "bert_spanish": "BERT (Spanish)",
+            "roberta_english": "RoBERTa (English)",
+            "llama3_zero_shot": "Llama 3 (Zero-Shot)",
+            "svm_baseline": "SVM Baseline"
+        },
+        "view": {
+            "subprojectsTitle": "ML Models & Subprojects",
+            "subprojectsDesc": "Select an ML Model to view the analyzed entries and predictions inside that subproject.",
+            "behaviorsTracked": "Target Behaviors Tracked",
+            "emptyModels": "No ML models were configured for this project.",
+            "openSubproject": "Open predictions \u2192"
+        },
+        "entries": {
+            "title": "Analyzed Entries",
+            "backToProject": "Back to Project",
+            "searchPlaceholder": "Search text snippet...",
+            "allVerdicts": "All Verdicts",
+            "tableId": "ID",
+            "tableText": "Analyzed Text",
+            "tableVerdict": "Verdict",
+            "tableScore": "Confidence",
+            "tableActions": "Actions",
+            "noResults": "No entries found matching the filters.",
+            "pageOf": "Page {{page}} of {{totalPages}}",
+            "prev": "Previous",
+            "next": "Next",
+            "deleteEntry": "Delete entry",
+            "exportCsv": "Export CSV"
+        }
     }
 }
