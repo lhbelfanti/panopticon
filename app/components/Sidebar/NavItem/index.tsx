@@ -7,7 +7,8 @@ const cn = (...inputs: ClassValue[]) => {
     return twMerge(clsx(inputs));
 };
 
-export const NavItem = ({ to, icon, label, collapsed, indented = false }: NavItemProps) => {
+export const NavItem = (props: NavItemProps) => {
+    const { to, icon, label, collapsed, indented = false } = props;
     return (
         <NavLink
             to={to}

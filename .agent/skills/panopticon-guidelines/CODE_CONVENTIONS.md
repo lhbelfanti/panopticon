@@ -21,6 +21,7 @@ This document outlines the detailed and specific code conventions, project struc
 - **Styling**: All CSS styling is handled via **Tailwind CSS**. HTML elements use `className` exclusively to apply Tailwind utility classes.
 - **Refactoring styles**: Tailwind class strings are refactored out into string variables within the component (e.g. `const buttonClass: string = 'mt-4 w-96 p-2 ...';`) when the style can be reused in more than one place, to avoid repeating code and make it cleaner.
 - **Functions Structure**: All component and utility functions must strictly be declared as Arrow Functions (`const ComponentName = () => {}`) rather than standard `function ComponentName() {}` blocks.
+- **Props Destructuring**: Do not destructure props directly in the component definition signature. Instead, accept the `props` object and destructure it inside the component body to improve readability. (e.g. `const NavItem = (props: NavItemProps) => { const { to, icon, label } = props; ... }`).
 - **Typing**: Strict TypeScript typings are enforced. Interfaces and Types for a component's props are usually separated into their own `types.d.ts` or `types.ts` files.
 - **File extensions**: Use `.tsx` for files containing JSX/React code and `.ts` for standard TypeScript logic files.
 
@@ -56,3 +57,4 @@ This document outlines the detailed and specific code conventions, project struc
 ## Pages
 - **Handling Strategy**: Pages are not distinctly decoupled into a `pages/` directory. Instead, they operate as Remix route components. The default export of any matched file inside `app/routes/` operates as a given page. 
 - **Location**: The visual layouts and component aggregations that map exactly to URLs form the pages, placed in `app/routes/` (e.g. `signup._index.tsx`, `selection._index.tsx`).
+- **Componentization for Clean Pages**: Keep page routes as clean as possible. Because routing mechanisms and server calls (`loader`, `action`) are defined in page files, large blocks of HTML/JSX code make it difficult to follow the logic. Aggressively encapsulate UI sections into subcomponents to maintain high readability on the page level.

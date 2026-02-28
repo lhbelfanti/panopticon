@@ -21,7 +21,8 @@ const cn = (...inputs: ClassValue[]) => {
     return twMerge(clsx(inputs));
 };
 
-export const Sidebar = ({ projects }: SidebarProps) => {
+export const Sidebar = (props: SidebarProps) => {
+    const { projects } = props;
     const [collapsed, setCollapsed] = useState(false);
     const [showLogoutModal, setShowLogoutModal] = useState(false);
     const { t, i18n } = useTranslation();
