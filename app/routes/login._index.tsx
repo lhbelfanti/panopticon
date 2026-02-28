@@ -1,7 +1,7 @@
 import { Form, redirect, useActionData, useNavigation } from "react-router";
 import { login } from "~/services/api/auth/index.server";
 
-export async function action({ request }: { request: Request }) {
+export const action = async ({ request }: { request: Request }) => {
     const formData = await request.formData();
     const email = formData.get("email");
     const password = formData.get("password");
@@ -20,9 +20,9 @@ export async function action({ request }: { request: Request }) {
     } catch (err) {
         return { error: "Login failed, please try again." };
     }
-}
+};
 
-export default function Login() {
+const Login = () => {
     const actionData = useActionData<typeof action>();
     const navigation = useNavigation();
     const isSubmitting = navigation.state === "submitting";
@@ -121,4 +121,6 @@ export default function Login() {
             </div>
         </div>
     );
-}
+};
+
+export default Login;

@@ -20,6 +20,7 @@ This document outlines the detailed and specific code conventions, project struc
 ## HTML, CSS, and Code Conventions
 - **Styling**: All CSS styling is handled via **Tailwind CSS**. HTML elements use `className` exclusively to apply Tailwind utility classes.
 - **Refactoring styles**: Tailwind class strings are refactored out into string variables within the component (e.g. `const buttonClass: string = 'mt-4 w-96 p-2 ...';`) when the style can be reused in more than one place, to avoid repeating code and make it cleaner.
+- **Functions Structure**: All component and utility functions must strictly be declared as Arrow Functions (`const ComponentName = () => {}`) rather than standard `function ComponentName() {}` blocks.
 - **Typing**: Strict TypeScript typings are enforced. Interfaces and Types for a component's props are usually separated into their own `types.d.ts` or `types.ts` files.
 - **File extensions**: Use `.tsx` for files containing JSX/React code and `.ts` for standard TypeScript logic files.
 
@@ -49,7 +50,8 @@ This document outlines the detailed and specific code conventions, project struc
 ## Components
 - **Handling Strategy**: Components are isolated module blocks used within pages.
 - **Location**: They reside inside `app/components/`.
-- **File Structure**: Each component has its own dedicated folder generally named with PascalCase (e.g., `app/components/Button/`). Within the folder, the main React export happens from an `index.tsx` file coupled with supplementary files such as typing (`types.d.ts`) or constants.
+- **File Structure**: Each component has its own dedicated folder generally named with PascalCase (e.g., `app/components/Button/`). Within the folder, the main React export happens from an `index.tsx` file coupled with supplementary files such as typing (`types.d.ts` or `types.ts`) or constants.
+- **Subcomponents**: If a component possesses specific subcomponents (e.g. `Sidebar` containing `NavigateItem`), those subcomponents strictly must be housed inside isolated, nested folders belonging to the parent component (e.g. `app/components/Sidebar/NavItem/index.tsx` accompanied by its intrinsic `types.ts`), preserving modular encapsulation.
 
 ## Pages
 - **Handling Strategy**: Pages are not distinctly decoupled into a `pages/` directory. Instead, they operate as Remix route components. The default export of any matched file inside `app/routes/` operates as a given page. 

@@ -11,15 +11,15 @@ export const meta: MetaFunction = () => {
     ];
 };
 
-export async function loader() {
+export const loader = async () => {
     const [summary, recentActivities] = await Promise.all([
         getDashboardSummary(),
         getRecentActivities()
     ]);
     return { summary, recentActivities };
-}
+};
 
-export default function Index() {
+const Index = () => {
     const { summary, recentActivities } = useLoaderData<typeof loader>();
     const { t, i18n } = useTranslation();
 
@@ -246,9 +246,9 @@ export default function Index() {
             </div>
         </div>
     );
-}
+};
 
-function ActivityIcon({ type }: { type: string }) {
+const ActivityIcon = ({ type }: { type: string }) => {
     switch (type) {
         case 'project_created': return <Folder size={14} />;
         case 'csv_uploaded':
@@ -256,9 +256,9 @@ function ActivityIcon({ type }: { type: string }) {
         case 'predictions_made': return <Activity size={14} />;
         default: return <Activity size={14} />;
     }
-}
+};
 
-function getActivityColor(type: string): string {
+const getActivityColor = (type: string): string => {
     switch (type) {
         case 'project_created': return "bg-blue-500/10 text-blue-400 border border-blue-500/20";
         case 'csv_uploaded':
@@ -266,4 +266,6 @@ function getActivityColor(type: string): string {
         case 'predictions_made': return "bg-primary/10 text-primary border border-primary/20";
         default: return "bg-gray-500/10 text-gray-400 border border-gray-500/20";
     }
-}
+};
+
+export default Index;

@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { NavLink } from 'react-router';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { useTranslation } from 'react-i18next';
@@ -16,12 +15,13 @@ import {
     Globe
 } from 'lucide-react';
 import type { SidebarProps } from './types';
+import { NavItem } from './NavItem';
 
-function cn(...inputs: ClassValue[]) {
+const cn = (...inputs: ClassValue[]) => {
     return twMerge(clsx(inputs));
-}
+};
 
-export function Sidebar({ projects }: SidebarProps) {
+export const Sidebar = ({ projects }: SidebarProps) => {
     const [collapsed, setCollapsed] = useState(false);
     const [showLogoutModal, setShowLogoutModal] = useState(false);
     const { t, i18n } = useTranslation();
@@ -58,7 +58,7 @@ export function Sidebar({ projects }: SidebarProps) {
                                 PANOPTICON
                             </span>
                         )}
-                        <img src="/panopticon-logo-no-text.png" alt="Logo" className={cn("relative z-10 h-auto drop-shadow-2xl transition-all duration-300", collapsed ? "w-10" : "w-16")} />
+                        <img src="/panopticon-logo-no-text.png" alt="Logo" className={cn("relative z-10 h-auto drop-shadow-2xl transition-all duration-300", collapsed ? "w-10" : "w-30")} />
                         {!collapsed && (
                             <span className="text-primary font-bold tracking-[0.2em] text-sm mt-3 relative z-10 drop-shadow-md">
                                 PANOPTICON
@@ -201,44 +201,4 @@ export function Sidebar({ projects }: SidebarProps) {
             )}
         </>
     );
-}
-
-interface NavItemProps {
-    to: string;
-    icon: React.ReactNode;
-    label: string;
-    collapsed: boolean;
-    indented?: boolean;
-}
-
-function NavItem({ to, icon, label, collapsed, indented = false }: NavItemProps) {
-    return (
-        <NavLink
-            to={to}
-            className={({ isActive }) =>
-                cn(
-                    "flex items-center rounded-xl p-2.5 transition-all duration-200 group relative",
-                    collapsed ? "justify-center" : cn("justify-start gap-3 w-full", indented && "pl-5"),
-                    isActive
-                        ? "bg-primary text-background-dark font-semibold shadow-sm border border-transparent"
-                        : "text-light-gray hover:bg-white/5 hover:text-white-1 hover:translate-x-1"
-                )
-            }
-            title={collapsed ? label : undefined}
-        >
-            {({ isActive }) => (
-                <>
-                    <div className={cn("flex-shrink-0 flex items-center justify-center", isActive ? "text-background-dark" : "text-light-gray-70 group-hover:text-white-1")}>
-                        {icon}
-                    </div>
-
-                    {!collapsed && (
-                        <span className="truncate text-sm tracking-wide">
-                            {label}
-                        </span>
-                    )}
-                </>
-            )}
-        </NavLink>
-    );
-}
+};

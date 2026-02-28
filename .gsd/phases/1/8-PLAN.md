@@ -17,7 +17,7 @@ must_haves:
     - "Analyzed Entries card displays total 'X/Y' where Y is small and gray, followed by a green percentage icon and text."
     - "Recent Activity Prediction rows map correctly to 'Done' or 'In Progress' states instead of 'created'."
     - "Sidebar Collapse Button has clearer borders/colors to stand out from the background."
-    - "Sidebar Branding uses `panopticon-logo-no-text.png` paired with explicit 'PANOPTICON' yellow HTML text."
+    - "Sidebar Branding uses `panopticon-logo-no-text.png` paired with explicit 'PANOPTICON' yellow HTML text. The text should be behind the logo, so the logo can be appreciated. The language toggle should be on the top right corner of the sidebar on the top of the logo, there should be a gap between the logo and the toggle."
 ---
 
 # Plan 1.8: Final UI Glare & Detail Adjustments
