@@ -1,5 +1,7 @@
 import { Form, redirect, useActionData, useNavigation } from "react-router";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
+import { Globe } from "lucide-react";
 import { login } from "~/services/api/auth/index.server";
 
 export const action = async ({ request }: { request: Request }) => {
@@ -28,9 +30,22 @@ const Login = () => {
     const navigation = useNavigation();
     const isSubmitting = navigation.state === "submitting";
     const [view, setView] = useState<"login" | "forgot">("login");
+    const { i18n } = useTranslation();
+
+    const toggleLanguage = () => {
+        i18n.changeLanguage(i18n.language === "es" ? "en" : "es");
+    };
 
     return (
-        <div className="min-h-screen flex text-light-gray font-sans bg-background-dark">
+        <div className="min-h-screen flex text-light-gray font-sans bg-background-dark relative">
+            {/* Language Toggle */}
+            <button
+                onClick={toggleLanguage}
+                title="Cambiar idioma / Change language"
+                className="absolute top-6 right-6 lg:right-8 p-2.5 rounded-full bg-surface-dark border border-white/10 text-light-gray-70 hover:text-white-1 hover:bg-white/10 hover:border-white/20 transition-all z-50 shadow-lg"
+            >
+                <Globe size={20} />
+            </button>
             {/* Left side - Branding/Image (Inspiration from typical 2-column auth layouts seen in modern portals) */}
             <div className="hidden lg:flex w-1/2 bg-background-dark flex-col justify-center items-center relative overflow-hidden border-r border-white/5">
                 {/* Decorative background gradients */}
@@ -38,13 +53,13 @@ const Login = () => {
                 <div className="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-primary rounded-full blur-[150px] opacity-10" />
 
                 <div className="z-10 flex flex-col items-center">
-                    <div className="flex items-center justify-center relative mb-8">
-                        <h1 className="text-6xl font-black text-primary tracking-tighter absolute left-14 opacity-20">PANOPTICON</h1>
+                    <div className="flex items-center justify-center relative mb-8 w-full max-w-sm">
+                        <h1 className="text-5xl font-black text-primary tracking-tighter absolute w-full text-center opacity-20 whitespace-nowrap">PANOPTICON</h1>
                         <img src="/panopticon-logo-no-text.png" alt="Panopticon Logo" className="w-48 h-auto drop-shadow-2xl z-10" />
                     </div>
-                    <h2 className="text-3xl font-bold text-white-1 mb-4 text-center">Portal de Investigación</h2>
+                    <h2 className="text-3xl font-bold text-white-1 mb-4 text-center px-4 leading-tight">Plataforma de análisis de comportamientos humanos adversos</h2>
                     <p className="text-light-gray-70 text-center max-w-md px-8">
-                        Plataforma avanzada para el análisis y detección de comportamientos humanos adversos.
+                        Ecosistema avanzado para la detección temprana, investigación y diagnóstico de patrones de comportamiento.
                     </p>
                 </div>
             </div>
@@ -65,7 +80,7 @@ const Login = () => {
                         <>
                             <h1 className="text-3xl font-bold text-white-1 mb-2">Iniciar Sesión</h1>
                             <p className="text-light-gray-70 mb-8">
-                                Ingrese sus credenciales de investigador
+                                Ingrese sus credenciales
                             </p>
 
                             <Form method="post" className="flex flex-col gap-6">
@@ -85,7 +100,7 @@ const Login = () => {
                                         id="username"
                                         required
                                         className="w-full bg-sidebar-dark border border-white/10 rounded-lg p-3.5 text-white-1 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all placeholder:opacity-30"
-                                        placeholder="investigador_01"
+                                        placeholder="usuario_01"
                                     />
                                 </div>
 
@@ -142,7 +157,7 @@ const Login = () => {
                                 </button>
 
                                 <p className="text-center text-sm text-light-gray-70 mt-4">
-                                    ¿No tiene una cuenta de investigador? <a href="#" className="text-primary hover:text-primary/70 font-medium tracking-wide">Regístrese ahora</a>
+                                    ¿No tiene una cuenta? <a href="#" className="text-primary hover:text-primary/70 font-medium tracking-wide">Regístrese ahora</a>
                                 </p>
                             </Form>
                         </>
