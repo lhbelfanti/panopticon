@@ -11,6 +11,7 @@ import type { Route } from "./+types/root";
 import "./app.css";
 
 export const links: Route.LinksFunction = () => [
+  { rel: "icon", type: "image/x-icon", href: "/panopticon.ico" },
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
   {
     rel: "preconnect",
@@ -56,9 +57,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
       </head>
-      <body className="min-h-screen bg-smoky-black text-light-gray font-sans flex">
+      <body className="min-h-screen bg-background-dark text-light-gray font-sans flex">
         {!isLoginPage && <Sidebar projects={projects} />}
-        <main className="flex-1 flex flex-col h-screen overflow-y-auto relative bg-smoky-black isolate">
+        <main className="flex-1 flex flex-col h-screen overflow-y-auto relative bg-background-dark isolate">
           {children}
         </main>
         <ScrollRestoration />

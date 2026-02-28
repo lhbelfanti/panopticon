@@ -27,22 +27,22 @@ export function Sidebar({ projects }: SidebarProps) {
     return (
         <aside
             className={cn(
-                "flex flex-col bg-onyx text-light-gray h-screen transition-all duration-300 border-r border-[var(--color-eerie-black-1)] shadow-2xl relative",
+                "flex flex-col bg-sidebar-dark text-light-gray h-screen transition-all duration-300 border-r border-white/5 shadow-2xl relative",
                 collapsed ? "w-20" : "w-72"
             )}
         >
             {/* Collapse Toggle (Absolute positioning behind/near logo area on the right edge) */}
             <button
                 onClick={toggleSidebar}
-                className="absolute -right-3 top-8 bg-[var(--color-eerie-black-1)] hover:bg-bittersweet-shimmer border border-onyx text-light-gray hover:text-white-1 rounded-full p-1 shadow-lg transition-colors z-50 flex items-center justify-center"
+                className="absolute -right-3 top-8 bg-surface-dark hover:bg-primary border border-white/5 text-light-gray hover:text-background-dark rounded-full p-1 shadow-lg transition-colors z-50 flex items-center justify-center"
                 title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
             >
                 {collapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
             </button>
 
             {/* Header / Logo Component */}
-            <div className="flex items-center p-6 border-b border-[var(--color-eerie-black-1)] min-h-[5rem]">
-                <div className={cn("flex items-center w-full transition-all duration-300", collapsed ? "justify-center" : "gap-4")}>
+            <div className="flex items-center justify-center p-6 border-b border-white/5 min-h-[5rem]">
+                <div className={cn("flex items-center justify-center w-full transition-all duration-300")}>
                     {collapsed ? (
                         <img src="/panopticon-logo-no-text.png" alt="Panopticon" className="w-10 h-auto drop-shadow-md" />
                     ) : (
@@ -58,7 +58,7 @@ export function Sidebar({ projects }: SidebarProps) {
                 <div className="flex flex-col gap-1.5">
                     <NavItem
                         to="/"
-                        icon={<Home size={20} className="text-light-gray hover:text-bittersweet-shimmer transition-colors" />}
+                        icon={<Home size={20} className="text-light-gray hover:text-primary transition-colors" />}
                         label="Home"
                         collapsed={collapsed}
                     />
@@ -74,14 +74,14 @@ export function Sidebar({ projects }: SidebarProps) {
                     )}
                     <NavItem
                         to="/entries/new"
-                        icon={<CopyPlus size={18} className="text-blue-400 group-hover:text-blue-300 transition-colors" />}
+                        icon={<CopyPlus size={18} className="text-primary/70 group-hover:text-primary transition-colors" />}
                         label="Nueva Entrada (Predicción)"
                         collapsed={collapsed}
                         indented={!collapsed}
                     />
                     <NavItem
                         to="/projects/new"
-                        icon={<LibraryBig size={18} className="text-vegas-gold group-hover:text-orange-yellow-crayola transition-colors" />}
+                        icon={<LibraryBig size={18} className="text-primary/70 group-hover:text-primary transition-colors" />}
                         label="Nuevo Proyecto"
                         collapsed={collapsed}
                         indented={!collapsed}
@@ -115,10 +115,10 @@ export function Sidebar({ projects }: SidebarProps) {
             </nav>
 
             {/* Footer / User Settings */}
-            <div className="mt-auto border-t border-[var(--color-eerie-black-1)] p-4 bg-black/10">
+            <div className="mt-auto border-t border-white/5 p-4 bg-black/20">
                 <div className={cn("flex items-center", collapsed ? "justify-center" : "justify-between gap-3")}>
                     <div className={cn("flex items-center gap-3 overflow-hidden", collapsed && "justify-center")}>
-                        <div className="flex-shrink-0 bg-jet rounded-full p-2 border border-[var(--color-eerie-black-1)] shadow-inner">
+                        <div className="flex-shrink-0 bg-surface-dark rounded-full p-2 border border-white/5 shadow-inner">
                             <UserCircle size={24} className="text-light-gray group-hover:text-white-1" />
                         </div>
                         {!collapsed && (
@@ -129,7 +129,7 @@ export function Sidebar({ projects }: SidebarProps) {
                         )}
                     </div>
                     {!collapsed && (
-                        <button className="flex-shrink-0 text-light-gray-70 hover:text-bittersweet-shimmer transition-colors p-2 rounded-lg hover:bg-jet" title="Cerrar sesión">
+                        <button className="flex-shrink-0 text-light-gray-70 hover:text-primary transition-colors p-2 rounded-lg hover:bg-surface-dark" title="Cerrar sesión">
                             <LogOut size={18} />
                         </button>
                     )}
@@ -156,8 +156,8 @@ function NavItem({ to, icon, label, collapsed, indented = false }: NavItemProps)
                     "flex items-center rounded-xl p-2.5 transition-all duration-200 group relative",
                     collapsed ? "justify-center" : cn("justify-start gap-3 w-full", indented && "pl-5"),
                     isActive
-                        ? "bg-[var(--color-eerie-black-1)] text-white-1 font-medium shadow-sm border border-white/5"
-                        : "text-light-gray hover:bg-jet hover:text-white-1 hover:translate-x-1"
+                        ? "bg-surface-dark text-white-1 font-medium shadow-sm border border-white/5"
+                        : "text-light-gray hover:bg-white/5 hover:text-white-1 hover:translate-x-1"
                 )
             }
             title={collapsed ? label : undefined}
@@ -166,10 +166,10 @@ function NavItem({ to, icon, label, collapsed, indented = false }: NavItemProps)
                 <>
                     {/* Active Indicator Line (Desktop only) */}
                     {isActive && !collapsed && (
-                        <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-2/3 bg-bittersweet-shimmer rounded-r-md" />
+                        <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-2/3 bg-primary rounded-r-md" />
                     )}
 
-                    <div className={cn("flex-shrink-0 flex items-center justify-center", isActive && "[&>svg]:text-bittersweet-shimmer")}>
+                    <div className={cn("flex-shrink-0 flex items-center justify-center", isActive && "[&>svg]:text-primary")}>
                         {icon}
                     </div>
 

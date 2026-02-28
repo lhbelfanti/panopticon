@@ -28,12 +28,12 @@ export default function Login() {
     const isSubmitting = navigation.state === "submitting";
 
     return (
-        <div className="min-h-screen flex text-light-gray font-sans bg-jet">
+        <div className="min-h-screen flex text-light-gray font-sans bg-background-dark">
             {/* Left side - Branding/Image (Inspiration from typical 2-column auth layouts seen in modern portals) */}
-            <div className="hidden lg:flex w-1/2 bg-smoky-black flex-col justify-center items-center relative overflow-hidden border-r border-[var(--color-eerie-black-1)]">
+            <div className="hidden lg:flex w-1/2 bg-background-dark flex-col justify-center items-center relative overflow-hidden border-r border-white/5">
                 {/* Decorative background gradients */}
-                <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-bittersweet-shimmer rounded-full blur-[150px] opacity-20" />
-                <div className="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-vegas-gold rounded-full blur-[150px] opacity-10" />
+                <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-primary rounded-full blur-[150px] opacity-10" />
+                <div className="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-primary rounded-full blur-[150px] opacity-10" />
 
                 <div className="z-10 flex flex-col items-center">
                     <img src="/panopticon-logo.png" alt="Panopticon Logo" className="w-48 h-auto mb-8 drop-shadow-2xl" />
@@ -46,7 +46,7 @@ export default function Login() {
 
             {/* Right side - Login Form */}
             <div className="w-full lg:w-1/2 flex items-center justify-center p-8">
-                <div className="w-full max-w-md bg-onyx/90 backdrop-blur-xl p-10 rounded-2xl border border-[var(--color-eerie-black-1)] shadow-2xl">
+                <div className="w-full max-w-md bg-surface-dark/90 backdrop-blur-xl p-10 rounded-2xl border border-white/5 shadow-2xl">
 
                     <div className="flex flex-col items-center mb-8 lg:hidden">
                         <img src="/panopticon-logo.png" alt="Panopticon Logo" className="w-32 h-auto mb-4" />
@@ -74,7 +74,7 @@ export default function Login() {
                                 name="email"
                                 id="email"
                                 required
-                                className="w-full bg-[var(--color-eerie-black-2)] border border-[var(--color-eerie-black-1)] rounded-lg p-3.5 text-white-1 focus:ring-2 focus:ring-bittersweet-shimmer focus:border-transparent outline-none transition-all placeholder:opacity-30"
+                                className="w-full bg-sidebar-dark border border-white/10 rounded-lg p-3.5 text-white-1 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all placeholder:opacity-30"
                                 placeholder="usuario@institucion.edu"
                             />
                         </div>
@@ -84,7 +84,7 @@ export default function Login() {
                                 <label className="text-sm font-semibold text-light-gray tracking-wide" htmlFor="password">
                                     Contraseña
                                 </label>
-                                <a href="#" className="text-xs text-bittersweet-shimmer hover:text-orange-crayola transition-colors">
+                                <a href="#" className="text-xs text-primary hover:text-primary/70 transition-colors">
                                     ¿Olvidó su contraseña?
                                 </a>
                             </div>
@@ -93,7 +93,7 @@ export default function Login() {
                                 name="password"
                                 id="password"
                                 required
-                                className="w-full bg-[var(--color-eerie-black-2)] border border-[var(--color-eerie-black-1)] rounded-lg p-3.5 text-white-1 focus:ring-2 focus:ring-bittersweet-shimmer focus:border-transparent outline-none transition-all placeholder:opacity-30"
+                                className="w-full bg-sidebar-dark border border-white/10 rounded-lg p-3.5 text-white-1 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all placeholder:opacity-30"
                                 placeholder="••••••••"
                             />
                         </div>
@@ -101,11 +101,11 @@ export default function Login() {
                         <button
                             type="submit"
                             disabled={isSubmitting}
-                            className="w-full mt-2 bg-bittersweet-shimmer hover:bg-orange-crayola text-white-1 font-bold py-3.5 px-4 rounded-lg transition-transform hover:-translate-y-0.5 shadow-lg shadow-bittersweet-shimmer/25 flex items-center justify-center gap-2 disabled:opacity-70 disabled:hover:translate-y-0"
+                            className="w-full mt-2 bg-primary hover:bg-primary/90 text-background-dark font-bold py-3.5 px-4 rounded-lg transition-transform hover:-translate-y-0.5 shadow-lg shadow-primary/20 flex items-center justify-center gap-2 disabled:opacity-70 disabled:hover:translate-y-0"
                         >
                             {isSubmitting ? (
                                 <>
-                                    <div className="w-5 h-5 border-2 border-white-1/30 border-t-white-1 rounded-full animate-spin" />
+                                    <div className="w-5 h-5 border-2 border-background-dark/30 border-t-background-dark rounded-full animate-spin" />
                                     <span>Verificando...</span>
                                 </>
                             ) : (
@@ -114,7 +114,7 @@ export default function Login() {
                         </button>
 
                         <p className="text-center text-sm text-light-gray-70 mt-4">
-                            ¿No tiene una cuenta institucional? <a href="#" className="text-bittersweet-shimmer hover:text-orange-crayola font-medium">Regístrese ahora</a>
+                            ¿No tiene una cuenta institucional? <a href="#" className="text-primary hover:text-primary/70 font-medium tracking-wide">Regístrese ahora</a>
                         </p>
                     </Form>
                 </div>
