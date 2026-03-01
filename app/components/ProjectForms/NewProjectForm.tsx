@@ -2,7 +2,8 @@ import { useMemo, useState } from "react";
 import { Form } from "react-router";
 import type { BehaviorConfig } from "~/services/api/projects/types";
 import * as LucideIcons from "lucide-react";
-import { useTranslation } from "react-i18next";
+import { AdverseBehaviorLabel } from "~/components/AdverseBehaviorLabel";
+import { Trans, useTranslation } from "react-i18next";
 import type { NewProjectFormProps } from "./types";
 
 const modelsList = [
@@ -53,9 +54,9 @@ export const NewProjectForm = (props: NewProjectFormProps) => {
   const inputClassName =
     "w-full bg-sidebar-dark border border-white/10 rounded-lg p-3.5 text-white-1 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all placeholder:opacity-30 shadow-inner";
   const checkboxLabelClassName =
-    "flex items-center gap-3 p-4 rounded-xl border border-white/5 hover:border-primary/50 bg-background-dark/50 cursor-pointer transition-all hover:shadow-lg hover:shadow-primary/5 group";
+    "flex items-center gap-3 p-4 rounded-xl border border-white/5 hover:border-primary/50 bg-background-dark/50 cursor-pointer transition-all hover:shadow-lg hover:shadow-primary/5 group h-full";
   const checkboxInputClassName =
-    "peer appearance-none w-5 h-5 border-2 border-white/20 rounded bg-transparent checked:bg-primary checked:border-primary transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed";
+    "peer appearance-none w-5 h-5 border-2 border-white/20 rounded bg-transparent checked:bg-primary checked:border-primary transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0";
 
   return (
     <Form method="post" className="p-8 lg:p-10 flex flex-col gap-8">
@@ -109,8 +110,8 @@ export const NewProjectForm = (props: NewProjectFormProps) => {
           <h3 className="text-lg font-bold text-white-1">
             {t("projects.new.behaviorsTitle")}
           </h3>
-          <p className="text-sm text-light-gray-70 mt-1">
-            {t("projects.new.behaviorsDesc")}
+          <p className="text-sm text-light-gray-70 mt-1 leading-relaxed">
+            <Trans i18nKey="projects.new.behaviorsDesc" components={{ 1: <AdverseBehaviorLabel /> }} />
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
@@ -124,7 +125,7 @@ export const NewProjectForm = (props: NewProjectFormProps) => {
                 key={config.id}
                 className={`${checkboxLabelClassName} ${!isEnabled ? "opacity-50 cursor-not-allowed border-white/5 hover:border-white/5 hover:shadow-none bg-black/20" : ""}`}
               >
-                <div className="relative flex items-center justify-center">
+                <div className="relative flex items-center justify-center flex-shrink-0">
                   <input
                     type="checkbox"
                     name="behaviors"
@@ -147,21 +148,21 @@ export const NewProjectForm = (props: NewProjectFormProps) => {
                     />
                   </svg>
                 </div>
-                <div className="flex items-center gap-2 overflow-hidden w-full">
+                <div className="flex items-center gap-2 overflow-hidden w-full h-full">
                   <div
                     className={`p-1.5 rounded-md flex-shrink-0 ${config.bgClass} ${config.colorClass} ${!isEnabled && "saturate-0 opacity-50"}`}
                   >
                     <IconComponent size={16} />
                   </div>
                   <span
-                    className={`text-sm font-medium transition-colors truncate ${isEnabled ? "text-light-gray-80 group-hover:text-white-1" : "text-light-gray-60"}`}
+                    className={`text-sm font-medium transition-colors break-words leading-tight ${isEnabled ? "text-light-gray-80 group-hover:text-white-1" : "text-light-gray-60"}`}
                     title={t(`projects.behaviors.${config.id}`)}
                   >
                     {t(`projects.behaviors.${config.id}`)}
                   </span>
                 </div>
                 {!isEnabled && (
-                  <span className="text-[0.6rem] uppercase tracking-wider font-bold bg-white/10 px-1.5 py-0.5 rounded text-light-gray-60 flex-shrink-0 ml-auto mr-1">
+                  <span className="text-[0.6rem] uppercase tracking-wider font-bold bg-white/10 px-1.5 py-0.5 rounded text-light-gray-60 flex-shrink-0 ml-auto mr-1 self-start mt-0.5">
                     {t("common.notAvailable")}
                   </span>
                 )}
@@ -179,8 +180,8 @@ export const NewProjectForm = (props: NewProjectFormProps) => {
           <h3 className="text-lg font-bold text-white-1">
             {t("projects.new.modelsTitle")}
           </h3>
-          <p className="text-sm text-light-gray-70 mt-1">
-            {t("projects.new.modelsDesc")}
+          <p className="text-sm text-light-gray-70 mt-1 leading-relaxed">
+            <Trans i18nKey="projects.new.modelsDesc" components={{ 1: <AdverseBehaviorLabel /> }} />
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -196,7 +197,7 @@ export const NewProjectForm = (props: NewProjectFormProps) => {
           )}
           {availableModels.map((m) => (
             <label key={m} className={checkboxLabelClassName}>
-              <div className="relative flex items-center justify-center">
+              <div className="relative flex items-center justify-center flex-shrink-0">
                 <input
                   type="checkbox"
                   name="models"
@@ -217,7 +218,7 @@ export const NewProjectForm = (props: NewProjectFormProps) => {
                   />
                 </svg>
               </div>
-              <span className="text-light-gray-80 text-sm font-medium group-hover:text-white-1 transition-colors">
+              <span className="text-light-gray-80 text-sm font-medium group-hover:text-white-1 transition-colors break-words text-left w-full pl-2">
                 {t(`projects.models.${m}`)}
               </span>
             </label>

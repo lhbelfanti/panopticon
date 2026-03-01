@@ -105,9 +105,9 @@
             "description": "Descripción (Opcional)",
             "descriptionPlaceholder": "Breve descripción de los objetivos del análisis...",
             "behaviorsTitle": "Comportamientos Objetivo",
-            "behaviorsDesc": "Selecciona el comportamiento humano adverso que te gustaría detectar en el dataset",
+            "behaviorsDesc": "Selecciona los <1>Adverse Human Behaviours</1> que te gustaría detectar en el dataset",
             "modelsTitle": "Modelos",
-            "modelsDesc": "Por cada modelo seleccionado se creará un nuevo subproyecto. Esto permite usar diferentes modelos para saber cuál de ellos detecta mejor los Comportamientos Humanos Adversos seleccionados. Ten en cuenta que no todos los modelos están disponibles para todos los Comportamientos Humanos Adversos y estás viendo la lista de aquellos que están disponibles para todos los Comportamientos Humanos Adversos que seleccionaste.",
+            "modelsDesc": "Se generará un subproyecto por cada modelo seleccionado. Nota: Los modelos se filtran dinámicamente para mostrar sólo los compatibles con todos los <1>Adverse Human Behaviours</1> seleccionados.",
             "noModelsIntersection": "No hay modelos disponibles para la combinación de comportamientos seleccionada.",
             "selectBehaviorFirst": "Seleccione al menos un comportamiento para ver los modelos disponibles.",
             "submit": "Crear Proyecto",
@@ -129,8 +129,8 @@
         },
         "view": {
             "subprojectsTitle": "Subproyectos por modelo",
-            "subprojectsDesc": "Selecciona un subproyecto para ver su dataset y predicciones",
-            "behaviorsTracked": "Comportamientos Humanos Adversos a detectar",
+            "subprojectsDesc": "Explora los diferentes modelos aplicados a este proyecto. Selecciona un subproyecto para acceder a su dataset específico, evaluar predicciones individuales y administrar los resultados.",
+            "behaviorsTracked": "<1>Adverse Human Behaviours</1> a detectar",
             "emptyModels": "No hay modelos CL configurados para este proyecto.",
             "openSubproject": "Abrir predicciones \u2192"
         },

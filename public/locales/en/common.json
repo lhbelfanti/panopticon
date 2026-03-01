@@ -105,9 +105,9 @@
             "description": "Description (Optional)",
             "descriptionPlaceholder": "Brief description of the analysis goals...",
             "behaviorsTitle": "Target Behaviors",
-            "behaviorsDesc": "Select the adverse human behaviour you'd like to detect in the datasset",
+            "behaviorsDesc": "Select the <1>Adverse Human Behaviours</1> you'd like to detect in the dataset",
             "modelsTitle": "Models",
-            "modelsDesc": "For each model selected a new subproject will be created. This allow you to use different models to know which one is the one that detects better the Adverse Human Behaviours selected. Take into consideration that not all the models are available for all the Adverse Human Behaviours and you are seeing the list of them which are available for all the Adverse Human Behaviours you selected",
+            "modelsDesc": "A new subproject will be generated for each selected model. Note: Models are dynamically filtered to only show those compatible with all selected <1>Adverse Human Behaviours</1>.",
             "noModelsIntersection": "No models available for the selected combination of behaviors.",
             "selectBehaviorFirst": "Select at least one behavior to view available models.",
             "submit": "Create Project",
@@ -129,8 +129,8 @@
         },
         "view": {
             "subprojectsTitle": "Subprojects by model",
-            "subprojectsDesc": "Select a subproject to view its dataset and predictions",
-            "behaviorsTracked": "Adverse Human Behaviours to detect",
+            "subprojectsDesc": "Explore the different models applied to this project. Select a subproject to access its specific dataset, evaluate individual predictions, and manage the filtered results.",
+            "behaviorsTracked": "<1>Adverse Human Behaviours</1> to detect",
             "emptyModels": "No ML models were configured for this project.",
             "openSubproject": "Open predictions \u2192"
         },
