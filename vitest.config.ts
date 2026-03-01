@@ -21,7 +21,16 @@ export default defineConfig({
             provider: "v8",
             reporter: ["text", "json", "html", "lcov"],
             include: ["app/**/*.{ts,tsx}"],
-            exclude: ["app/**/*.test.{ts,tsx}", "app/entry.client.tsx", "app/entry.server.tsx", "app/root.tsx"]
+            exclude: [
+                "app/**/*.test.{ts,tsx}",
+                "app/entry.client.tsx",
+                "app/entry.server.tsx",
+                "app/root.tsx",
+                "app/routes.ts",
+                "app/localization/i18n.ts",
+                "app/**/types.ts",
+                "app/**/*.server.ts"
+            ]
         }
     },
 });
