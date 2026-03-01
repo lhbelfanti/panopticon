@@ -16,8 +16,8 @@ import {
   Eye,
   FileText,
   Filter,
+  Folder,
   Hash,
-  LibraryBig,
   Percent,
   Search,
   Trash2,
@@ -67,7 +67,7 @@ const EntriesTable = (props: EntriesTableProps) => {
       setEntryToDelete(null);
     }
   }, [nav.state, isDeleting]);
-  
+
   const isSearching =
     nav.location != null &&
     new URLSearchParams(nav.location.search).has("filterCol");
@@ -112,7 +112,7 @@ const EntriesTable = (props: EntriesTableProps) => {
               to={`/projects/${project.id}`}
               className="text-white-1 hover:text-yellow-400 transition-colors flex items-center gap-2"
             >
-              <LibraryBig size={28} className="text-primary" />
+              <Folder size={28} className="text-primary" />
               {project.name}
             </Link>
             <span className="opacity-50">/</span>
@@ -138,7 +138,7 @@ const EntriesTable = (props: EntriesTableProps) => {
                 e.target instanceof HTMLSelectElement ||
                 (e.target instanceof HTMLInputElement && e.target.type !== "text" && e.target.type !== "number")
               ) {
-                 submit(e.currentTarget, { replace: true });
+                submit(e.currentTarget, { replace: true });
               }
             }}
             onSubmit={(e) => { e.preventDefault(); submit(e.currentTarget, { replace: true }); }}
