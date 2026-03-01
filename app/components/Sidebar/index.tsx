@@ -23,7 +23,7 @@ const cn = (...inputs: ClassValue[]) => {
 };
 
 export const Sidebar = (props: SidebarProps) => {
-  const { projects } = props;
+  const { projects, user } = props;
   const [collapsed, setCollapsed] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const { t, i18n } = useTranslation();
@@ -147,10 +147,10 @@ export const Sidebar = (props: SidebarProps) => {
               {!collapsed && (
                 <div className="flex flex-col min-w-0 pr-2 transition-colors">
                   <span className="text-sm font-semibold text-white-1 group-hover:text-background-dark leading-tight truncate">
-                    {t("sidebar.researcherName")}
+                    {user ? `${user.name} ${user.lastName}` : "Research User"}
                   </span>
                   <span className="text-xs text-light-gray-70 group-hover:text-background-dark/80 truncate">
-                    {t("sidebar.researcherUser")}
+                    {user ? user.nickname : "@research"}
                   </span>
                 </div>
               )}

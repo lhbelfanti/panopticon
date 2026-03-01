@@ -29,9 +29,12 @@ export const links: Route.LinksFunction = () => [
   },
 ];
 
+import { getUserById } from "~/services/api/users/users.server";
+
 export const loader = async () => {
   const projects = await getProjects();
-  return { projects };
+  const user = await getUserById("1");
+  return { projects, user };
 };
 
 export const Layout = (props: { children: React.ReactNode }) => {
@@ -42,9 +45,11 @@ export const Layout = (props: { children: React.ReactNode }) => {
 
   // Conditionally hook into useLoaderData in case of early Error Boundaries rendering the Layout before loader runs
   let projects: Project[] = [];
+  let user = null;
   try {
     const data = useLoaderData<typeof loader>();
     projects = data?.projects || [];
+    user = data?.user || null;
   } catch (e) {
     // ignore
   }
@@ -58,7 +63,7 @@ export const Layout = (props: { children: React.ReactNode }) => {
         <Links />
       </head>
       <body className="min-h-screen bg-background-dark text-light-gray font-sans flex relative">
-        {!isLoginPage && <Sidebar projects={projects} />}
+        {!isLoginPage && <Sidebar projects={projects} user={user} />}
         <main className="flex-1 flex flex-col h-screen overflow-y-auto relative bg-background-dark isolate">
           {children}
         </main>

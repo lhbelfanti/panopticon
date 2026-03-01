@@ -5,7 +5,7 @@ import type { User } from "./types";
 export const getUserById = async (id: string): Promise<User | null> => {
   // Simulated domain logic
   if (id === "1") {
-    return { id: "1", name: "John Doe" };
+    return { id: "1", name: "Lucas", lastName: "Belfanti", nickname: "@lbelfanti" };
   }
   return null;
 };
