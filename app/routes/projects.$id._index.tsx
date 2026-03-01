@@ -15,7 +15,8 @@ import ConfirmationModal from "~/components/ConfirmationModal";
 import SubprojectCard from "~/components/SubprojectCard";
 import { Folder, Trash2 } from "lucide-react";
 import * as LucideIcons from "lucide-react";
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
+import { AdverseBehaviorLabel } from "~/components/AdverseBehaviorLabel";
 
 export const meta = () => {
   return [
@@ -78,7 +79,7 @@ const ProjectViewPage = () => {
 
             <div className="flex flex-col gap-2 mt-2">
               <span className="text-[0.65rem] font-bold text-light-gray-50 uppercase tracking-widest">
-                {t("projects.view.behaviorsTracked")}
+                <Trans i18nKey="projects.view.behaviorsTracked" components={{ 1: <AdverseBehaviorLabel /> }} />
               </span>
               <div className="flex flex-wrap gap-2">
                 {project.behaviors?.map((b) => {
@@ -128,7 +129,7 @@ const ProjectViewPage = () => {
             <h2 className="text-2xl font-bold text-white-1 mb-2">
               {t("projects.view.subprojectsTitle")}
             </h2>
-            <p className="text-sm text-light-gray-70 max-w-3xl leading-relaxed text-balance">
+            <p className="text-sm text-light-gray-70 w-full max-w-full leading-relaxed text-balance">
               {t("projects.view.subprojectsDesc")}
             </p>
           </div>

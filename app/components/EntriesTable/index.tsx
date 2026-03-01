@@ -16,6 +16,7 @@ import {
   FileText,
   Filter,
   Hash,
+  LibraryBig,
   Percent,
   Search,
   Trash2,
@@ -46,6 +47,12 @@ const EntriesTable = (props: EntriesTableProps) => {
 
   const isDeleting = nav.formData?.get("intent") === "delete_entry";
   const isPredicting = nav.formData?.get("intent") === "predict_pending";
+
+  useEffect(() => {
+    if (nav.state === "idle" && !isDeleting) {
+      setEntryToDelete(null);
+    }
+  }, [nav.state, isDeleting]);
   const isSearching =
     nav.location != null &&
     new URLSearchParams(nav.location.search).has("filterCol");
@@ -86,8 +93,9 @@ const EntriesTable = (props: EntriesTableProps) => {
             {/* Title should be clickable, go to project screen, hover yellow, text-white-1 */}
             <Link
               to={`/projects/${project.id}`}
-              className="text-white-1 hover:text-yellow-400 transition-colors"
+              className="text-white-1 hover:text-yellow-400 transition-colors flex items-center gap-2"
             >
+              <LibraryBig size={28} className="text-primary" />
               {project.name}
             </Link>
             <span className="opacity-50">/</span>
@@ -96,7 +104,7 @@ const EntriesTable = (props: EntriesTableProps) => {
               {t(`projects.models.${modelId}`)}
             </span>
           </h1>
-          <p className="text-light-gray-70 text-sm">{t("entries.title")}</p>
+          <p className="text-light-gray-70 text-sm">{t("projects.entries.title")}</p>
         </div>
       </div>
 
@@ -238,7 +246,7 @@ const EntriesTable = (props: EntriesTableProps) => {
             className="flex items-center gap-2 px-4 py-2 text-sm font-bold text-white-1 bg-surface-dark border border-white/10 hover:bg-yellow-400 hover:text-background-dark hover:border-yellow-400 rounded-lg transition-colors whitespace-nowrap"
           >
             <Download size={16} />
-            {t("entries.exportCsv")}
+            {t("projects.entries.exportCsv")}
           </a>
         </div>
 
@@ -253,12 +261,12 @@ const EntriesTable = (props: EntriesTableProps) => {
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="border-b border-white/5 text-xs font-bold text-light-gray-70 uppercase tracking-wider bg-black/20 sticky top-0 z-10 backdrop-blur-md">
-                  <th className="py-3 px-4 w-1 whitespace-nowrap text-center">{t("entries.tableId")}</th>
-                  <th className="py-3 px-4 text-center">{t("entries.tableText")}</th>
-                  <th className="py-3 px-4 w-1 whitespace-nowrap text-center">{t("entries.tableVerdict")}</th>
-                  <th className="py-3 px-4 w-1 whitespace-nowrap text-center">{t("entries.tableScore")}</th>
-                  <th className="py-3 px-4 w-1 whitespace-nowrap text-center text-right">
-                    {t("entries.tableActions")}
+                  <th className="py-3 px-4 w-1 whitespace-nowrap text-center">{t("projects.entries.tableId")}</th>
+                  <th className="py-3 px-4 text-left">{t("projects.entries.tableText")}</th>
+                  <th className="py-3 px-4 w-1 whitespace-nowrap text-center">{t("projects.entries.tableVerdict")}</th>
+                  <th className="py-3 px-4 w-1 whitespace-nowrap text-center">{t("projects.entries.tableScore")}</th>
+                  <th className="py-3 px-4 w-1 whitespace-nowrap text-center">
+                    {t("projects.entries.tableActions")}
                   </th>
                 </tr>
               </thead>
@@ -269,7 +277,7 @@ const EntriesTable = (props: EntriesTableProps) => {
                       colSpan={5}
                       className="p-12 text-center text-light-gray-70 border-none"
                     >
-                      {t("entries.noResults")}
+                      {t("projects.entries.noResults")}
                     </td>
                   </tr>
                 ) : (
@@ -283,7 +291,7 @@ const EntriesTable = (props: EntriesTableProps) => {
                         {entry.id.split("_").pop()}
                       </td>
                       <td
-                        className="py-2 px-4 text-sm text-white-1 break-words min-w-0 text-center leading-relaxed"
+                        className="py-2 px-4 text-sm text-white-1 break-words min-w-0 text-left leading-relaxed"
                         title={entry.text}
                       >
                         {entry.text}
@@ -301,10 +309,10 @@ const EntriesTable = (props: EntriesTableProps) => {
                           : "-"}
                       </td>
                       <td
-                        className="py-2 px-4 text-right whitespace-nowrap"
+                        className="py-2 px-4 text-center whitespace-nowrap"
                         onClick={(e) => e.stopPropagation()}
                       >
-                        <div className="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div className="flex items-center justify-center gap-3">
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
@@ -321,7 +329,7 @@ const EntriesTable = (props: EntriesTableProps) => {
                               setEntryToDelete(entry.id);
                             }}
                             disabled={isDeleting}
-                            title={t("entries.deleteEntry")}
+                            title={t("projects.entries.deleteEntry")}
                             className="group p-1.5 rounded-full hover:bg-bittersweet-shimmer hover:scale-105 text-light-gray-50 hover:text-white-1 transition-all disabled:opacity-50 disabled:hover:scale-100 disabled:hover:bg-transparent"
                           >
                             <Trash2
@@ -340,56 +348,106 @@ const EntriesTable = (props: EntriesTableProps) => {
         </div>
 
         {/* Footer Toolbar: Count, Pagination, Predict Button */}
-        <div className="px-4 lg:px-6 py-3 border-t border-white/5 bg-black/10 flex items-center justify-between">
+        <div className="px-6 py-6 border-t border-white/5 bg-black/10 flex items-center justify-between">
           {/* Entry Count */}
-          <div className="text-xs text-light-gray-70 font-semibold tracking-wide w-1/3">
-            Total entries: <span className="text-white-1">{data.total}</span>
+          <div className="text-sm text-light-gray-70 font-bold tracking-wide w-1/4">
+            Total entries: <span className="text-white-1 text-xl ml-1">{data.total}</span>
           </div>
 
-          {/* Centered Numbered Pagination */}
-          <div className="flex gap-1 items-center justify-center w-1/3">
-            {Array.from(
-              { length: Math.min(5, data.totalPages || 1) },
-              (_, i) => {
-                // Compute display pages centered around current page
-                let pageNum = data.page - 2 + i;
-                if (data.page <= 3) pageNum = i + 1;
-                else if (data.page >= data.totalPages - 2)
-                  pageNum = data.totalPages - 4 + i;
+          {/* Complex Pagination */}
+          <div className="flex gap-2 items-center justify-center w-2/4">
+            <Form method="get" className="inline">
+              <input type="hidden" name="filterCol" value={filterCol} />
+              <input type="hidden" name="filterVal" value={filterVal} />
+              <input type="hidden" name="filterOp" value={filterOp} />
+              <input type="hidden" name="filterBias" value={filterBias} />
+              <input type="hidden" name="page" value={Math.max(1, data.page - 1)} />
+              <button
+                type="submit"
+                disabled={data.page <= 1}
+                title={t("projects.entries.prev")}
+                className="w-10 h-10 flex items-center justify-center rounded-lg text-lg font-bold transition-colors text-light-gray-70 hover:bg-white/5 hover:text-white-1 disabled:opacity-30 disabled:hover:bg-transparent"
+              >
+                &lt;
+              </button>
+            </Form>
 
-                if (pageNum < 1 || pageNum > data.totalPages) return null;
+            <div className="flex gap-1 items-center bg-white/5 rounded-lg px-2 py-1">
+              {(() => {
+                const total = data.totalPages || 1;
+                const current = data.page;
 
-                return (
-                  <Form method="get" key={pageNum} className="inline">
-                    <input type="hidden" name="filterCol" value={filterCol} />
-                    <input type="hidden" name="filterVal" value={filterVal} />
-                    <input type="hidden" name="filterOp" value={filterOp} />
-                    <input type="hidden" name="filterBias" value={filterBias} />
-                    <input type="hidden" name="page" value={pageNum} />
-                    <button
-                      type="submit"
-                      className={`w-7 h-7 flex items-center justify-center rounded text-xs font-bold transition-colors ${pageNum === data.page
-                        ? "bg-primary text-background-dark"
-                        : "text-light-gray-70 hover:bg-white/5 hover:text-white-1"
-                        }`}
-                    >
-                      {pageNum}
-                    </button>
-                  </Form>
-                );
-              },
-            )}
+                // Logic to display pages with ellipsis
+                const pages: (number | string)[] = [];
+                if (total <= 10) {
+                  for (let i = 1; i <= total; i++) pages.push(i);
+                } else {
+                  if (current <= 4) {
+                    pages.push(1, 2, 3, 4, 5, "...", total - 2, total - 1, total);
+                  } else if (current >= total - 3) {
+                    pages.push(1, 2, 3, "...", total - 4, total - 3, total - 2, total - 1, total);
+                  } else {
+                    pages.push(1, 2, "...", current - 1, current, current + 1, "...", total - 1, total);
+                  }
+                }
+
+                return pages.map((p, idx) => {
+                  if (p === "...") {
+                    return (
+                      <span key={`ellipsis-${idx}`} className="px-2 text-light-gray-70 text-sm font-bold opacity-50">
+                        ...
+                      </span>
+                    );
+                  }
+
+                  return (
+                    <Form method="get" key={p} className="inline">
+                      <input type="hidden" name="filterCol" value={filterCol} />
+                      <input type="hidden" name="filterVal" value={filterVal} />
+                      <input type="hidden" name="filterOp" value={filterOp} />
+                      <input type="hidden" name="filterBias" value={filterBias} />
+                      <input type="hidden" name="page" value={p} />
+                      <button
+                        type="submit"
+                        className={`w-8 h-8 flex items-center justify-center rounded-md text-sm font-bold transition-colors ${p === current
+                            ? "bg-primary text-background-dark shadow-md"
+                            : "text-light-gray-70 hover:bg-white/10 hover:text-white-1"
+                          }`}
+                      >
+                        {p}
+                      </button>
+                    </Form>
+                  );
+                });
+              })()}
+            </div>
+
+            <Form method="get" className="inline">
+              <input type="hidden" name="filterCol" value={filterCol} />
+              <input type="hidden" name="filterVal" value={filterVal} />
+              <input type="hidden" name="filterOp" value={filterOp} />
+              <input type="hidden" name="filterBias" value={filterBias} />
+              <input type="hidden" name="page" value={Math.min(data.totalPages, data.page + 1)} />
+              <button
+                type="submit"
+                disabled={data.page >= data.totalPages}
+                title={t("projects.entries.next")}
+                className="w-10 h-10 flex items-center justify-center rounded-lg text-lg font-bold transition-colors text-light-gray-70 hover:bg-white/5 hover:text-white-1 disabled:opacity-30 disabled:hover:bg-transparent"
+              >
+                &gt;
+              </button>
+            </Form>
           </div>
 
           {/* Predict Pending Button */}
-          <div className="w-1/3 flex justify-end">
+          <div className="w-1/4 flex justify-end">
             <button
               type="button"
               onClick={handlePredictPending}
               disabled={isPredicting}
-              className="flex items-center gap-2 px-4 py-1.5 text-xs font-bold text-background-dark bg-yellow-400 hover:bg-yellow-500 rounded-md transition-all disabled:opacity-50"
+              className="flex items-center gap-2 px-6 py-3 text-base font-bold text-background-dark bg-yellow-400 hover:bg-yellow-500 rounded-lg transition-all disabled:opacity-50 hover:scale-105 hover:shadow-lg shadow-yellow-500/20"
             >
-              <Zap size={14} className={isPredicting ? "animate-pulse" : ""} />
+              <Zap size={20} className={isPredicting ? "animate-pulse" : ""} />
               {isPredicting ? "Predicting..." : "Predict Pending"}
             </button>
           </div>
@@ -454,11 +512,11 @@ const EntriesTable = (props: EntriesTableProps) => {
         isOpen={!!entryToDelete}
         onClose={() => setEntryToDelete(null)}
         icon={<Trash2 size={28} />}
-        title={t("entries.deleteEntry")}
-        description={t("entries.deleteEntryDesc")}
+        title={t("projects.entries.deleteEntry")}
+        description={t("projects.entries.deleteEntryDesc")}
         cancelText={t("sidebar.cancel")}
         confirmText={
-          isDeleting ? t("common.deleting") : t("entries.deleteEntry")
+          isDeleting ? t("common.deleting") : t("projects.entries.deleteEntry")
         }
         confirmAction="."
         confirmMethod="post"

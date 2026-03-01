@@ -105,9 +105,9 @@
             "description": "Descripción (Opcional)",
             "descriptionPlaceholder": "Breve descripción de los objetivos del análisis...",
             "behaviorsTitle": "Comportamientos Objetivo",
-            "behaviorsDesc": "Selecciona los <1>Adverse Human Behaviours</1> que te gustaría detectar en el dataset",
+            "behaviorsDesc": "Selecciona los <1>Comportamientos Humanos Adversos</1> que te gustaría detectar en el dataset",
             "modelsTitle": "Modelos",
-            "modelsDesc": "Se generará un subproyecto por cada modelo seleccionado. Nota: Los modelos se filtran dinámicamente para mostrar sólo los compatibles con todos los <1>Adverse Human Behaviours</1> seleccionados.",
+            "modelsDesc": "Se generará un subproyecto por cada modelo seleccionado. Nota: Los modelos se filtran dinámicamente para mostrar sólo los compatibles con todos los <1>Comportamientos Humanos Adversos</1> seleccionados.",
             "noModelsIntersection": "No hay modelos disponibles para la combinación de comportamientos seleccionada.",
             "selectBehaviorFirst": "Seleccione al menos un comportamiento para ver los modelos disponibles.",
             "submit": "Crear Proyecto",
@@ -130,7 +130,7 @@
         "view": {
             "subprojectsTitle": "Subproyectos por modelo",
             "subprojectsDesc": "Explora los diferentes modelos aplicados a este proyecto. Selecciona un subproyecto para acceder a su dataset específico, evaluar predicciones individuales y administrar los resultados.",
-            "behaviorsTracked": "<1>Adverse Human Behaviours</1> a detectar",
+            "behaviorsTracked": "<1>Comportamientos Humanos Adversos</1> a detectar",
             "emptyModels": "No hay modelos CL configurados para este proyecto.",
             "openSubproject": "Abrir predicciones \u2192"
         },
