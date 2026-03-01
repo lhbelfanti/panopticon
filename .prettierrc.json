@@ -1,0 +1,18 @@
+{
+    "plugins": [
+        "@trivago/prettier-plugin-sort-imports"
+    ],
+    "importOrder": [
+        "^(react/(.*)$)|^(react$)|^(react-dom/(.*)$)|^(react-dom$)",
+        "^(node:.*|fs|path|os|crypto|url)$",
+        "^@?react-router(.*)$",
+        "^~/services/api/(.*)$",
+        "^~/components/(.*)$",
+        "<THIRD_PARTY_MODULES>",
+        "^~/(.*)$",
+        "^[.//](?!.*types).*$",
+        ".*types$"
+    ],
+    "importOrderSeparation": false,
+    "importOrderSortSpecifiers": true
+}
