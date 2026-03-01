@@ -39,7 +39,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   return new Response(csvContent, {
     headers: {
       "Content-Type": "text/csv; charset=utf-8",
-      "Content-Disposition": `attachment; filename="export_${modelId}_${Date.now()}.csv"`,
+      "Content-Disposition": `attachment; filename="export_${modelId.replace(/-/g, '_')}_${id}_1.csv"`,
     },
   });
 };

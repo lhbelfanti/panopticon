@@ -8,7 +8,7 @@ const mockTextPool = [
   "Stop bothering me, or I will make you pay.",
   "I love the new update to this game!",
   "Nobody understands what I am going through.",
-  "I'm so exhausted, I wish I could just disappear.",
+  "I'm so exhausted, I wish I could just disappear. I'm so exhausted, I wish I could just disappear. I'm so exhausted, I wish I could just disappear. I'm so exhausted, I wish I could just disappear.",
   "You are so ugly and nobody likes you.",
   "Learning React is fun but hard sometimes.",
 ];
@@ -27,7 +27,7 @@ const generateMockEntries = (projectId: string, modelId: string) => {
       id: `entry_${globalEntriesId}_${Date.now()}`,
       projectId,
       modelId,
-      text: `${text} (${i})`,
+      text: text,
       verdict: randomVerdict,
       score:
         randomVerdict === "Positive"
@@ -155,14 +155,10 @@ export const predictPendingEntries = async (
   entriesStore[storeKey] = entriesStore[storeKey].map((e) => {
     if (e.verdict === "Pending") {
       count++;
-      const newVerdict = Math.random() > 0.6 ? "Positive" : "Negative";
       return {
         ...e,
-        verdict: newVerdict as Entry["verdict"],
-        score:
-          newVerdict === "Positive"
-            ? 0.85 + Math.random() * 0.14
-            : Math.random() * 0.4,
+        verdict: "In Progress" as Entry["verdict"],
+        score: undefined,
       };
     }
     return e;

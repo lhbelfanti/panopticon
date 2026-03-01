@@ -43,7 +43,7 @@ const ConfirmationModal = (props: ConfirmationModalProps) => {
           <button
             type="button"
             onClick={onClose}
-            className="flex-1 py-2.5 px-4 rounded-lg font-semibold text-light-gray hover:text-white-1 bg-white/5 hover:bg-white/10 transition-colors"
+            className="flex-1 py-2.5 px-4 rounded-lg font-semibold cursor-pointer text-light-gray hover:text-white-1 bg-white/5 hover:bg-white/10 transition-colors duration-150"
           >
             {cancelText}
           </button>
@@ -57,7 +57,7 @@ const ConfirmationModal = (props: ConfirmationModalProps) => {
             ))}
             <button
               type="submit"
-              className={`flex-1 py-2.5 px-4 rounded-lg font-semibold text-white-1 transition-colors shadow-lg ${btnColor}`}
+              className={`flex-1 flex justify-center items-center py-2.5 px-4 rounded-lg cursor-pointer font-semibold text-white-1 transition-colors duration-150 shadow-lg ${btnColor}`}
             >
               {confirmText}
             </button>

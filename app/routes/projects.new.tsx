@@ -12,7 +12,7 @@ import {
 import type { MLModel, TargetBehavior } from "~/services/api/projects/types";
 import { NewProjectForm } from "~/components/ProjectForms/NewProjectForm";
 import { useTranslation } from "react-i18next";
-import { LibraryBig } from "lucide-react";
+import { Folder } from "lucide-react";
 
 export const meta = () => {
   return [
@@ -71,7 +71,7 @@ const NewProjectPage = () => {
       <div className="max-w-3xl mx-auto">
         <div className="mb-10 animate-in fade-in slide-in-from-bottom-4 duration-500">
           <h1 className="text-4xl font-extrabold text-white-1 mb-3 tracking-tight flex items-center gap-3">
-            <LibraryBig size={36} className="text-primary" />
+            <Folder size={36} className="text-primary" />
             {t("projects.new.title")}
           </h1>
         </div>

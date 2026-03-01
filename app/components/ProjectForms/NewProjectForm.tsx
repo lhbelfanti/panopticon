@@ -114,7 +114,7 @@ export const NewProjectForm = (props: NewProjectFormProps) => {
             <Trans i18nKey="projects.new.behaviorsDesc" components={{ 1: <AdverseBehaviorLabel /> }} />
           </p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {behaviorConfigs.map((config) => {
             const IconComponent =
               (LucideIcons as any)[config.iconName] || LucideIcons.Circle;
@@ -123,6 +123,7 @@ export const NewProjectForm = (props: NewProjectFormProps) => {
             return (
               <label
                 key={config.id}
+                title={!isEnabled ? t("common.notAvailable") : undefined}
                 className={`${checkboxLabelClassName} ${!isEnabled ? "opacity-50 cursor-not-allowed border-white/5 hover:border-white/5 hover:shadow-none bg-black/20" : ""}`}
               >
                 <div className="relative flex items-center justify-center flex-shrink-0">

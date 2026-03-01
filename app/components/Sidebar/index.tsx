@@ -86,7 +86,7 @@ export const Sidebar = (props: SidebarProps) => {
             />
             <NavItem
               to="/projects/new"
-              icon={<LibraryBig size={18} className="transition-colors" />}
+              icon={<Folder size={18} className="transition-colors" />}
               label={t("sidebar.newProject")}
               collapsed={collapsed}
               indented={!collapsed}
@@ -97,7 +97,7 @@ export const Sidebar = (props: SidebarProps) => {
           <div className="flex flex-col gap-1.5">
             {!collapsed && (
               <h3 className="px-3 text-[0.65rem] font-bold text-light-gray-70 uppercase tracking-widest mb-1.5 flex items-center gap-2">
-                <LibraryBig size={12} className="opacity-50" />
+                <Folder size={12} className="opacity-50" />
                 {t("sidebar.yourProjects")}
               </h3>
             )}

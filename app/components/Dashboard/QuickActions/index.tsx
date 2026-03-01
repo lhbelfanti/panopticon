@@ -41,16 +41,16 @@ export const QuickActions = () => {
               <Activity size={24} />
             </div>
             <h2 className="text-xl font-bold text-white-1">
-              {t("dashboard.newPrediction.title")}
+              {t("dashboard.newEntry.title")}
             </h2>
           </div>
-          <p className="text-light-gray-70 text-sm leading-relaxed pr-4 w-[70%]">
-            {t("dashboard.newPrediction.desc")}
+          <p className="text-light-gray-70 text-sm leading-relaxed pr-4 w-[85%]">
+            {t("dashboard.newEntry.desc")}
           </p>
         </div>
         <div className="mt-4 pt-4 border-t border-white/5 flex justify-end">
           <span className="text-primary font-semibold text-sm group-hover:translate-x-1 transition-transform">
-            {t("dashboard.newPrediction.action")}
+            {t("dashboard.newEntry.action")}
           </span>
         </div>
       </Link>

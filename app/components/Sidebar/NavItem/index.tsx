@@ -67,7 +67,7 @@ export const NavItem = (props: NavItemProps) => {
               e.stopPropagation();
               setIsExpanded(!isExpanded);
             }}
-            className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-light-gray-70 hover:text-white-1 hover:bg-white/10 rounded-md transition-all z-10"
+            className={cn("absolute right-2 top-1/2 -translate-y-1/2 p-1 rounded-md transition-all z-10", window.location.pathname.includes(to) ? "text-white-1 hover:bg-white/10" : "text-light-gray-70 hover:text-white-1 hover:bg-white/10")}
           >
             {isExpanded ? (
               <LucideIcons.ChevronDown size={14} />
@@ -87,7 +87,7 @@ export const NavItem = (props: NavItemProps) => {
               to={sub.to}
               className={({ isActive }) =>
                 cn(
-                  "text-xs truncate py-2 px-3 rounded-lg transition-colors border border-transparent",
+                  "text-xs truncate py-2 px-3 rounded-lg transition-colors border border-transparent flex items-center gap-2",
                   isActive
                     ? "bg-primary/10 text-primary border-primary/20 font-medium shadow-inner"
                     : "text-light-gray-70 hover:text-white-1 hover:bg-white/5 hover:border-white/10",
@@ -95,6 +95,7 @@ export const NavItem = (props: NavItemProps) => {
               }
               title={sub.label}
             >
+              <LucideIcons.Box size={14} className="flex-shrink-0" />
               {sub.label}
             </NavLink>
           ))}

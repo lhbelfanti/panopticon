@@ -34,7 +34,8 @@
         }
     },
     "common": {
-        "notAvailable": "No disponible"
+        "notAvailable": "No disponible",
+        "deleting": "Eliminando..."
     },
     "sidebar": {
         "home": "Inicio",
@@ -104,7 +105,7 @@
             "namePlaceholder": "ej. Cohorte Salud Mental 2024",
             "description": "Descripción (Opcional)",
             "descriptionPlaceholder": "Breve descripción de los objetivos del análisis...",
-            "behaviorsTitle": "Comportamientos Objetivo",
+            "behaviorsTitle": "Comportamientos a detectar",
             "behaviorsDesc": "Selecciona los <1>Comportamientos Humanos Adversos</1> que te gustaría detectar en el dataset",
             "modelsTitle": "Modelos",
             "modelsDesc": "Se generará un subproyecto por cada modelo seleccionado. Nota: Los modelos se filtran dinámicamente para mostrar sólo los compatibles con todos los <1>Comportamientos Humanos Adversos</1> seleccionados.",
@@ -129,18 +130,19 @@
         },
         "view": {
             "subprojectsTitle": "Subproyectos por modelo",
-            "subprojectsDesc": "Explora los diferentes modelos aplicados a este proyecto. Selecciona un subproyecto para acceder a su dataset específico, evaluar predicciones individuales y administrar los resultados.",
+            "subprojectsDesc": "Explore the different models applied to this project. Select a subproject to access its specific dataset, evaluate predictions, and manage the filtered results.",
             "behaviorsTracked": "<1>Comportamientos Humanos Adversos</1> a detectar",
             "emptyModels": "No hay modelos CL configurados para este proyecto.",
-            "openSubproject": "Abrir predicciones \u2192"
+            "openSubproject": "Explore subproject \u2192"
         },
         "entries": {
             "title": "Entradas Analizadas",
+            "desc": "Revise un análisis global de los datos de su corpus a continuación. Consulte las métricas de confianza detalladas o filtre las filas según los valores inferidos.",
             "backToProject": "Volver al proyecto",
             "searchPlaceholder": "Buscar fragmento de texto...",
             "allVerdicts": "Todos los Veredictos",
             "tableId": "ID",
-            "tableText": "Texto Analizado",
+            "tableText": "Texto",
             "tableVerdict": "Veredicto",
             "tableScore": "Confianza",
             "tableActions": "Acciones",
@@ -149,7 +151,9 @@
             "prev": "Anterior",
             "next": "Siguiente",
             "deleteEntry": "Eliminar entrada",
-            "exportCsv": "Exportar CSV"
+            "deleteEntryDesc": "Est\u00e1 seguro de que desea eliminar esta entrada? Esta acci\u00f3n no se puede deshacer.",
+            "exportCsv": "Exportar CSV",
+            "datasetEntries": "Entradas del dataset"
         }
     }
 }

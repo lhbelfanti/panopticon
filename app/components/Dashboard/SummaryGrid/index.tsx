@@ -15,21 +15,21 @@ export const SummaryGrid = (props: SummaryGridProps) => {
         {/* Widget 1 */}
         <div className="bg-surface-dark p-4 rounded-xl border border-white/5 shadow-md flex flex-col hover:-translate-y-1 transition-transform">
           <div className="flex justify-between items-start mb-3">
-            <span className="text-light-gray-70 text-sm font-medium tracking-tight">
+            <span className="text-light-gray-70 text-sm font-medium tracking-tight pr-2">
               {t("dashboard.summary.tweetsAnalyzed")}
             </span>
-            <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+            <div className="w-8 h-8 shrink-0 rounded-full bg-primary/10 flex items-center justify-center text-primary">
               <FileText size={16} />
             </div>
           </div>
-          <div className="flex items-baseline">
+          <div className="flex items-baseline flex-wrap gap-x-1 gap-y-2">
             <span className="text-3xl font-extrabold text-white-1 tracking-tight">
               {summary.tweetsAnalyzed.toLocaleString()}
             </span>
-            <span className="text-light-gray-70 text-lg font-medium ml-1">
+            <span className="text-light-gray-70 text-lg font-medium ml-0.5">
               / 2,500
             </span>
-            <div className="flex items-center gap-1 ml-4 bg-green-500/10 border border-green-500/20 px-2 py-0.5 rounded-lg text-green-400">
+            <div className="flex shrink-0 items-center gap-1 ml-auto bg-green-500/10 border border-green-500/20 px-2 py-0.5 rounded-lg text-green-400">
               <TrendingUp size={14} />
               <span className="font-bold text-sm">85%</span>
             </div>

@@ -11,6 +11,7 @@ import ConfirmationModal from "~/components/ConfirmationModal";
 import {
   ArrowLeft,
   Box,
+  ChevronDown,
   Download,
   Eye,
   FileText,
@@ -85,7 +86,7 @@ const EntriesTable = (props: EntriesTableProps) => {
           className="flex items-center gap-2 text-primary hover:text-white-1 transition-colors text-sm font-semibold max-w-max"
         >
           <ArrowLeft size={16} />
-          {t("entries.backToProject")}
+          {t("projects.entries.backToProject")}
         </Link>
 
         <div>
@@ -104,7 +105,7 @@ const EntriesTable = (props: EntriesTableProps) => {
               {t(`projects.models.${modelId}`)}
             </span>
           </h1>
-          <p className="text-light-gray-70 text-sm">{t("projects.entries.title")}</p>
+          <p className="text-light-gray-70 text-sm">{t("projects.entries.desc")}</p>
         </div>
       </div>
 
@@ -174,7 +175,7 @@ const EntriesTable = (props: EntriesTableProps) => {
                 <select
                   name="filterVal"
                   defaultValue={currFilterCol === filterCol ? filterVal : ""}
-                  className="w-full appearance-none bg-background-dark border border-white/10 rounded-lg py-2 px-4 text-sm text-white-1 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"
+                  className="w-full appearance-none bg-background-dark border border-white/10 rounded-lg py-2 px-4 pr-8 text-sm text-white-1 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"
                 >
                   <option value="">All Verdicts</option>
                   <option value="Positive">Positive</option>
@@ -182,23 +183,27 @@ const EntriesTable = (props: EntriesTableProps) => {
                   <option value="Pending">Pending</option>
                   <option value="Error">Error</option>
                 </select>
+                <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-light-gray-70 pointer-events-none" />
               </div>
             )}
 
             {currFilterCol === "score" && (
               <div className="flex items-center gap-2">
-                <select
-                  name="filterOp"
-                  defaultValue={currFilterCol === filterCol ? filterOp : ""}
-                  className="appearance-none bg-background-dark border border-white/10 rounded-lg py-2 px-3 text-sm text-white-1 focus:ring-2 focus:ring-primary outline-none"
-                >
-                  <option value=">">&gt;</option>
-                  <option value="<">&lt;</option>
-                  <option value=">=">&ge;</option>
-                  <option value="<=">&le;</option>
-                  <option value="=">=</option>
-                  <option value="~=">~=</option>
-                </select>
+                <div className="relative">
+                  <select
+                    name="filterOp"
+                    defaultValue={currFilterCol === filterCol ? filterOp : ""}
+                    className="appearance-none bg-background-dark border border-white/10 rounded-lg py-2 pl-3 pr-8 text-sm text-white-1 focus:ring-2 focus:ring-primary outline-none"
+                  >
+                    <option value=">">&gt;</option>
+                    <option value="<">&lt;</option>
+                    <option value=">=">&ge;</option>
+                    <option value="<=">&le;</option>
+                    <option value="=">=</option>
+                    <option value="~=">~=</option>
+                  </select>
+                  <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-light-gray-70 pointer-events-none" />
+                </div>
 
                 <div className="relative w-40">
                   <input
@@ -288,10 +293,10 @@ const EntriesTable = (props: EntriesTableProps) => {
                       onClick={() => setEntryToView(entry)}
                     >
                       <td className="py-2 px-4 text-sm text-light-gray-50 font-mono whitespace-nowrap text-center">
-                        {entry.id.split("_").pop()}
+                        {entry.id}
                       </td>
                       <td
-                        className="py-2 px-4 text-sm text-white-1 break-words min-w-0 text-left leading-relaxed"
+                        className="py-2 px-4 text-sm text-white-1 truncate max-w-sm text-left leading-relaxed"
                         title={entry.text}
                       >
                         {entry.text}
@@ -351,7 +356,7 @@ const EntriesTable = (props: EntriesTableProps) => {
         <div className="px-6 py-6 border-t border-white/5 bg-black/10 flex items-center justify-between">
           {/* Entry Count */}
           <div className="text-sm text-light-gray-70 font-bold tracking-wide w-1/4">
-            Total entries: <span className="text-white-1 text-xl ml-1">{data.total}</span>
+            {t("projects.entries.datasetEntries")}: <span className="text-white-1 text-xl ml-1">{data.total}</span>
           </div>
 
           {/* Complex Pagination */}
@@ -410,8 +415,8 @@ const EntriesTable = (props: EntriesTableProps) => {
                       <button
                         type="submit"
                         className={`w-8 h-8 flex items-center justify-center rounded-md text-sm font-bold transition-colors ${p === current
-                            ? "bg-primary text-background-dark shadow-md"
-                            : "text-light-gray-70 hover:bg-white/10 hover:text-white-1"
+                          ? "bg-primary text-background-dark shadow-md"
+                          : "text-light-gray-70 hover:bg-white/10 hover:text-white-1"
                           }`}
                       >
                         {p}

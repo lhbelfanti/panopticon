@@ -77,29 +77,39 @@ const ProjectViewPage = () => {
               </p>
             )}
 
-            <div className="flex flex-col gap-2 mt-2">
-              <span className="text-[0.65rem] font-bold text-light-gray-50 uppercase tracking-widest">
-                <Trans i18nKey="projects.view.behaviorsTracked" components={{ 1: <AdverseBehaviorLabel /> }} />
-              </span>
-              <div className="flex flex-wrap gap-2">
-                {project.behaviors?.map((b) => {
-                  const config = behaviorConfigs.find((c) => c.id === b);
-                  if (!config) return null;
-                  const IconNode =
-                    (LucideIcons as any)[config.iconName] || LucideIcons.Circle;
+            <div className="flex flex-col gap-8 mt-6">
+              <div className="flex flex-col gap-2">
+                <span className="text-[0.65rem] font-bold text-light-gray-50 uppercase tracking-widest">
+                  PROJECT ID
+                </span>
+                <span className="text-sm font-mono text-white-1 bg-white/5 border border-white/5 py-1.5 px-3 rounded-md self-start shadow-inner">
+                  {project.id}
+                </span>
+              </div>
+              <div className="flex flex-col gap-2">
+                <span className="text-[0.65rem] font-bold text-light-gray-50 uppercase tracking-widest">
+                  <Trans i18nKey="projects.view.behaviorsTracked" components={{ 1: <AdverseBehaviorLabel /> }} />
+                </span>
+                <div className="flex flex-wrap gap-2">
+                  {project.behaviors?.map((b) => {
+                    const config = behaviorConfigs.find((c) => c.id === b);
+                    if (!config) return null;
+                    const IconNode =
+                      (LucideIcons as any)[config.iconName] || LucideIcons.Circle;
 
-                  return (
-                    <div
-                      key={b}
-                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-white/5 ${config.bgClass} ${config.colorClass}`}
-                    >
-                      <IconNode size={14} />
-                      <span className="text-xs font-semibold">
-                        {t(`projects.behaviors.${b}`)}
-                      </span>
-                    </div>
-                  );
-                })}
+                    return (
+                      <div
+                        key={b}
+                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-white/5 ${config.bgClass} ${config.colorClass}`}
+                      >
+                        <IconNode size={14} />
+                        <span className="text-xs font-semibold">
+                          {t(`projects.behaviors.${b}`)}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             </div>
           </div>
