@@ -16,6 +16,7 @@ import {
 import type { SidebarProps } from './types';
 import { NavItem } from './NavItem';
 import { Logo } from '~/components/Logo';
+import ConfirmationModal from '~/components/ConfirmationModal';
 
 const cn = (...inputs: ClassValue[]) => {
     return twMerge(clsx(inputs));
