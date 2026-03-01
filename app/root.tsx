@@ -1,13 +1,18 @@
 import {
-  isRouteErrorResponse,
   Links,
   Meta,
   Outlet,
   Scripts,
   ScrollRestoration,
+  isRouteErrorResponse,
 } from "react-router";
-
+import { useLoaderData, useLocation } from "react-router";
+import { getProjects } from "~/services/api/projects/index.server";
+import type { Project } from "~/services/api/projects/types";
+import { LanguageSwitcher } from "~/components/LanguageSwitcher";
+import { Sidebar } from "~/components/Sidebar";
 import type { Route } from "./+types/root";
+import { useTranslation } from "react-i18next";
 import "./app.css";
 
 export const links: Route.LinksFunction = () => [
@@ -24,13 +29,6 @@ export const links: Route.LinksFunction = () => [
   },
 ];
 
-import { useTranslation } from "react-i18next";
-import { useLoaderData, useLocation } from "react-router";
-import { Sidebar } from "~/components/Sidebar";
-import { LanguageSwitcher } from "~/components/LanguageSwitcher";
-import { getProjects } from "~/services/api/projects/index.server";
-import type { Project } from "~/services/api/projects/types";
-
 export const loader = async () => {
   const projects = await getProjects();
   return { projects };
@@ -40,7 +38,7 @@ export const Layout = (props: { children: React.ReactNode }) => {
   const { children } = props;
   const { i18n } = useTranslation();
   const location = useLocation();
-  const isLoginPage = location.pathname.startsWith('/login');
+  const isLoginPage = location.pathname.startsWith("/login");
 
   // Conditionally hook into useLoaderData in case of early Error Boundaries rendering the Layout before loader runs
   let projects: Project[] = [];
@@ -70,7 +68,7 @@ export const Layout = (props: { children: React.ReactNode }) => {
       </body>
     </html>
   );
-}
+};
 
 const App = () => {
   return <Outlet />;
@@ -106,4 +104,4 @@ export const ErrorBoundary = (props: Route.ErrorBoundaryProps) => {
       )}
     </main>
   );
-}
+};

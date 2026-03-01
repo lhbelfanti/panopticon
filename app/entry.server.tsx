@@ -1,20 +1,18 @@
-import { PassThrough } from "node:stream";
-
-import type { AppLoadContext, EntryContext } from "react-router";
-import { createReadableStreamFromReadable } from "@react-router/node";
-import { ServerRouter } from "react-router";
-import { isbot } from "isbot";
 import type { RenderToPipeableStreamOptions } from "react-dom/server";
 import { renderToPipeableStream } from "react-dom/server";
+import { resolve } from "node:path";
+import { PassThrough } from "node:stream";
+import { createReadableStreamFromReadable } from "@react-router/node";
+import type { AppLoadContext, EntryContext } from "react-router";
+import { ServerRouter } from "react-router";
+import { createInstance } from "i18next";
+import Backend from "i18next-fs-backend";
+import { isbot } from "isbot";
+import { I18nextProvider, initReactI18next } from "react-i18next";
+import i18n from "./localization/i18n";
+import i18nServer from "./localization/i18n.server";
 
 export const streamTimeout = 5_000;
-
-import { createInstance } from "i18next";
-import { I18nextProvider, initReactI18next } from "react-i18next";
-import Backend from "i18next-fs-backend";
-import { resolve } from "node:path";
-import i18nServer from "./localization/i18n.server";
-import i18n from "./localization/i18n";
 
 const handleRequest = async (
   request: Request,
