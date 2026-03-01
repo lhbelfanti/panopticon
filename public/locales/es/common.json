@@ -33,15 +33,18 @@
             "loginFailed": "Fallo al iniciar sesión, intente nuevamente."
         }
     },
+    "common": {
+        "notAvailable": "No disponible"
+    },
     "sidebar": {
         "home": "Inicio",
         "quickActions": "Acciones Rápidas",
-        "newEntry": "Nueva Entrada (Predicción)",
+        "newEntry": "Nueva Entrada",
         "newProject": "Nuevo Proyecto",
         "yourProjects": "Tus Proyectos",
         "noActiveProjects": "No hay proyectos activos",
-        "admin": "Administrador",
-        "thesis": "Tesis de Grado",
+        "researcherName": "Lucas Belfanti",
+        "researcherUser": "@lbelfanti",
         "logout": "Cerrar sesión",
         "language": "Idioma",
         "logoutConfirmTitle": "Cerrar sesión",
@@ -102,18 +105,21 @@
             "description": "Descripción (Opcional)",
             "descriptionPlaceholder": "Breve descripción de los objetivos del análisis...",
             "behaviorsTitle": "Comportamientos Objetivo",
-            "behaviorsDesc": "Seleccione los comportamientos que desea identificar en el dataset.",
-            "modelsTitle": "Modelos ML",
-            "modelsDesc": "Seleccione los modelos para generar subproyectos para comparación.",
+            "behaviorsDesc": "Selecciona el comportamiento humano adverso que te gustaría detectar en el dataset",
+            "modelsTitle": "Modelos",
+            "modelsDesc": "Por cada modelo seleccionado se creará un nuevo subproyecto. Esto permite usar diferentes modelos para saber cuál de ellos detecta mejor los Comportamientos Humanos Adversos seleccionados. Ten en cuenta que no todos los modelos están disponibles para todos los Comportamientos Humanos Adversos y estás viendo la lista de aquellos que están disponibles para todos los Comportamientos Humanos Adversos que seleccionaste.",
+            "noModelsIntersection": "No hay modelos disponibles para la combinación de comportamientos seleccionada.",
+            "selectBehaviorFirst": "Seleccione al menos un comportamiento para ver los modelos disponibles.",
             "submit": "Crear Proyecto",
             "creating": "Creando..."
         },
         "behaviors": {
-            "suicidal_ideation": "Ideación Suicida",
-            "depression": "Depresión",
-            "anxiety": "Ansiedad",
-            "harassment": "Acoso escolar",
-            "hate_speech": "Discurso de odio"
+            "illicit_drugs": "Consumo de drogas ilícitas",
+            "hate_speech": "Discursos de odio",
+            "cyberbullying": "Ciberbullyng / acoso cibernético",
+            "sexism": "Sexismo",
+            "suicidal_ideation_depression": "Ideación suicida y depresión",
+            "eating_disorders": "Trastornos de la Conduca Alimentaria (TCA)"
         },
         "models": {
             "bert_spanish": "BERT (Español)",
@@ -122,9 +128,9 @@
             "svm_baseline": "SVM Baseline"
         },
         "view": {
-            "subprojectsTitle": "Modelos CL y Subproyectos",
-            "subprojectsDesc": "Seleccione un modelo CL para visualizar las entradas analizadas y las predicciones.",
-            "behaviorsTracked": "Comportamientos Analizados",
+            "subprojectsTitle": "Subproyectos por modelo",
+            "subprojectsDesc": "Selecciona un subproyecto para ver su dataset y predicciones",
+            "behaviorsTracked": "Comportamientos Humanos Adversos a detectar",
             "emptyModels": "No hay modelos CL configurados para este proyecto.",
             "openSubproject": "Abrir predicciones \u2192"
         },

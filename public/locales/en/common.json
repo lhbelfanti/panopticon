@@ -33,15 +33,18 @@
             "loginFailed": "Login failed, please try again."
         }
     },
+    "common": {
+        "notAvailable": "Not available"
+    },
     "sidebar": {
         "home": "Home",
         "quickActions": "Quick Actions",
-        "newEntry": "New Entry (Prediction)",
+        "newEntry": "New Entry",
         "newProject": "New Project",
         "yourProjects": "Your Projects",
         "noActiveProjects": "No active projects",
-        "admin": "Administrator",
-        "thesis": "Degree Thesis",
+        "researcherName": "Lucas Belfanti",
+        "researcherUser": "@lbelfanti",
         "logout": "Log out",
         "language": "Language",
         "logoutConfirmTitle": "Log out",
@@ -102,18 +105,21 @@
             "description": "Description (Optional)",
             "descriptionPlaceholder": "Brief description of the analysis goals...",
             "behaviorsTitle": "Target Behaviors",
-            "behaviorsDesc": "Select the behaviors you'd like to identify in the dataset.",
-            "modelsTitle": "ML Models",
-            "modelsDesc": "Select the models to generate subprojects for comparison.",
+            "behaviorsDesc": "Select the adverse human behaviour you'd like to detect in the datasset",
+            "modelsTitle": "Models",
+            "modelsDesc": "For each model selected a new subproject will be created. This allow you to use different models to know which one is the one that detects better the Adverse Human Behaviours selected. Take into consideration that not all the models are available for all the Adverse Human Behaviours and you are seeing the list of them which are available for all the Adverse Human Behaviours you selected",
+            "noModelsIntersection": "No models available for the selected combination of behaviors.",
+            "selectBehaviorFirst": "Select at least one behavior to view available models.",
             "submit": "Create Project",
             "creating": "Creating..."
         },
         "behaviors": {
-            "suicidal_ideation": "Suicidal Ideation",
-            "depression": "Depression",
-            "anxiety": "Anxiety",
-            "harassment": "Harassment",
-            "hate_speech": "Hate Speech"
+            "illicit_drugs": "Illicit drug use",
+            "hate_speech": "Hate speech",
+            "cyberbullying": "Cyberbullying",
+            "sexism": "Sexism",
+            "suicidal_ideation_depression": "Suicidal ideation and depression",
+            "eating_disorders": "Eating disorders (TCA)"
         },
         "models": {
             "bert_spanish": "BERT (Spanish)",
@@ -122,9 +128,9 @@
             "svm_baseline": "SVM Baseline"
         },
         "view": {
-            "subprojectsTitle": "ML Models & Subprojects",
-            "subprojectsDesc": "Select an ML Model to view the analyzed entries and predictions inside that subproject.",
-            "behaviorsTracked": "Target Behaviors Tracked",
+            "subprojectsTitle": "Subprojects by model",
+            "subprojectsDesc": "Select a subproject to view its dataset and predictions",
+            "behaviorsTracked": "Adverse Human Behaviours to detect",
             "emptyModels": "No ML models were configured for this project.",
             "openSubproject": "Open predictions \u2192"
         },
