@@ -3,9 +3,9 @@
 </p>
 <p align="center">Adverse human behaviors detection system using models based on Natural Language Processing, Machine Learning, and Transformers<p>
 <p align="center">
-    <img src="https://img.shields.io/github/repo-size/lhbelfanti/panoptic?label=Repo%20size" alt="Repo size" />
-    <img src="https://img.shields.io/github/license/lhbelfanti/panoptic?label=License" alt="License" />
-    <img src="https://codecov.io/gh/lhbelfanti/panopticon/graph/badge.svg" alt="Coverage" />
+    <img src="https://img.shields.io/github/repo-size/lhbelfanti/panopticon?label=Repo%20size" alt="Repo size" />
+    <img src="https://img.shields.io/github/license/lhbelfanti/panopticon?label=License" alt="License" />
+    <img src="https://codecov.io/gh/lhbelfanti/panopticon/graph/badge.svg?token=5WGK0JOW2A" alt="Coverage" />
 </p>
 
 ---
