@@ -24,6 +24,13 @@ This document outlines the detailed and specific code conventions, project struc
 - **Props Destructuring**: Do not destructure props directly in the component definition signature. Instead, accept the `props` object and destructure it inside the component body to improve readability. (e.g. `const NavItem = (props: NavItemProps) => { const { to, icon, label } = props; ... }`).
 - **Typing**: Strict TypeScript typings are enforced. Interfaces and Types for a component's props are usually separated into their own `types.d.ts` or `types.ts` files.
 - **File extensions**: Use `.tsx` for files containing JSX/React code and `.ts` for standard TypeScript logic files.
+- **Imports**: All the imports should be at the top of the file and must be grouped in the following order:
+  1. Native imports (`react`)
+  2. `react-router` imports
+  3. API folder imports (`~/services/api/...`)
+  4. Components imports (`~/components/...`)
+  5. Other imports (`lucide-react`, `react-i18next`, `clsx`, etc.)
+  6. Types imports (e.g., `import type { ... } from "./types"`)
 
 ## Localization
 - **Handling Strategy**: Localization is managed using `i18next` ecosystem together with `remix-i18next` for seamless SSR support.
