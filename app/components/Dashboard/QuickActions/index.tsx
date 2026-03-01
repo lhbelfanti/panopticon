@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import { Activity, Folder } from "lucide-react";
+import { CopyPlus, Folder } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 export const QuickActions = () => {
@@ -38,7 +38,7 @@ export const QuickActions = () => {
         <div className="flex flex-col gap-3 relative">
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center group-hover:scale-110 transition-transform">
-              <Activity size={24} />
+              <CopyPlus size={24} />
             </div>
             <h2 className="text-xl font-bold text-white-1">
               {t("dashboard.newEntry.title")}

@@ -60,8 +60,8 @@
             "desc": "Configura un nuevo entorno de análisis, importa datasets y define tus objetivos de minería de texto.",
             "action": "Crear ahora \u2192"
         },
-        "newPrediction": {
-            "title": "Nueva Predicción",
+        "newEntry": {
+            "title": "Nueva Entrada",
             "desc": "Ejecuta modelos de IA sobre textos en tiempo real para predecir sentimientos, categorías o entidades.",
             "action": "Agregar nueva \u2192"
         },

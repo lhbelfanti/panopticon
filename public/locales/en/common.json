@@ -60,8 +60,8 @@
             "desc": "Set up a new analysis environment, import datasets and define your text mining goals.",
             "action": "Create now \u2192"
         },
-        "newPrediction": {
-            "title": "New Prediction",
+        "newEntry": {
+            "title": "New Entry",
             "desc": "Execute AI models on texts in real-time to predict sentiments, categories or entities.",
             "action": "Add new \u2192"
         },
