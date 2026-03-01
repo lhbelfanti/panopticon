@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Form, Link, useNavigation, useSubmit } from "react-router";
 import type {
   Entry,
@@ -41,10 +41,23 @@ const EntriesTable = (props: EntriesTableProps) => {
 
   // Controlled search state for input switching UX
   const [currFilterCol, setCurrFilterCol] = useState<FilterColumn>(filterCol);
+  const [localFilterVal, setLocalFilterVal] = useState(filterVal);
+  const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
     setCurrFilterCol(filterCol);
-  }, [filterCol]);
+    setLocalFilterVal(filterVal);
+  }, [filterCol, filterVal]);
+
+  // Debounce logic for typing in text fields
+  useEffect(() => {
+    if (localFilterVal !== filterVal) {
+      const handler = setTimeout(() => {
+        if (formRef.current) submit(formRef.current, { replace: true });
+      }, 300);
+      return () => clearTimeout(handler);
+    }
+  }, [localFilterVal, submit, filterVal]);
 
   const isDeleting = nav.formData?.get("intent") === "delete_entry";
   const isPredicting = nav.formData?.get("intent") === "predict_pending";
@@ -54,6 +67,7 @@ const EntriesTable = (props: EntriesTableProps) => {
       setEntryToDelete(null);
     }
   }, [nav.state, isDeleting]);
+  
   const isSearching =
     nav.location != null &&
     new URLSearchParams(nav.location.search).has("filterCol");
@@ -115,8 +129,19 @@ const EntriesTable = (props: EntriesTableProps) => {
         {/* Toolbar Context */}
         <div className="p-4 border-b border-white/5 bg-black/10 flex flex-col sm:flex-row gap-4 justify-between items-center">
           <Form
+            ref={formRef}
             method="get"
-            onChange={(e) => submit(e.currentTarget)}
+            onChange={(e) => {
+              // We rely on the local state + debounce for text inputs,
+              // but for select dropdowns, form native logic should submit directly:
+              if (
+                e.target instanceof HTMLSelectElement ||
+                (e.target instanceof HTMLInputElement && e.target.type !== "text" && e.target.type !== "number")
+              ) {
+                 submit(e.currentTarget, { replace: true });
+              }
+            }}
+            onSubmit={(e) => { e.preventDefault(); submit(e.currentTarget, { replace: true }); }}
             className="flex w-full sm:w-auto gap-4 items-center flex-wrap"
           >
             {/* Column Selector */}
@@ -127,9 +152,10 @@ const EntriesTable = (props: EntriesTableProps) => {
               <select
                 name="filterCol"
                 value={currFilterCol}
-                onChange={(e) =>
-                  setCurrFilterCol(e.target.value as FilterColumn)
-                }
+                onChange={(e) => {
+                  setCurrFilterCol(e.target.value as FilterColumn);
+                  setLocalFilterVal("");
+                }}
                 className="appearance-none bg-background-dark border border-white/10 rounded-lg py-2 pl-9 pr-8 text-sm text-white-1 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"
               >
                 <option value="id">ID</option>
@@ -150,7 +176,8 @@ const EntriesTable = (props: EntriesTableProps) => {
                 <input
                   type="number"
                   name="filterVal"
-                  defaultValue={currFilterCol === filterCol ? filterVal : ""}
+                  value={localFilterVal}
+                  onChange={(e) => setLocalFilterVal(e.target.value)}
                   placeholder="Number ID"
                   className="w-full bg-background-dark border border-white/10 rounded-lg py-2 pl-9 pr-4 text-sm text-white-1 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"
                 />
@@ -166,7 +193,8 @@ const EntriesTable = (props: EntriesTableProps) => {
                 <input
                   type="text"
                   name="filterVal"
-                  defaultValue={currFilterCol === filterCol ? filterVal : ""}
+                  value={localFilterVal}
+                  onChange={(e) => setLocalFilterVal(e.target.value)}
                   placeholder="Search characters"
                   className="w-full bg-background-dark border border-white/10 rounded-lg py-2 pl-9 pr-4 text-sm text-white-1 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"
                 />
@@ -177,7 +205,8 @@ const EntriesTable = (props: EntriesTableProps) => {
               <div className="relative w-full sm:w-48">
                 <select
                   name="filterVal"
-                  defaultValue={currFilterCol === filterCol ? filterVal : ""}
+                  value={localFilterVal}
+                  onChange={(e) => setLocalFilterVal(e.target.value)}
                   className="w-full appearance-none bg-background-dark border border-white/10 rounded-lg py-2 px-4 pr-8 text-sm text-white-1 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"
                 >
                   <option value="">All Verdicts</option>
@@ -196,7 +225,7 @@ const EntriesTable = (props: EntriesTableProps) => {
                 <div className="relative">
                   <select
                     name="filterOp"
-                    defaultValue={currFilterCol === filterCol ? filterOp : ""}
+                    defaultValue={filterOp}
                     className="appearance-none bg-background-dark border border-white/10 rounded-lg py-2 pl-3 pr-8 text-sm text-white-1 focus:ring-2 focus:ring-primary outline-none"
                   >
                     <option value=">">&gt;</option>
@@ -213,7 +242,8 @@ const EntriesTable = (props: EntriesTableProps) => {
                   <input
                     type="number"
                     name="filterVal"
-                    defaultValue={currFilterCol === filterCol ? filterVal : ""}
+                    value={localFilterVal}
+                    onChange={(e) => setLocalFilterVal(e.target.value)}
                     placeholder="0-100"
                     min="0"
                     max="100"
@@ -234,9 +264,7 @@ const EntriesTable = (props: EntriesTableProps) => {
                     <input
                       type="number"
                       name="filterBias"
-                      defaultValue={
-                        currFilterCol === filterCol ? filterBias : "0"
-                      }
+                      defaultValue={filterBias}
                       placeholder="Bias"
                       min="0"
                       max="100"
@@ -264,7 +292,7 @@ const EntriesTable = (props: EntriesTableProps) => {
           <div
             className={
               "transition-opacity duration-200 " +
-              (isSearching ? "opacity-30" : "opacity-100")
+              (nav.state === "loading" ? "opacity-30" : "opacity-100")
             }
           >
             <table className="w-full text-left border-collapse">

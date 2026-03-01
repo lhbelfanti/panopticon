@@ -67,7 +67,8 @@ export const getEntries = async (
   ) {
     filtered = filtered.filter((e) => {
       if (params.filterCol === "id") {
-        return e.id.toLowerCase().includes(params.filterVal!.toLowerCase());
+        const displayId = e.id.split("_")[1] || e.id;
+        return displayId.toLowerCase().includes(params.filterVal!.toLowerCase());
       }
       if (params.filterCol === "text") {
         return e.text.toLowerCase().includes(params.filterVal!.toLowerCase());

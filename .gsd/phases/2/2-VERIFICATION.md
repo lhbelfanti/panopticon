@@ -1,13 +1,13 @@
 ---
 phase: 2
-verified_at: 2026-03-01T18:22:00-03:00
-verdict: FAIL
+verified_at: 2026-03-01T18:43:00-03:00
+verdict: PASS
 ---
 
 # Phase 2 Verification Report
 
 ## Summary
-8/9 must-haves verified
+9/9 must-haves verified. Both Text and ID filtering issues resolved via gap closure (debounced inputs & ID matching fix).
 
 ## Must-Haves
 
@@ -27,11 +27,9 @@ verdict: FAIL
 **Status:** PASS
 **Evidence:** Successfully clicked on BERT (Spanish) card.
 
-### ❌ Subproject view contains a paginated table of entries with column-based filters
-**Status:** FAIL
-**Reason:** The UI filter interaction does not refresh or update the table rows shown.
-**Expected:** Filtering updates the URL and triggers a loader refresh, showing only matching rows.
-**Actual:** Only the `Export CSV` link visually receives the query parameters, the table UI stays stale.
+### ✅ Subproject view contains a paginated table of entries with column-based filters
+**Status:** PASS
+**Evidence:** Text and ID filtering verified by subagent. Filtering actively updates the state by triggering loader navigations securely via debounced components.
 
 ### ✅ User can trigger a standard UI confirmation modal to delete a project or single entry
 **Status:** PASS
