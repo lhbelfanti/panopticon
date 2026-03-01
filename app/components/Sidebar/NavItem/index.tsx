@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { NavLink } from "react-router";
+import { NavLink, useLocation } from "react-router";
 import { type ClassValue, clsx } from "clsx";
 import * as LucideIcons from "lucide-react";
 import { twMerge } from "tailwind-merge";
@@ -12,6 +12,7 @@ const cn = (...inputs: ClassValue[]) => {
 export const NavItem = (props: NavItemProps) => {
   const { to, icon, label, collapsed, indented = false, subItems } = props;
   const [isExpanded, setIsExpanded] = useState(false);
+  const location = useLocation();
 
   const hasSubItems = subItems && subItems.length > 0;
 
@@ -67,7 +68,7 @@ export const NavItem = (props: NavItemProps) => {
               e.stopPropagation();
               setIsExpanded(!isExpanded);
             }}
-            className={cn("absolute right-2 top-1/2 -translate-y-1/2 p-1 rounded-md transition-all z-10", window.location.pathname.includes(to) ? "text-white-1 hover:bg-white/10" : "text-light-gray-70 hover:text-white-1 hover:bg-white/10")}
+            className={cn("absolute right-2 top-1/2 -translate-y-1/2 p-1 rounded-md transition-all z-10", location.pathname.includes(to) ? "text-white-1 hover:bg-white/10" : "text-light-gray-70 hover:text-white-1 hover:bg-white/10")}
           >
             {isExpanded ? (
               <LucideIcons.ChevronDown size={14} />
