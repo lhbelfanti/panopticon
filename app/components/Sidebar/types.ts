@@ -1,5 +1,5 @@
-import type { Project } from '~/services/api/projects/types';
+import type { Project } from "~/services/api/projects/types";
 
 export interface SidebarProps {
-    projects: Project[];
+  projects: Project[];
 }
