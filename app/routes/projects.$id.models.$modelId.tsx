@@ -44,7 +44,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   const filterOp = (url.searchParams.get("filterOp") || "") as any;
   const filterBias = parseFloat(url.searchParams.get("filterBias") || "0");
   const page = parseInt(url.searchParams.get("page") || "1", 10);
-  const limit = 10;
+  const limit = 20;
 
   const data = await getEntries({
     projectId: id,

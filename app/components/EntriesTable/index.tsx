@@ -10,6 +10,7 @@ import type { Project } from "~/services/api/projects/types";
 import ConfirmationModal from "~/components/ConfirmationModal";
 import {
   ArrowLeft,
+  Box,
   Download,
   Eye,
   FileText,
@@ -90,7 +91,8 @@ const EntriesTable = (props: EntriesTableProps) => {
               {project.name}
             </Link>
             <span className="opacity-50">/</span>
-            <span className="text-primary">
+            <span className="text-primary flex items-center gap-2">
+              <Box size={28} />
               {t(`projects.models.${modelId}`)}
             </span>
           </h1>
@@ -190,7 +192,7 @@ const EntriesTable = (props: EntriesTableProps) => {
                   <option value="~=">~=</option>
                 </select>
 
-                <div className="relative w-24">
+                <div className="relative w-40">
                   <input
                     type="number"
                     name="filterVal"
@@ -208,7 +210,7 @@ const EntriesTable = (props: EntriesTableProps) => {
                 </div>
 
                 {filterOp === "~=" && (
-                  <div className="relative w-24">
+                  <div className="relative w-32 ml-2">
                     <span className="absolute -left-3 text-light-gray-50 top-1/2 -translate-y-1/2 text-xs">
                       ±
                     </span>
@@ -233,7 +235,7 @@ const EntriesTable = (props: EntriesTableProps) => {
           <a
             href={`/projects/${project.id}/models/${modelId}/export?filterCol=${filterCol}&filterVal=${encodeURIComponent(filterVal)}&filterOp=${encodeURIComponent(filterOp)}&filterBias=${filterBias}`}
             download
-            className="flex items-center gap-2 px-3 py-2 text-sm font-bold text-white-1 bg-surface-dark border border-white/10 hover:bg-white/5 rounded-lg transition-colors whitespace-nowrap"
+            className="flex items-center gap-2 px-4 py-2 text-sm font-bold text-white-1 bg-surface-dark border border-white/10 hover:bg-yellow-400 hover:text-background-dark hover:border-yellow-400 rounded-lg transition-colors whitespace-nowrap"
           >
             <Download size={16} />
             {t("entries.exportCsv")}
@@ -251,11 +253,11 @@ const EntriesTable = (props: EntriesTableProps) => {
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="border-b border-white/5 text-xs font-bold text-light-gray-70 uppercase tracking-wider bg-black/20 sticky top-0 z-10 backdrop-blur-md">
-                  <th className="py-2 pl-6">{t("entries.tableId")}</th>
-                  <th className="py-2 px-4">{t("entries.tableText")}</th>
-                  <th className="py-2 px-4">{t("entries.tableVerdict")}</th>
-                  <th className="py-2 px-4">{t("entries.tableScore")}</th>
-                  <th className="py-2 px-4 text-right pr-6">
+                  <th className="py-3 px-4 w-1 whitespace-nowrap text-center">{t("entries.tableId")}</th>
+                  <th className="py-3 px-4 text-center">{t("entries.tableText")}</th>
+                  <th className="py-3 px-4 w-1 whitespace-nowrap text-center">{t("entries.tableVerdict")}</th>
+                  <th className="py-3 px-4 w-1 whitespace-nowrap text-center">{t("entries.tableScore")}</th>
+                  <th className="py-3 px-4 w-1 whitespace-nowrap text-center text-right">
                     {t("entries.tableActions")}
                   </th>
                 </tr>
@@ -277,29 +279,29 @@ const EntriesTable = (props: EntriesTableProps) => {
                       className="hover:bg-white/5 transition-colors group cursor-pointer"
                       onClick={() => setEntryToView(entry)}
                     >
-                      <td className="py-1.5 pl-6 text-xs text-light-gray-50 font-mono whitespace-nowrap">
+                      <td className="py-2 px-4 text-sm text-light-gray-50 font-mono whitespace-nowrap text-center">
                         {entry.id.split("_").pop()}
                       </td>
                       <td
-                        className="py-1.5 px-4 text-xs text-white-1 max-w-sm truncate"
+                        className="py-2 px-4 text-sm text-white-1 break-words min-w-0 text-center leading-relaxed"
                         title={entry.text}
                       >
                         {entry.text}
                       </td>
-                      <td className="py-1.5 px-4 whitespace-nowrap">
+                      <td className="py-2 px-4 whitespace-nowrap text-center">
                         <span
                           className={`px-2 py-0.5 text-[0.65rem] font-bold rounded-full border ${getVerdictStyle(entry.verdict)}`}
                         >
                           {entry.verdict}
                         </span>
                       </td>
-                      <td className="py-1.5 px-4 text-xs text-light-gray-80 font-mono whitespace-nowrap">
+                      <td className="py-2 px-4 text-sm text-light-gray-80 font-mono whitespace-nowrap text-center">
                         {entry.score != null
                           ? (entry.score * 100).toFixed(1) + "%"
                           : "-"}
                       </td>
                       <td
-                        className="py-1.5 px-4 pr-6 text-right whitespace-nowrap"
+                        className="py-2 px-4 text-right whitespace-nowrap"
                         onClick={(e) => e.stopPropagation()}
                       >
                         <div className="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -366,11 +368,10 @@ const EntriesTable = (props: EntriesTableProps) => {
                     <input type="hidden" name="page" value={pageNum} />
                     <button
                       type="submit"
-                      className={`w-7 h-7 flex items-center justify-center rounded text-xs font-bold transition-colors ${
-                        pageNum === data.page
-                          ? "bg-primary text-background-dark"
-                          : "text-light-gray-70 hover:bg-white/5 hover:text-white-1"
-                      }`}
+                      className={`w-7 h-7 flex items-center justify-center rounded text-xs font-bold transition-colors ${pageNum === data.page
+                        ? "bg-primary text-background-dark"
+                        : "text-light-gray-70 hover:bg-white/5 hover:text-white-1"
+                        }`}
                     >
                       {pageNum}
                     </button>

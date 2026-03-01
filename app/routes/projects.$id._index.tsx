@@ -13,7 +13,7 @@ import {
 } from "~/services/api/projects/index.server";
 import ConfirmationModal from "~/components/ConfirmationModal";
 import SubprojectCard from "~/components/SubprojectCard";
-import { Trash2 } from "lucide-react";
+import { Folder, Trash2 } from "lucide-react";
 import * as LucideIcons from "lucide-react";
 import { useTranslation } from "react-i18next";
 
@@ -66,7 +66,8 @@ const ProjectViewPage = () => {
         {/* Header */}
         <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 flex justify-between items-start">
           <div>
-            <h1 className="text-4xl font-extrabold text-white-1 mb-3 tracking-tight">
+            <h1 className="text-4xl font-extrabold text-white-1 mb-3 tracking-tight flex items-center gap-3">
+              <Folder size={36} className="text-primary" />
               {project.name}
             </h1>
             {project.description && (
@@ -127,7 +128,7 @@ const ProjectViewPage = () => {
             <h2 className="text-2xl font-bold text-white-1 mb-2">
               {t("projects.view.subprojectsTitle")}
             </h2>
-            <p className="text-sm text-light-gray-70">
+            <p className="text-sm text-light-gray-70 max-w-3xl leading-relaxed text-balance">
               {t("projects.view.subprojectsDesc")}
             </p>
           </div>
