@@ -5,6 +5,7 @@
 <p align="center">
     <img src="https://img.shields.io/github/repo-size/lhbelfanti/panoptic?label=Repo%20size" alt="Repo size" />
     <img src="https://img.shields.io/github/license/lhbelfanti/panoptic?label=License" alt="License" />
+    <img src="https://codecov.io/gh/lhbelfanti/panopticon/graph/badge.svg" alt="Coverage" />
 </p>
 
 ---
