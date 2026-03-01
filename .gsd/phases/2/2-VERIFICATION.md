@@ -1,57 +1,56 @@
 ---
 phase: 2
-verified: 2026-03-01T11:00:57-03:00
-status: passed
-score: 9/9 must-haves verified
-is_re_verification: false
+verified_at: 2026-03-01T18:22:00-03:00
+verdict: FAIL
 ---
 
-# Phase 2 Verification
+# Phase 2 Verification Report
+
+## Summary
+8/9 must-haves verified
 
 ## Must-Haves
 
-### Truths
-| Truth | Status | Evidence |
-|-------|--------|----------|
-| User can create a new project by specifying name, description, target behaviors, and ML models | ✓ VERIFIED | Verified `projects.new.tsx` form correctly submits all fields and handles the payload creation. |
-| System creates a parent project and subprojects for each selected ML model | ✓ VERIFIED | Verified `createProject` function logic and payload structure matches requirements in `app/services/api/projects/index.server.ts`. |
-| User can view a parent project and its metadata | ✓ VERIFIED | Verified `projects.$id._index.tsx` uses `getProjectById` and correctly lists details. |
-| User can navigate into a specific model's subproject to view entries | ✓ VERIFIED | Verified nested route `projects.$id.models.$modelId.tsx` and sidebar navigation component maps the model IDs. |
-| Subproject view contains a paginated table of entries with column-based filters | ✓ VERIFIED | Verified `EntriesTable` receives pagination bounds, outputs correctly limited sets, handles inputs based on `filterCol`. |
-| User can trigger a standard UI confirmation modal to delete a project or single entry | ✓ VERIFIED | Verified `ConfirmationModal` component renders destructively for project deletion and single record deletion. |
-| Deleting a parent project redirects to dashboard or standard project | ✓ VERIFIED | Verified action function returns `redirect('/')` after deletion operation. |
-| Entries table includes a button to export entries as a CSV | ✓ VERIFIED | Verified `export` route extracts current table scopes and outputs text/csv chunks. |
-| Behaviors map correctly to UI and constrain model visibility based on backend intersection | ✓ VERIFIED | Verified `getBehaviorsConfig` feeds UI mapping logic rendering constraints cleanly without errors. |
+### ✅ User can create a new project by specifying name, description, target behaviors, and ML models
+**Status:** PASS
+**Evidence:** Browser subagent navigated to `/projects/new` and successfully created a project.
 
-### Artifacts
-| Path | Exists | Substantive | Wired |
-|------|--------|-------------|-------|
-| app/routes/projects.new.tsx | ✓ | ✓ | ✓ |
-| app/routes/projects.$id._index.tsx | ✓ | ✓ | ✓ |
-| app/routes/projects.$id.models.$modelId.tsx | ✓ | ✓ | ✓ |
-| app/services/api/projects/index.server.ts | ✓ | ✓ | ✓ |
-| app/services/api/entries/index.server.ts | ✓ | ✓ | ✓ |
+### ✅ System creates a parent project and subprojects for each selected ML model
+**Status:** PASS
+**Evidence:** Project was created, subagent verified the models were created appropriately.
 
-### Key Links
-| From | To | Via | Status |
-|------|-----|-----|--------|
-| projects.new.tsx | api/projects/index.server.ts | action (createProject) | ✓ VERIFIED |
-| projects.$id._index.tsx | api/projects/index.server.ts | loader (getProject) & action (deleteProject) | ✓ VERIFIED |
-| projects.$id.models.$modelId.tsx | api/entries/index.server.ts | loader (getEntries) & action (deleteEntry) | ✓ VERIFIED |
+### ✅ User can view a parent project and its metadata
+**Status:** PASS
+**Evidence:** Successfully redirected to parent project view and saw name, desc.
 
-## Anti-Patterns Found
-- ℹ️ Info: `app/routes/projects.$id.models.$modelId.tsx` successfully leverages native React Router mutation patterns instead of extensive client side `useEffect` fetching blocks.
+### ✅ User can navigate into a specific model's subproject to view entries
+**Status:** PASS
+**Evidence:** Successfully clicked on BERT (Spanish) card.
 
-## Human Verification Needed
-### 1. Visual Review: Behavior Selection Constraints
-**Test:** Open New Project Screen, select multiple behaviors, ensure that only the intersection of available models is displayed.
-**Expected:** The "Available Models" UI instantly shrinks mapping capabilities to explicitly supported systems based on intersection algorithms.
-**Why human:** Visual check verifies intuitive user feedback.
+### ❌ Subproject view contains a paginated table of entries with column-based filters
+**Status:** FAIL
+**Reason:** The UI filter interaction does not refresh or update the table rows shown.
+**Expected:** Filtering updates the URL and triggers a loader refresh, showing only matching rows.
+**Actual:** Only the `Export CSV` link visually receives the query parameters, the table UI stays stale.
 
-### 2. File Download Export CSV
-**Test:** Trigger Export CSV inside the Subproject screen while table is highly filtered.
-**Expected:** The browser natively downloads a matching timestamped `.csv` matching the table.
-**Why human:** Browser downloads are difficult to assert functionally outside end-to-end browser setups.
+### ✅ User can trigger a standard UI confirmation modal to delete a project or single entry
+**Status:** PASS
+**Evidence:** Clicked Trash icon, UI Confirmation modal triggered and cancelled correctly.
+
+### ✅ Deleting a parent project redirects to dashboard or standard project
+**Status:** PASS
+**Evidence:** Previously verified via AST review, function action redirect works natively.
+
+### ✅ Entries table includes a button to export entries as a CSV
+**Status:** PASS
+**Evidence:** Button renders natively and appends parameters.
+
+### ✅ Behaviors map correctly to UI and constrain model visibility based on backend intersection
+**Status:** PASS
+**Evidence:** Form logic explicitly hides/shows models dynamically based on selected behavior combinations. Checked by Subagent.
 
 ## Verdict
-Phase 2 execution passed accurately based on all code requirements requested. No logical gaps present.
+FAIL
+
+## Gap Closure Required
+- Fix filter inputs in EntriesTable so they correctly navigate or trigger data re-fetching.
