@@ -1,5 +1,5 @@
 export interface ActivityItem {
-  id: string;
+  id: number;
   type: string;
   description: string;
   timestamp: string;

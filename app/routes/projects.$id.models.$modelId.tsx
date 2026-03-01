@@ -20,12 +20,12 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
   const entryId = formData.get("entryId");
 
   if (intent === "delete_entry" && typeof entryId === "string") {
-    await deleteEntry(id, modelId, entryId);
+    await deleteEntry(parseInt(id), modelId, entryId);
     return null;
   }
 
   if (intent === "predict_pending") {
-    const count = await predictPendingEntries(id, modelId);
+    const count = await predictPendingEntries(parseInt(id), modelId);
     return { success: true, count };
   }
 
@@ -35,7 +35,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   const { id, modelId } = params;
   if (!id || !modelId) throw new Response("Not Found", { status: 404 });
-  const project = await getProjectById(id);
+  const project = await getProjectById(parseInt(id));
   if (!project) throw new Response("Not Found", { status: 404 });
 
   const url = new URL(request.url);
@@ -47,7 +47,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   const limit = 10;
 
   const data = await getEntries({
-    projectId: id,
+    projectId: parseInt(id),
     modelId,
     page,
     limit,

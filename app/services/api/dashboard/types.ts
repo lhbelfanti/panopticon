@@ -12,7 +12,7 @@ export type RecentActivityType =
   | "predictions_made";
 
 export interface RecentActivity {
-  id: string;
+  id: number;
   type: RecentActivityType;
   description: string;
   timestamp: string;

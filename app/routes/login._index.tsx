@@ -91,9 +91,19 @@ const Login = () => {
               t={t}
             />
           ) : view === "forgot" ? (
-            <ForgotPasswordForm setView={setView} t={t} />
+            <ForgotPasswordForm
+              actionData={actionData as any}
+              isSubmitting={isSubmitting}
+              setView={setView}
+              t={t}
+            />
           ) : (
-            <RegisterForm setView={setView} t={t} />
+            <RegisterForm
+              actionData={actionData as any}
+              isSubmitting={isSubmitting}
+              setView={setView}
+              t={t}
+            />
           )}
         </div>
       </div>

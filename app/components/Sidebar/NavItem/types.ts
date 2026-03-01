@@ -4,5 +4,5 @@ export interface NavItemProps {
   label: string;
   collapsed: boolean;
   indented?: boolean;
-  subItems?: { id: string; to: string; label: string }[];
+  subItems?: { id: number; to: string; label: string }[];
 }

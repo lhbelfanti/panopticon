@@ -16,7 +16,7 @@ const mockTextPool = [
 let globalEntriesId = 0;
 
 // Generate mock entries per "Subproject ID"
-const generateMockEntries = (projectId: string, modelId: string) => {
+const generateMockEntries = (projectId: number, modelId: string) => {
   return Array.from({ length: 45 }).map((_, i) => {
     globalEntriesId++;
     const text = mockTextPool[i % mockTextPool.length];
@@ -128,7 +128,7 @@ export const getEntries = async (
 };
 
 export const deleteEntry = async (
-  projectId: string,
+  projectId: number,
   modelId: string,
   entryId: string,
 ): Promise<boolean> => {
@@ -144,7 +144,7 @@ export const deleteEntry = async (
 };
 
 export const predictPendingEntries = async (
-  projectId: string,
+  projectId: number,
   modelId: string,
 ): Promise<number> => {
   await delay(1500);

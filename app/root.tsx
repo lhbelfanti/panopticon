@@ -33,7 +33,7 @@ import { getUserById } from "~/services/api/users/users.server";
 
 export const loader = async () => {
   const projects = await getProjects();
-  const user = await getUserById("1");
+  const user = await getUserById(1);
   return { projects, user };
 };
 

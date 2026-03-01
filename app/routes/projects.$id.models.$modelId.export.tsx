@@ -13,7 +13,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 
   // Fetch all records for CSV using a high limit
   const data = await getEntries({
-    projectId: id,
+    projectId: parseInt(id),
     modelId,
     page: 1,
     limit: 10000,

@@ -3,19 +3,19 @@ import type { BehaviorConfig, CreateProjectDTO, Project } from "./types";
 // Stateful in-memory mock store
 let projects: Project[] = [
   {
-    id: "proj_1",
+    id: 1,
     name: "Default Analysis",
     description: "Default project for all uncategorized analysis",
     behaviors: ["suicidal_ideation_depression", "hate_speech"],
     models: ["bert_spanish", "roberta_english"],
     subprojects: [
       {
-        id: "proj_1_bert_spanish",
+        id: 11,
         model: "bert_spanish",
         createdAt: new Date().toISOString(),
       },
       {
-        id: "proj_1_roberta_english",
+        id: 12,
         model: "roberta_english",
         createdAt: new Date().toISOString(),
       },
@@ -23,14 +23,14 @@ let projects: Project[] = [
     createdAt: new Date().toISOString(),
   },
   {
-    id: "proj_2",
+    id: 2,
     name: "Mental Health Cohort A",
     description: "Analyzing posts related to depression and suicidal thoughts",
     behaviors: ["suicidal_ideation_depression"],
     models: ["llama3_zero_shot"],
     subprojects: [
       {
-        id: "proj_2_llama3_zero_shot",
+        id: 21,
         model: "llama3_zero_shot",
         createdAt: new Date(Date.now() - 86400000).toISOString(),
       },
@@ -51,7 +51,7 @@ export const createProject = async (
 ): Promise<Project> => {
   await delay(800); // Simulate network delay
 
-  const projectId = crypto.randomUUID();
+  const projectId = Date.now();
   const newProject: Project = {
     id: projectId,
     name: data.name,
@@ -59,7 +59,7 @@ export const createProject = async (
     behaviors: data.behaviors || [],
     models: data.models || [],
     subprojects: (data.models || []).map((model) => ({
-      id: `${projectId}_${model}`,
+      id: parseInt(`${projectId}${Math.floor(Math.random() * 100)}`),
       model,
       createdAt: new Date().toISOString(),
     })),
@@ -70,12 +70,12 @@ export const createProject = async (
   return newProject;
 };
 
-export const getProjectById = async (id: string): Promise<Project | null> => {
+export const getProjectById = async (id: number): Promise<Project | null> => {
   await delay(500); // Simulate network delay
   return projects.find((p) => p.id === id) || null;
 };
 
-export const deleteProject = async (id: string): Promise<boolean> => {
+export const deleteProject = async (id: number): Promise<boolean> => {
   await delay(600);
   const initialLen = projects.length;
   projects = projects.filter((p) => p.id !== id);

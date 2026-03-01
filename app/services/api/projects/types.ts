@@ -21,13 +21,13 @@ export interface BehaviorConfig {
 }
 
 export interface Subproject {
-  id: string;
+  id: number;
   model: MLModel;
   createdAt: string;
 }
 
 export interface Project {
-  id: string;
+  id: number;
   name: string;
   description?: string;
   behaviors: TargetBehavior[];

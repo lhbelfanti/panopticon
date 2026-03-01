@@ -35,7 +35,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
   const intent = formData.get("intent");
 
   if (intent === "delete_project") {
-    await deleteProject(id);
+    await deleteProject(parseInt(id));
     return redirect("/"); // Redirect to dashboard after deletion
   }
 
@@ -45,7 +45,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 export const loader = async ({ params }: LoaderFunctionArgs) => {
   const { id } = params;
   if (!id) throw new Response("Not Found", { status: 404 });
-  const project = await getProjectById(id);
+  const project = await getProjectById(parseInt(id));
   if (!project) throw new Response("Not Found", { status: 404 });
 
   const behaviorConfigs = await getBehaviorsConfig();

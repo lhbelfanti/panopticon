@@ -2,7 +2,7 @@ export type EntryVerdict = "Pending" | "Positive" | "Negative" | "Error";
 
 export interface Entry {
   id: string;
-  projectId: string; // The parent project ID
+  projectId: number; // The parent project ID
   modelId: string; // The subproject model reference
   text: string;
   verdict: EntryVerdict;
@@ -14,7 +14,7 @@ export type FilterColumn = "id" | "text" | "verdict" | "score";
 export type FilterOperator = ">" | "<" | ">=" | "<=" | "=" | "~=" | "";
 
 export interface GetEntriesParams {
-  projectId: string;
+  projectId: number;
   modelId: string;
   page?: number;
   limit?: number;
