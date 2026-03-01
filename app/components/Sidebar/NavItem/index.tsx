@@ -57,26 +57,30 @@ export const NavItem = (props: NavItemProps) => {
                   {label}
                 </span>
               )}
+              {hasSubItems && !collapsed && (
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setIsExpanded(!isExpanded);
+                  }}
+                  className={cn(
+                    "absolute right-2 top-1/2 -translate-y-1/2 p-1 rounded-md transition-all z-10",
+                    isActive
+                      ? "text-background-dark hover:bg-black/10"
+                      : "text-light-gray-70 hover:text-white-1 hover:bg-white/10"
+                  )}
+                >
+                  {isExpanded ? (
+                    <LucideIcons.ChevronDown size={14} />
+                  ) : (
+                    <LucideIcons.ChevronRight size={14} />
+                  )}
+                </button>
+              )}
             </>
           )}
         </NavLink>
-
-        {hasSubItems && !collapsed && (
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              setIsExpanded(!isExpanded);
-            }}
-            className={cn("absolute right-2 top-1/2 -translate-y-1/2 p-1 rounded-md transition-all z-10", location.pathname.includes(to) ? "text-white-1 hover:bg-white/10" : "text-light-gray-70 hover:text-white-1 hover:bg-white/10")}
-          >
-            {isExpanded ? (
-              <LucideIcons.ChevronDown size={14} />
-            ) : (
-              <LucideIcons.ChevronRight size={14} />
-            )}
-          </button>
-        )}
       </div>
 
       {/* Sub Items Dropdown */}

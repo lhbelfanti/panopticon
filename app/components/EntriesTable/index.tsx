@@ -66,6 +66,8 @@ const EntriesTable = (props: EntriesTableProps) => {
         return "bg-bittersweet-shimmer/10 text-bittersweet-shimmer border-bittersweet-shimmer/20";
       case "Pending":
         return "bg-yellow-500/10 text-yellow-400 border-yellow-500/20";
+      case "In Progress":
+        return "bg-blue-500/10 text-blue-400 border-blue-500/20";
       default:
         return "bg-gray-500/10 text-gray-400 border-gray-500/20";
     }
@@ -119,7 +121,7 @@ const EntriesTable = (props: EntriesTableProps) => {
           >
             {/* Column Selector */}
             <div className="relative">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-light-gray-70 pointer-events-none">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-light-gray-70 pointer-events-none z-10">
                 <Filter size={16} />
               </span>
               <select
@@ -135,6 +137,7 @@ const EntriesTable = (props: EntriesTableProps) => {
                 <option value="verdict">Verdict</option>
                 <option value="score">Score</option>
               </select>
+              <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-light-gray-70 pointer-events-none" />
             </div>
 
             {/* Dynamic Value Input */}
@@ -181,6 +184,7 @@ const EntriesTable = (props: EntriesTableProps) => {
                   <option value="Positive">Positive</option>
                   <option value="Negative">Negative</option>
                   <option value="Pending">Pending</option>
+                  <option value="In Progress">In Progress</option>
                   <option value="Error">Error</option>
                 </select>
                 <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-light-gray-70 pointer-events-none" />
@@ -266,11 +270,11 @@ const EntriesTable = (props: EntriesTableProps) => {
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="border-b border-white/5 text-xs font-bold text-light-gray-70 uppercase tracking-wider bg-black/20 sticky top-0 z-10 backdrop-blur-md">
-                  <th className="py-3 px-4 w-1 whitespace-nowrap text-center">{t("projects.entries.tableId")}</th>
+                  <th className="py-3 px-4 w-1 whitespace-nowrap text-left">{t("projects.entries.tableId")}</th>
                   <th className="py-3 px-4 text-left">{t("projects.entries.tableText")}</th>
-                  <th className="py-3 px-4 w-1 whitespace-nowrap text-center">{t("projects.entries.tableVerdict")}</th>
-                  <th className="py-3 px-4 w-1 whitespace-nowrap text-center">{t("projects.entries.tableScore")}</th>
-                  <th className="py-3 px-4 w-1 whitespace-nowrap text-center">
+                  <th className="py-3 px-4 w-1 whitespace-nowrap text-left">{t("projects.entries.tableVerdict")}</th>
+                  <th className="py-3 px-4 w-1 whitespace-nowrap text-left">{t("projects.entries.tableScore")}</th>
+                  <th className="py-3 px-4 w-1 whitespace-nowrap text-left">
                     {t("projects.entries.tableActions")}
                   </th>
                 </tr>
@@ -292,8 +296,8 @@ const EntriesTable = (props: EntriesTableProps) => {
                       className="hover:bg-white/5 transition-colors group cursor-pointer"
                       onClick={() => setEntryToView(entry)}
                     >
-                      <td className="py-2 px-4 text-sm text-light-gray-50 font-mono whitespace-nowrap text-center">
-                        {entry.id}
+                      <td className="py-2 px-4 text-sm text-light-gray-50 font-mono whitespace-nowrap text-left">
+                        {entry.id.split("_")[1] || entry.id}
                       </td>
                       <td
                         className="py-2 px-4 text-sm text-white-1 truncate max-w-sm text-left leading-relaxed"
@@ -301,23 +305,23 @@ const EntriesTable = (props: EntriesTableProps) => {
                       >
                         {entry.text}
                       </td>
-                      <td className="py-2 px-4 whitespace-nowrap text-center">
+                      <td className="py-2 px-4 whitespace-nowrap text-left">
                         <span
                           className={`px-2 py-0.5 text-[0.65rem] font-bold rounded-full border ${getVerdictStyle(entry.verdict)}`}
                         >
                           {entry.verdict}
                         </span>
                       </td>
-                      <td className="py-2 px-4 text-sm text-light-gray-80 font-mono whitespace-nowrap text-center">
+                      <td className="py-2 px-4 text-sm text-light-gray-80 font-mono whitespace-nowrap text-left">
                         {entry.score != null
                           ? (entry.score * 100).toFixed(1) + "%"
                           : "-"}
                       </td>
                       <td
-                        className="py-2 px-4 text-center whitespace-nowrap"
+                        className="py-2 px-4 text-left whitespace-nowrap"
                         onClick={(e) => e.stopPropagation()}
                       >
-                        <div className="flex items-center justify-center gap-3">
+                        <div className="flex items-center justify-start gap-3">
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
