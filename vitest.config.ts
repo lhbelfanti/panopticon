@@ -29,7 +29,8 @@ export default defineConfig({
                 "app/routes.ts",
                 "app/localization/i18n.ts",
                 "app/**/types.ts",
-                "app/**/*.server.ts"
+                "app/**/*.server.ts",
+                "app/services/**/*"
             ]
         }
     },

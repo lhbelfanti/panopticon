@@ -53,3 +53,19 @@ describe("Dashboard Index Route", () => {
         expect(screen.getByTestId("recent-activity")).toBeInTheDocument();
     });
 });
+
+import { loader } from "./_index";
+import { getDashboardSummary, getRecentActivities } from "~/services/api/dashboard/index.server";
+
+vi.mock("~/services/api/dashboard/index.server", () => ({
+    getDashboardSummary: vi.fn(async () => ({})),
+    getRecentActivities: vi.fn(async () => []),
+}));
+
+describe("Dashboard Index Route Functions", () => {
+    it("loader returns dashboard data", async () => {
+        const result = await loader();
+        expect(result).toHaveProperty("summary");
+        expect(result).toHaveProperty("recentActivities");
+    });
+});

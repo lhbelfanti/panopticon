@@ -159,4 +159,45 @@ describe("EntriesTable", () => {
         const calls = mockSubmit.mock.calls;
         expect(calls[0][0].get("intent")).toBe("predict_pending");
     });
+
+    it("renders different verdict styles", () => {
+        const entryOverrides = [
+            { id: "e1", verdict: "Positive", text: "t1" },
+            { id: "e2", verdict: "Negative", text: "t2" },
+            { id: "e3", verdict: "Pending", text: "t3" },
+            { id: "e4", verdict: "In Progress", text: "t4" },
+            { id: "e5", verdict: "Other", text: "t5" },
+        ];
+        renderTable({ data: { ...mockData, entries: entryOverrides as any } });
+
+        expect(screen.getByText("Positive")).toHaveClass("border-green-500/20");
+        expect(screen.getByText("Negative")).toHaveClass("border-bittersweet-shimmer/20");
+        expect(screen.getByText("Pending")).toHaveClass("border-yellow-500/20");
+        expect(screen.getByText("In Progress")).toHaveClass("border-blue-500/20");
+        expect(screen.getByText("Other")).toHaveClass("border-gray-500/20");
+    });
+
+    it("handles filter column switching and value typing", async () => {
+        const user = userEvent.setup();
+        renderTable();
+
+        const colSelect = screen.getByRole("combobox", { name: "" }); // The first one
+        await user.selectOptions(colSelect, "id");
+        expect(screen.getByPlaceholderText("Number ID")).toBeInTheDocument();
+
+        await user.selectOptions(colSelect, "verdict");
+        const selects = screen.getAllByRole("combobox");
+        expect(selects.length).toBe(2); // col + val
+        expect(screen.getByRole("option", { name: "Positive" })).toBeInTheDocument();
+
+        await user.selectOptions(colSelect, "score");
+        expect(screen.getByPlaceholderText("0-100")).toBeInTheDocument();
+    });
+
+    it("renders pagination ellipsis for many pages", () => {
+        renderTable({ data: { ...mockData, totalPages: 20, page: 10 } });
+        const ellipsis = screen.getAllByText("...");
+        expect(ellipsis.length).toBeGreaterThan(0);
+        expect(screen.getByText("10")).toHaveClass("bg-primary");
+    });
 });

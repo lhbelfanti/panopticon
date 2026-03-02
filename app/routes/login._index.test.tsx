@@ -66,3 +66,57 @@ describe("Login Route", () => {
         expect(screen.getByText("login.register.title")).toBeInTheDocument();
     });
 });
+
+import { action } from "./login._index";
+
+vi.mock("~/services/api/auth/index.server", () => ({
+    login: vi.fn(async ({ username }) => {
+        if (username === "valid") {
+            return {
+                user: { id: 1, name: "Test" },
+                headers: { "Set-Cookie": "session=abc" }
+            };
+        }
+        throw new Error("failed");
+    })
+}));
+
+describe("Login Route Functions", () => {
+    it("action validates username", async () => {
+        const formData = new FormData();
+        const request = new Request("http://localhost/login", {
+            method: "POST",
+            body: formData,
+        });
+
+        const result = await action({ request });
+        expect(result).toEqual({ error: "usernameRequired" });
+    });
+
+    it("action handles successful login", async () => {
+        const formData = new FormData();
+        formData.set("username", "valid");
+        formData.set("password", "password");
+        const request = new Request("http://localhost/login", {
+            method: "POST",
+            body: formData,
+        });
+
+        const result = await action({ request }) as Response;
+        expect(result.status).toBe(302);
+        expect(result.headers.get("Location")).toBe("/");
+    });
+
+    it("action handles login failure", async () => {
+        const formData = new FormData();
+        formData.set("username", "invalid");
+        formData.set("password", "password");
+        const request = new Request("http://localhost/login", {
+            method: "POST",
+            body: formData,
+        });
+
+        const result = await action({ request });
+        expect(result).toEqual({ error: "loginFailed" });
+    });
+});

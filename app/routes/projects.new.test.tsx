@@ -44,3 +44,23 @@ describe("NewProjectPage Route", () => {
         expect(screen.getByText("projects.new.description")).toBeInTheDocument();
     });
 });
+
+import { loader, action } from "./projects.new";
+
+describe("NewProjectPage Route Functions", () => {
+    it("loader returns behavior configs", async () => {
+        const result = await loader({ request: new Request("http://localhost/projects/new"), params: {} } as any);
+        expect(result).toHaveProperty("behaviorConfigs");
+    });
+
+    it("action validates required fields", async () => {
+        const formData = new FormData();
+        const request = new Request("http://localhost/projects/new", {
+            method: "POST",
+            body: formData,
+        });
+
+        const result = await action({ request });
+        expect(result).toEqual({ error: "Name is required" });
+    });
+});

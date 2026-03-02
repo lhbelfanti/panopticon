@@ -47,3 +47,38 @@ describe("SubprojectEntriesPage Route", () => {
         expect(screen.getByText("Mocked Table for Test Project - roberta - Filter: text")).toBeInTheDocument();
     });
 });
+
+import { loader, action } from "./projects.$id.models.$modelId";
+import { getEntries, deleteEntry, predictPendingEntries } from "~/services/api/entries/index.server";
+import { getProjectById } from "~/services/api/projects/index.server";
+
+vi.mock("~/services/api/entries/index.server", () => ({
+    getEntries: vi.fn(async () => ({ entries: [], total: 0 })),
+    deleteEntry: vi.fn(async () => { }),
+    predictPendingEntries: vi.fn(async () => 5),
+}));
+
+vi.mock("~/services/api/projects/index.server", () => ({
+    getProjectById: vi.fn(async (id: number) => {
+        if (id === 123) return { id: 123, name: "Test Project" };
+        return null;
+    }),
+}));
+
+describe("SubprojectEntriesPage Route Functions", () => {
+    it("loader returns model and project data", async () => {
+        const url = "http://localhost/projects/123/models/m1?filterCol=text&filterVal=foo";
+        const result = await loader({ params: { id: "123", modelId: "m1" }, request: new Request(url) } as any);
+        expect(result.project.id).toBe(123);
+        expect(result.modelId).toBe("m1");
+        expect(result.filterVal).toBe("foo");
+    });
+
+    it("action handles predict_pending", async () => {
+        const formData = new FormData();
+        formData.set("intent", "predict_pending");
+        const request = new Request("http://localhost", { method: "POST", body: formData });
+        const result = await action({ request, params: { id: "123", modelId: "m1" } } as any);
+        expect(result).toEqual({ success: true, count: 5 });
+    });
+});
