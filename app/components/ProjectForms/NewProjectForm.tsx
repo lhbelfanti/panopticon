@@ -126,7 +126,7 @@ export const NewProjectForm = (props: NewProjectFormProps) => {
             return (
               <label
                 key={config.id}
-                title={!isEnabled ? t("common.notAvailable") : undefined}
+                title={!isEnabled ? "NOT AVAILABLE" : undefined}
                 className={`${checkboxLabelClassName} ${!isEnabled ? "opacity-50 cursor-not-allowed border-white/5 hover:border-white/5 hover:shadow-none bg-black/20" : ""}`}
               >
                 <div className="relative flex items-center justify-center flex-shrink-0">
@@ -139,7 +139,7 @@ export const NewProjectForm = (props: NewProjectFormProps) => {
                     className={checkboxInputClassName}
                   />
                   <svg
-                    className="absolute w-3.5 h-3.5 text-background-dark opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none"
+                    className={`absolute w-3.5 h-3.5 text-background-dark opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none`}
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -165,11 +165,6 @@ export const NewProjectForm = (props: NewProjectFormProps) => {
                     {t(`projects.behaviors.${config.id}`)}
                   </span>
                 </div>
-                {!isEnabled && (
-                  <span className="text-[0.6rem] uppercase tracking-wider font-bold bg-white/10 px-1.5 py-0.5 rounded text-light-gray-60 flex-shrink-0 ml-auto mr-1 self-start mt-0.5">
-                    {t("common.notAvailable")}
-                  </span>
-                )}
               </label>
             );
           })}
