@@ -48,19 +48,67 @@ describe("NewProjectPage Route", () => {
 import { loader, action } from "./projects.new";
 
 describe("NewProjectPage Route Functions", () => {
-    it("loader returns behavior configs", async () => {
-        const result = await loader({ request: new Request("http://localhost/projects/new"), params: {} } as any);
-        expect(result).toHaveProperty("behaviorConfigs");
-    });
-
-    it("action validates required fields", async () => {
+    it("action validates at least one behavior and model", async () => {
         const formData = new FormData();
+        formData.set("name", "Test Project");
+        // No behaviors or models added
         const request = new Request("http://localhost/projects/new", {
             method: "POST",
             body: formData,
         });
 
+        let result = await action({ request }) as any;
+        expect(result.error).toBe("At least one target behavior must be selected");
+
+        formData.append("behaviors", "Hate Speech");
+        const request2 = new Request("http://localhost/projects/new", {
+            method: "POST",
+            body: formData,
+        });
+        result = await action({ request: request2 }) as any;
+        expect(result.error).toBe("At least one ML model must be selected");
+    });
+
+    it("action handles API failure", async () => {
+        const formData = new FormData();
+        formData.set("name", "error_trigger");
+        formData.append("behaviors", "Hate Speech");
+        formData.append("models", "roberta");
+        const request = new Request("http://localhost/projects/new", {
+            method: "POST",
+            body: formData,
+        });
+
+        const projectsServer = await import("~/services/api/projects/index.server");
+        const createProjectSpy = vi.spyOn(projectsServer, "createProject").mockRejectedValueOnce(new Error("API Error"));
+
         const result = await action({ request });
-        expect(result).toEqual({ error: "Name is required" });
+        expect(result).toEqual({ error: "Failed to create project" });
+        createProjectSpy.mockRestore();
+    });
+
+    it("action validates all required fields", async () => {
+        const formData = new FormData();
+        // 1. Missing name
+        let request = new Request("http://localhost/projects/new", { method: "POST", body: formData });
+        let result = await action({ request }) as any;
+        expect(result.error).toBe("Name is required");
+
+        // 2. Missing behaviors
+        formData.set("name", "Test");
+        request = new Request("http://localhost/projects/new", { method: "POST", body: formData });
+        result = await action({ request }) as any;
+        expect(result.error).toBe("At least one target behavior must be selected");
+
+        // 3. Missing models
+        formData.append("behaviors", "Hate Speech");
+        request = new Request("http://localhost/projects/new", { method: "POST", body: formData });
+        result = await action({ request }) as any;
+        expect(result.error).toBe("At least one ML model must be selected");
+    });
+
+    it("loader returns behavior configs", async () => {
+        const result = await loader({ request: new Request("http://localhost/projects/new"), params: {} } as any);
+        expect(result).toHaveProperty("behaviorConfigs");
     });
 });

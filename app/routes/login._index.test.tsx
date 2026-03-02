@@ -120,3 +120,13 @@ describe("Login Route Functions", () => {
         expect(result).toEqual({ error: "loginFailed" });
     });
 });
+
+import { meta } from "./login._index";
+
+describe("Login Route Meta", () => {
+    it("returns expected meta tags", () => {
+        const result = meta();
+        expect(result).toContainEqual({ title: "Panopticon" });
+        expect(result).toContainEqual(expect.objectContaining({ name: "description" }));
+    });
+});

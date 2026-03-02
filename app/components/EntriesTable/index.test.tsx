@@ -81,7 +81,12 @@ describe("EntriesTable", () => {
     const renderTable = (props = {}) => {
         return render(
             <BrowserRouter>
-                <EntriesTable {...defaultProps} {...props} />
+                <EntriesTable
+                    {...defaultProps}
+                    filterOp={defaultProps.filterOp as any}
+                    filterBias={defaultProps.filterBias as any}
+                    {...props}
+                />
             </BrowserRouter>
         );
     };
@@ -199,5 +204,41 @@ describe("EntriesTable", () => {
         const ellipsis = screen.getAllByText("...");
         expect(ellipsis.length).toBeGreaterThan(0);
         expect(screen.getByText("10")).toHaveClass("bg-primary");
+    });
+
+    it("handles null scores correctly", () => {
+        const dataWithNullScore = {
+            ...mockData,
+            entries: [{ ...mockData.entries[0], score: undefined }]
+        };
+        renderTable({ data: dataWithNullScore });
+        expect(screen.getByText("-")).toBeInTheDocument();
+    });
+
+    it("closes modal on backdrop click", async () => {
+        const user = userEvent.setup();
+        renderTable();
+        await user.click(screen.getByText("This is a test entry"));
+        expect(screen.getByText("View Full Entry")).toBeInTheDocument();
+
+        // The backdrop is the first div with fixed inset-0
+        const backdrop = screen.getByText("View Full Entry").parentElement?.parentElement?.parentElement;
+        if (backdrop) await user.click(backdrop);
+
+        expect(screen.queryByText("View Full Entry")).not.toBeInTheDocument();
+    });
+
+    it("triggers form submit from toolbar on change", async () => {
+        const user = userEvent.setup();
+        renderTable();
+
+        const colSelect = screen.getByRole("combobox", { name: "" });
+        await user.selectOptions(colSelect, "verdict");
+
+        // Changing the verdict level select should trigger submit
+        const verdictSelect = screen.getAllByRole("combobox")[1];
+        await user.selectOptions(verdictSelect, "Positive");
+
+        expect(mockSubmit).toHaveBeenCalled();
     });
 });

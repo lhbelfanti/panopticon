@@ -65,4 +65,16 @@ describe("ConfirmationModal", () => {
         expect(testIdInput).toHaveValue("123");
         expect(modeInput).toHaveValue("delete");
     });
+
+    it("calls onClose when backdrop is clicked", async () => {
+        const user = userEvent.setup();
+        const onCloseMock = vi.fn();
+        const { container } = renderModal({ onClose: onCloseMock });
+
+        // The backdrop is the outer div with fixed inset-0
+        const backdrop = container.firstChild as HTMLElement;
+        await user.click(backdrop);
+
+        expect(onCloseMock).toHaveBeenCalled();
+    });
 });

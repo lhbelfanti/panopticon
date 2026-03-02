@@ -135,3 +135,17 @@ describe("ProjectViewPage Route Functions", () => {
         expect(result.headers.get("Location")).toBe("/");
     });
 });
+
+import { meta } from "./projects.$id._index";
+
+describe("ProjectViewPage Route Meta & Edge Cases", () => {
+    it("returns expected meta tags", () => {
+        const result = meta();
+        expect(result).toContainEqual({ title: "Panopticon" });
+    });
+
+    it("throws 404 if id is missing in loader", async () => {
+        await expect(loader({ params: {}, request: new Request("http://localhost") } as any))
+            .rejects.toThrow();
+    });
+});

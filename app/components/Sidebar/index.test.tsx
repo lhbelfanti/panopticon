@@ -26,7 +26,7 @@ describe("Sidebar", () => {
             name: "Project One",
             subprojects: [{ id: "sub-1", model: "roberta" }],
             behaviors: ["spam", "toxicity"] as any,
-            models: ["roberta"],
+            models: ["roberta"] as any,
             createdAt: "2024-01-01T00:00:00Z"
         },
     ];
@@ -40,7 +40,7 @@ describe("Sidebar", () => {
     const renderSidebar = (props = {}) => {
         return render(
             <BrowserRouter>
-                <Sidebar projects={mockProjects} user={mockUser as any} {...props} />
+                <Sidebar projects={mockProjects as any} user={mockUser as any} {...props} />
             </BrowserRouter>
         );
     };
@@ -72,7 +72,7 @@ describe("Sidebar", () => {
     it("shows fallback user when no user prop provided", () => {
         render(
             <BrowserRouter>
-                <Sidebar projects={mockProjects} user={undefined} />
+                <Sidebar projects={mockProjects as any} user={undefined} />
             </BrowserRouter>
         );
         expect(screen.getByText("Research User")).toBeInTheDocument();
