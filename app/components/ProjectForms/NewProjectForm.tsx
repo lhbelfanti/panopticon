@@ -1,9 +1,12 @@
 import { useMemo, useState } from "react";
 import { Form } from "react-router";
-import type { BehaviorConfig } from "~/services/api/projects/types";
-import * as LucideIcons from "lucide-react";
-import { AdverseBehaviorLabel } from "~/components/AdverseBehaviorLabel";
 import { Trans, useTranslation } from "react-i18next";
+
+import { AdverseBehaviorLabel } from "~/components/AdverseBehaviorLabel";
+
+import * as LucideIcons from "lucide-react";
+
+import type { BehaviorConfig } from "~/services/api/projects/types";
 import type { NewProjectFormProps } from "./types";
 
 const modelsList = [

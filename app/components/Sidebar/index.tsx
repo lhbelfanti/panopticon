@@ -1,21 +1,23 @@
 import { useState } from "react";
-import ConfirmationModal from "~/components/ConfirmationModal";
+import { useTranslation } from "react-i18next";
+
 import { Logo } from "~/components/Logo";
-import { type ClassValue, clsx } from "clsx";
+import ConfirmationModal from "~/components/ConfirmationModal";
+import { NavItem } from "./NavItem";
+
 import {
   ChevronLeft,
   ChevronRight,
   CopyPlus,
   Folder,
   Home,
-  LibraryBig,
   LogOut,
   PlusCircle,
   UserCircle,
 } from "lucide-react";
-import { useTranslation } from "react-i18next";
+import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { NavItem } from "./NavItem";
+
 import type { SidebarProps } from "./types";
 
 const cn = (...inputs: ClassValue[]) => {
@@ -30,18 +32,21 @@ export const Sidebar = (props: SidebarProps) => {
 
   const toggleSidebar = () => setCollapsed(!collapsed);
 
+  const asideClasses = cn(
+    "flex flex-col bg-sidebar-dark text-light-gray h-screen transition-all duration-300 border-r border-white/5 shadow-2xl relative",
+    collapsed ? "w-20" : "w-72",
+  );
+
+  const toggleClasses =
+    "absolute -right-3 top-8 bg-surface-dark hover:bg-primary border border-white/20 hover:border-transparent text-light-gray hover:text-background-dark rounded-full p-1.5 shadow-xl transition-colors z-50 flex items-center justify-center";
+
   return (
     <>
-      <aside
-        className={cn(
-          "flex flex-col bg-sidebar-dark text-light-gray h-screen transition-all duration-300 border-r border-white/5 shadow-2xl relative",
-          collapsed ? "w-20" : "w-72",
-        )}
-      >
+      <aside className={asideClasses}>
         {/* Collapse Toggle */}
         <button
           onClick={toggleSidebar}
-          className="absolute -right-3 top-8 bg-surface-dark hover:bg-primary border border-white/20 hover:border-transparent text-light-gray hover:text-background-dark rounded-full p-1.5 shadow-xl transition-colors z-50 flex items-center justify-center"
+          className={toggleClasses}
           title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
         >
           {collapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}

@@ -5,12 +5,13 @@ import { useTranslation } from "react-i18next";
 export const QuickActions = () => {
   const { t } = useTranslation();
 
+  // Convention: extract long Tailwind strings into variables
+  const actionCardClasses =
+    "group bg-surface-dark p-6 rounded-2xl border border-white/5 hover:border-primary/50 transition-all duration-300 shadow-md hover:shadow-xl hover:shadow-primary/5 flex flex-col justify-between min-h-[160px]";
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-      <Link
-        to="/projects/new"
-        className="group bg-surface-dark p-6 rounded-2xl border border-white/5 hover:border-primary/50 transition-all duration-300 shadow-md hover:shadow-xl hover:shadow-primary/5 flex flex-col justify-between min-h-[160px]"
-      >
+      <Link to="/projects/new" className={actionCardClasses}>
         <div className="flex flex-col gap-3 relative">
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center group-hover:scale-110 transition-transform">
@@ -31,10 +32,7 @@ export const QuickActions = () => {
         </div>
       </Link>
 
-      <Link
-        to="/entries/new"
-        className="group bg-surface-dark p-6 rounded-2xl border border-white/5 hover:border-primary/50 transition-all duration-300 shadow-md hover:shadow-xl hover:shadow-primary/5 flex flex-col justify-between min-h-[160px]"
-      >
+      <Link to="/entries/new" className={actionCardClasses}>
         <div className="flex flex-col gap-3 relative">
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center group-hover:scale-110 transition-transform">

@@ -1,13 +1,9 @@
 import { useEffect, useState, useRef } from "react";
 import { Form, Link, useNavigation, useSubmit } from "react-router";
-import type {
-  Entry,
-  FilterColumn,
-  FilterOperator,
-  PaginatedEntries,
-} from "~/services/api/entries/types";
-import type { Project } from "~/services/api/projects/types";
+import { useTranslation } from "react-i18next";
+
 import ConfirmationModal from "~/components/ConfirmationModal";
+
 import {
   ArrowLeft,
   Box,
@@ -21,11 +17,16 @@ import {
   Percent,
   Search,
   Trash2,
-  Type,
   X,
   Zap,
 } from "lucide-react";
-import { useTranslation } from "react-i18next";
+
+import type {
+  Entry,
+  FilterColumn,
+  PaginatedEntries,
+} from "~/services/api/entries/types";
+import type { Project } from "~/services/api/projects/types";
 import type { EntriesTableProps } from "./types";
 
 const EntriesTable = (props: EntriesTableProps) => {
@@ -93,10 +94,24 @@ const EntriesTable = (props: EntriesTableProps) => {
     submit(formData, { method: "post" });
   };
 
+  // Convention: extract long Tailwind strings into variables
+  const containerClasses =
+    "flex-1 p-6 lg:p-10 overflow-y-auto bg-background-dark min-h-screen custom-scrollbar relative flex flex-col gap-6";
+  const headerSectionClasses =
+    "flex flex-col gap-4 animate-in fade-in slide-in-from-bottom-2 duration-300";
+  const tableCardClasses =
+    "bg-surface-dark border border-white/5 rounded-2xl shadow-xl overflow-hidden flex flex-col flex-1 animate-in fade-in slide-in-from-bottom-4 duration-500";
+  const toolbarClasses =
+    "p-4 border-b border-white/5 bg-black/10 flex flex-col sm:flex-row gap-4 justify-between items-center";
+  const tableHeaderRowClasses =
+    "border-b border-white/5 text-xs font-bold text-light-gray-70 uppercase tracking-wider bg-black/20 sticky top-0 z-10 backdrop-blur-md";
+  const predictButtonClasses =
+    "flex items-center gap-2 px-6 py-3 text-base font-bold text-background-dark bg-yellow-400 hover:bg-yellow-500 rounded-lg transition-all disabled:opacity-50 hover:scale-105 hover:shadow-lg shadow-yellow-500/20";
+
   return (
-    <div className="flex-1 p-6 lg:p-10 overflow-y-auto bg-background-dark min-h-screen custom-scrollbar relative flex flex-col gap-6">
+    <div className={containerClasses}>
       {/* Header / Breadcrumb */}
-      <div className="flex flex-col gap-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
+      <div className={headerSectionClasses}>
         <Link
           to={`/projects/${project.id}`}
           className="flex items-center gap-2 text-primary hover:text-white-1 transition-colors text-sm font-semibold max-w-max"
@@ -125,9 +140,9 @@ const EntriesTable = (props: EntriesTableProps) => {
         </div>
       </div>
 
-      <div className="bg-surface-dark border border-white/5 rounded-2xl shadow-xl overflow-hidden flex flex-col flex-1 animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <div className={tableCardClasses}>
         {/* Toolbar Context */}
-        <div className="p-4 border-b border-white/5 bg-black/10 flex flex-col sm:flex-row gap-4 justify-between items-center">
+        <div className={toolbarClasses}>
           <Form
             ref={formRef}
             method="get"
@@ -297,7 +312,7 @@ const EntriesTable = (props: EntriesTableProps) => {
           >
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="border-b border-white/5 text-xs font-bold text-light-gray-70 uppercase tracking-wider bg-black/20 sticky top-0 z-10 backdrop-blur-md">
+                <tr className={tableHeaderRowClasses}>
                   <th className="py-3 px-4 w-1 whitespace-nowrap text-left">{t("projects.entries.tableId")}</th>
                   <th className="py-3 px-4 text-left">{t("projects.entries.tableText")}</th>
                   <th className="py-3 px-4 w-1 whitespace-nowrap text-left">{t("projects.entries.tableVerdict")}</th>
@@ -482,7 +497,7 @@ const EntriesTable = (props: EntriesTableProps) => {
               type="button"
               onClick={handlePredictPending}
               disabled={isPredicting}
-              className="flex items-center gap-2 px-6 py-3 text-base font-bold text-background-dark bg-yellow-400 hover:bg-yellow-500 rounded-lg transition-all disabled:opacity-50 hover:scale-105 hover:shadow-lg shadow-yellow-500/20"
+              className={predictButtonClasses}
             >
               <Zap size={20} className={isPredicting ? "animate-pulse" : ""} />
               {isPredicting ? "Predicting..." : "Predict Pending"}

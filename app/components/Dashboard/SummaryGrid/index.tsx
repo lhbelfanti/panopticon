@@ -1,10 +1,21 @@
-import { CheckCircle2, FileText, Folder, TrendingUp, Zap } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { CheckCircle2, FileText, Folder, TrendingUp, Zap } from "lucide-react";
+import { type ClassValue, clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
+
 import type { SummaryGridProps } from "./types";
+
+const cn = (...inputs: ClassValue[]) => {
+  return twMerge(clsx(inputs));
+};
 
 export const SummaryGrid = (props: SummaryGridProps) => {
   const { summary } = props;
   const { t } = useTranslation();
+
+  // Convention: extract long Tailwind strings into variables
+  const widgetCardClasses =
+    "bg-surface-dark p-4 rounded-xl border border-white/5 shadow-md flex flex-col hover:-translate-y-1 transition-transform";
 
   return (
     <>
@@ -13,7 +24,7 @@ export const SummaryGrid = (props: SummaryGridProps) => {
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-12">
         {/* Widget 1 */}
-        <div className="bg-surface-dark p-4 rounded-xl border border-white/5 shadow-md flex flex-col hover:-translate-y-1 transition-transform">
+        <div className={widgetCardClasses}>
           <div className="flex justify-between items-start mb-3">
             <span className="text-light-gray-70 text-sm font-medium tracking-tight pr-2">
               {t("dashboard.summary.tweetsAnalyzed")}
@@ -37,7 +48,7 @@ export const SummaryGrid = (props: SummaryGridProps) => {
         </div>
 
         {/* Widget 2 */}
-        <div className="bg-surface-dark p-4 rounded-xl border border-white/5 shadow-md flex flex-col hover:-translate-y-1 transition-transform">
+        <div className={widgetCardClasses}>
           <div className="flex justify-between items-start mb-3">
             <span className="text-light-gray-70 text-sm font-medium tracking-tight">
               {t("dashboard.summary.activeProjects")}
@@ -52,7 +63,7 @@ export const SummaryGrid = (props: SummaryGridProps) => {
         </div>
 
         {/* Widget 3 */}
-        <div className="bg-surface-dark p-4 rounded-xl border border-white/5 shadow-md flex flex-col hover:-translate-y-1 transition-transform">
+        <div className={widgetCardClasses}>
           <div className="flex justify-between items-start mb-3">
             <span className="text-light-gray-70 text-sm font-medium tracking-tight">
               {t("dashboard.summary.averagePrecision")}
@@ -67,7 +78,7 @@ export const SummaryGrid = (props: SummaryGridProps) => {
         </div>
 
         {/* Widget 4: Most Used Model */}
-        <div className="bg-surface-dark p-4 rounded-xl border border-white/5 shadow-md flex flex-col hover:-translate-y-1 transition-transform">
+        <div className={widgetCardClasses}>
           <div className="flex justify-between items-start mb-3">
             <span className="text-light-gray-70 text-sm font-medium tracking-tight">
               {t("dashboard.summary.mostUsedModel")}
@@ -82,7 +93,7 @@ export const SummaryGrid = (props: SummaryGridProps) => {
         </div>
 
         {/* Widget 5: Remaining Tokens (Inline width) */}
-        <div className="bg-surface-dark p-4 rounded-xl border border-white/5 shadow-md flex flex-col hover:-translate-y-1 transition-transform relative overflow-hidden">
+        <div className={cn(widgetCardClasses, "relative overflow-hidden")}>
           <div className="flex justify-between items-start mb-2 relative z-10">
             <span className="text-light-gray-70 text-sm font-medium tracking-tight">
               {t("dashboard.summary.remainingTokens")}

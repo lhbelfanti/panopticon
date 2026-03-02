@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Pencil, X } from "lucide-react";
+
 import type { RegisterFormProps } from "./types";
 
 export const RegisterForm = (props: RegisterFormProps) => {
@@ -8,6 +9,12 @@ export const RegisterForm = (props: RegisterFormProps) => {
   const [lastName, setLastName] = useState("");
   const [isUsernameEdited, setIsUsernameEdited] = useState(false);
   const [username, setUsername] = useState("");
+
+  // Convention: extract long Tailwind strings into variables
+  const inputClasses =
+    "w-full bg-sidebar-dark border border-white/10 rounded-lg p-3.5 text-white-1 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all placeholder:opacity-30";
+  const buttonPrimaryClasses =
+    "w-full bg-primary hover:bg-primary/90 text-background-dark font-bold py-3.5 px-4 rounded-lg transition-transform hover:-translate-y-0.5 shadow-lg shadow-primary/20 flex items-center justify-center gap-2";
 
   const suggestedUsername = useMemo(() => {
     if (!firstName || !lastName) return "";
@@ -50,7 +57,7 @@ export const RegisterForm = (props: RegisterFormProps) => {
               required
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
-              className="w-full bg-sidebar-dark border border-white/10 rounded-lg p-3.5 text-white-1 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all placeholder:opacity-30"
+              className={inputClasses}
               placeholder="Jane"
             />
           </div>
@@ -68,7 +75,7 @@ export const RegisterForm = (props: RegisterFormProps) => {
               required
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
-              className="w-full bg-sidebar-dark border border-white/10 rounded-lg p-3.5 text-white-1 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all placeholder:opacity-30"
+              className={inputClasses}
               placeholder="Doe"
             />
           </div>
@@ -110,11 +117,10 @@ export const RegisterForm = (props: RegisterFormProps) => {
               setIsUsernameEdited(true);
               setUsername(e.target.value);
             }}
-            className={`w-full border rounded-lg p-3.5 outline-none transition-all placeholder:opacity-30 ${
-              isUsernameEdited
+            className={`w-full border rounded-lg p-3.5 outline-none transition-all placeholder:opacity-30 ${isUsernameEdited
                 ? "bg-sidebar-dark border-white/10 text-white-1 focus:ring-2 focus:ring-primary focus:border-transparent"
                 : "bg-background-dark/50 border-white/5 text-light-gray-70"
-            }`}
+              }`}
             placeholder="jdoe"
           />
         </div>
@@ -131,14 +137,14 @@ export const RegisterForm = (props: RegisterFormProps) => {
             name="reg-email"
             id="reg-email"
             required
-            className="w-full bg-sidebar-dark border border-white/10 rounded-lg p-3.5 text-white-1 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all placeholder:opacity-30"
+            className={inputClasses}
             placeholder="jdoe@researcher.org"
           />
         </div>
         <div className="flex flex-col gap-3 mt-2">
           <button
             type="submit"
-            className="w-full bg-primary hover:bg-primary/90 text-background-dark font-bold py-3.5 px-4 rounded-lg transition-transform hover:-translate-y-0.5 shadow-lg shadow-primary/20 flex items-center justify-center gap-2"
+            className={buttonPrimaryClasses}
           >
             {t("login.register.requestAccess")}
           </button>

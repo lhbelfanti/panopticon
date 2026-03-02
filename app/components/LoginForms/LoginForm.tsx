@@ -4,6 +4,12 @@ import type { LoginFormProps } from "./types";
 export const LoginForm = (props: LoginFormProps) => {
   const { actionData, isSubmitting, setView, t } = props;
 
+  // Convention: extract long Tailwind strings into variables
+  const inputClasses =
+    "w-full bg-sidebar-dark border border-white/10 rounded-lg p-3.5 text-white-1 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all placeholder:opacity-30";
+  const buttonClasses =
+    "w-full mt-2 bg-primary hover:bg-primary/90 text-background-dark font-bold py-3.5 px-4 rounded-lg transition-transform hover:-translate-y-0.5 shadow-lg shadow-primary/20 flex items-center justify-center gap-2 disabled:opacity-70 disabled:hover:translate-y-0";
+
   return (
     <div className="flex flex-col animate-in fade-in slide-in-from-right-4 duration-300">
       <h1 className="text-3xl font-bold text-white-1 mb-2">
@@ -30,7 +36,7 @@ export const LoginForm = (props: LoginFormProps) => {
             name="username"
             id="username"
             required
-            className="w-full bg-sidebar-dark border border-white/10 rounded-lg p-3.5 text-white-1 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all placeholder:opacity-30"
+            className={inputClasses}
             placeholder="jdoe"
           />
         </div>
@@ -56,7 +62,7 @@ export const LoginForm = (props: LoginFormProps) => {
             name="password"
             id="password"
             required
-            className="w-full bg-sidebar-dark border border-white/10 rounded-lg p-3.5 text-white-1 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all placeholder:opacity-30"
+            className={inputClasses}
             placeholder="••••••••"
           />
         </div>
@@ -64,7 +70,7 @@ export const LoginForm = (props: LoginFormProps) => {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full mt-2 bg-primary hover:bg-primary/90 text-background-dark font-bold py-3.5 px-4 rounded-lg transition-transform hover:-translate-y-0.5 shadow-lg shadow-primary/20 flex items-center justify-center gap-2 disabled:opacity-70 disabled:hover:translate-y-0"
+          className={buttonClasses}
         >
           {isSubmitting ? (
             <>

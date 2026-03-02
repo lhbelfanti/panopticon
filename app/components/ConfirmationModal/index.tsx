@@ -1,4 +1,5 @@
 import { Form } from "react-router";
+
 import type { ConfirmationModalProps } from "./types";
 
 const ConfirmationModal = (props: ConfirmationModalProps) => {
@@ -25,9 +26,18 @@ const ConfirmationModal = (props: ConfirmationModalProps) => {
     ? "bg-bittersweet-shimmer hover:bg-bittersweet-shimmer/80 shadow-bittersweet-shimmer/20"
     : "bg-primary hover:bg-primary/90 text-background-dark shadow-primary/20";
 
+  // Convention: extract long Tailwind strings into variables
+  const overlayClasses =
+    "fixed inset-0 z-[100] flex items-center justify-center bg-background-dark/80 backdrop-blur-sm p-4";
+  const modalCardClasses =
+    "bg-surface-dark border border-white/10 rounded-2xl shadow-2xl p-6 lg:p-8 w-full max-w-sm flex flex-col items-center animate-in fade-in zoom-in-95 duration-200";
+  const cancelButtonClasses =
+    "flex-1 py-2.5 px-4 rounded-lg font-semibold cursor-pointer text-light-gray hover:text-white-1 bg-white/5 hover:bg-white/10 transition-colors duration-150";
+  const confirmButtonClasses = `flex-1 flex justify-center items-center py-2.5 px-4 rounded-lg cursor-pointer font-semibold text-white-1 transition-colors duration-150 shadow-lg ${btnColor}`;
+
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-background-dark/80 backdrop-blur-sm p-4">
-      <div className="bg-surface-dark border border-white/10 rounded-2xl shadow-2xl p-6 lg:p-8 w-full max-w-sm flex flex-col items-center animate-in fade-in zoom-in-95 duration-200">
+    <div className={overlayClasses} onClick={onClose}>
+      <div className={modalCardClasses} onClick={(e) => e.stopPropagation()}>
         <div
           className={`w-16 h-16 rounded-full flex items-center justify-center mb-6 py-2 px-2 ${iconBgColor}`}
         >
@@ -43,7 +53,7 @@ const ConfirmationModal = (props: ConfirmationModalProps) => {
           <button
             type="button"
             onClick={onClose}
-            className="flex-1 py-2.5 px-4 rounded-lg font-semibold cursor-pointer text-light-gray hover:text-white-1 bg-white/5 hover:bg-white/10 transition-colors duration-150"
+            className={cancelButtonClasses}
           >
             {cancelText}
           </button>
@@ -57,7 +67,7 @@ const ConfirmationModal = (props: ConfirmationModalProps) => {
             ))}
             <button
               type="submit"
-              className={`flex-1 flex justify-center items-center py-2.5 px-4 rounded-lg cursor-pointer font-semibold text-white-1 transition-colors duration-150 shadow-lg ${btnColor}`}
+              className={confirmButtonClasses}
             >
               {confirmText}
             </button>

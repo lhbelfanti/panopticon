@@ -1,6 +1,8 @@
-import { Link } from "react-router";
-import { Box } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router";
+
+import { Box } from "lucide-react";
+
 import type { SubprojectCardProps } from "./types";
 
 const SubprojectCard = (props: SubprojectCardProps) => {
