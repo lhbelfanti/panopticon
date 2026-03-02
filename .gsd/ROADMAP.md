@@ -18,7 +18,7 @@
 **Requirements**: Authentication, Sidebar layout, Welcome screen activity summaries.
 
 ### Phase 2: Project Management Core
-**Status**: ⬜ Not Started
+**Status**: ✅ Completed
 **Objective**: Enable researchers to create new projects and view the project details (entries list, pagination, filters). Implement specific delete confirmation modals for projects/entries.
 **Requirements**: New Project setup, Project View dashboard, Delete Confirmation Modal.
 
