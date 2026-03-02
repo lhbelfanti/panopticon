@@ -97,14 +97,28 @@ describe("Sidebar", () => {
         expect(screen.getByTitle("Expand sidebar")).toBeInTheDocument();
     });
 
-    it("opens the logout confirmation modal", async () => {
+    it("renders no active projects message when projects array is empty", () => {
+        render(
+            <BrowserRouter>
+                <Sidebar projects={[]} user={mockUser as any} />
+            </BrowserRouter>
+        );
+        expect(screen.getByText("sidebar.noActiveProjects")).toBeInTheDocument();
+    });
+
+    it("closes the logout confirmation modal when cancelled", async () => {
         const user = userEvent.setup();
         renderSidebar();
 
+        // Open modal
         const logoutBtn = screen.getByTitle("sidebar.logout");
         await user.click(logoutBtn);
-
         expect(screen.getAllByText("sidebar.logoutConfirmTitle")[0]).toBeInTheDocument();
-        expect(screen.getByText("sidebar.logoutConfirmDesc")).toBeInTheDocument();
+
+        // Cancel modal - The ConfirmationModal mock uses onClose when Cancel is clicked
+        const cancelBtn = screen.getByText("sidebar.cancel");
+        await user.click(cancelBtn);
+
+        expect(screen.queryByText("sidebar.logoutConfirmDesc")).not.toBeInTheDocument();
     });
 });

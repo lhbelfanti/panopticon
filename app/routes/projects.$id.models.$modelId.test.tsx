@@ -81,4 +81,27 @@ describe("SubprojectEntriesPage Route Functions", () => {
         const result = await action({ request, params: { id: "123", modelId: "m1" } } as any);
         expect(result).toEqual({ success: true, count: 5 });
     });
+
+    it("action handles delete_entry", async () => {
+        const formData = new FormData();
+        formData.set("intent", "delete_entry");
+        formData.set("entryId", "e1");
+        const request = new Request("http://localhost", { method: "POST", body: formData });
+        const result = await action({ request, params: { id: "123", modelId: "m1" } } as any);
+        expect(deleteEntry).toHaveBeenCalledWith(123, "m1", "e1");
+        expect(result).toBeNull();
+    });
+
+    it("action returns null for unknown intent", async () => {
+        const formData = new FormData();
+        formData.set("intent", "unknown");
+        const request = new Request("http://localhost", { method: "POST", body: formData });
+        const result = await action({ request, params: { id: "123", modelId: "m1" } } as any);
+        expect(result).toBeNull();
+    });
+
+    it("loader throws 404 for non-existent project", async () => {
+        await expect(loader({ params: { id: "999", modelId: "m1" }, request: new Request("http://localhost") } as any))
+            .rejects.toThrow();
+    });
 });

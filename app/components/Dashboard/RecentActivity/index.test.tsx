@@ -53,4 +53,50 @@ describe("RecentActivity", () => {
         expect(screen.getByText("status.created")).toBeInTheDocument();
         expect(screen.getByText("status.processing")).toBeInTheDocument();
     });
+
+    it("renders time ago correctly for different intervals", () => {
+        const mockActivities = [
+            {
+                id: "1",
+                type: "csv_uploaded",
+                description: "Just now",
+                timestamp: "2024-01-02T11:59:55Z", // 5 seconds ago
+            },
+            {
+                id: "2",
+                type: "tweets_added",
+                description: "Days ago",
+                timestamp: "2024-01-01T11:59:55Z", // 1 day ago
+            },
+            {
+                id: "3",
+                type: "unknown",
+                description: "Long ago",
+                status: "custom_status",
+                timestamp: "2023-12-30T12:00:00Z", // 3 days ago
+            }
+        ];
+
+        render(<RecentActivity recentActivities={mockActivities as any} />);
+
+        expect(screen.getByText("relativeTime.secondsAgo")).toBeInTheDocument();
+        expect(screen.getByText("relativeTime.daysAgo count:1")).toBeInTheDocument();
+        expect(screen.getByText("relativeTime.daysAgo count:3")).toBeInTheDocument();
+        expect(screen.getByText("status.custom_status")).toBeInTheDocument();
+    });
+});
+
+import { ActivityIcon, getActivityColor } from "./utils";
+
+describe("RecentActivity Utils", () => {
+    it("ActivityIcon returns fallback for unknown type", () => {
+        const { container } = render(<ActivityIcon type="unknown" />);
+        // It should render an Activity icon (default)
+        expect(container.querySelector("svg")).toBeInTheDocument();
+    });
+
+    it("getActivityColor returns fallback for unknown type", () => {
+        const color = getActivityColor("unknown");
+        expect(color).toContain("gray-500");
+    });
 });

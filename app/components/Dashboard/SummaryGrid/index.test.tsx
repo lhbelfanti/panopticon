@@ -40,4 +40,21 @@ describe("SummaryGrid", () => {
 
         expect(screen.getByText("dashboard.summary.unlimited")).toBeInTheDocument();
     });
+
+    it("caps the token progress bar at 100%", () => {
+        // 10M tokens is > 5M total used for progress calc
+        const summaryHighTokens = { ...mockSummary, remainingTokens: 10000000 };
+        const { container } = render(<SummaryGrid summary={summaryHighTokens} />);
+
+        const progressBar = container.querySelector(".bg-primary");
+        expect(progressBar).toHaveStyle({ width: "100%" });
+    });
+
+    it("renders progress bar at 0% when tokens are 0", () => {
+        const summaryZeroTokens = { ...mockSummary, remainingTokens: 0 };
+        const { container } = render(<SummaryGrid summary={summaryZeroTokens} />);
+
+        const progressBar = container.querySelector(".bg-primary");
+        expect(progressBar).toHaveStyle({ width: "0%" });
+    });
 });

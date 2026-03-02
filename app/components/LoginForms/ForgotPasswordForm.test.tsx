@@ -8,6 +8,8 @@ describe("ForgotPasswordForm", () => {
     const defaultProps = {
         setView: vi.fn(),
         t: vi.fn((key: string) => key),
+        actionData: undefined,
+        isSubmitting: false,
     };
 
     const renderForm = () => render(
@@ -33,6 +35,24 @@ describe("ForgotPasswordForm", () => {
         );
 
         await user.click(screen.getByRole("button", { name: "login.recoverPassword.backToLogin" }));
+        expect(setViewMock).toHaveBeenCalledWith("login");
+    });
+
+    it("calls setView('login') when form is submitted", async () => {
+        const user = userEvent.setup();
+        const setViewMock = vi.fn();
+        render(
+            <BrowserRouter>
+                <ForgotPasswordForm t={defaultProps.t} setView={setViewMock} />
+            </BrowserRouter>
+        );
+
+        const emailInput = screen.getByLabelText("login.email");
+        await user.type(emailInput, "test@example.com");
+
+        const submitBtn = screen.getByRole("button", { name: "login.recoverPassword.sendLink" });
+        await user.click(submitBtn);
+
         expect(setViewMock).toHaveBeenCalledWith("login");
     });
 });

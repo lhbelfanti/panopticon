@@ -69,3 +69,13 @@ describe("Dashboard Index Route Functions", () => {
         expect(result).toHaveProperty("recentActivities");
     });
 });
+
+import { meta } from "./_index";
+
+describe("Dashboard Index Route Meta", () => {
+    it("returns expected meta tags", () => {
+        const result = meta({} as any);
+        expect(result).toContainEqual({ title: "Panopticon" });
+        expect(result).toContainEqual({ name: "description", content: "Adverse Human Behaviour Analysis Platform" });
+    });
+});

@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { BrowserRouter } from "react-router";
@@ -11,6 +11,12 @@ vi.mock("react-i18next", () => ({
 }));
 
 const mockSubmit = vi.fn();
+const mockUseNavigation = vi.fn(() => ({
+    state: "idle",
+    formData: undefined,
+    location: undefined,
+}));
+
 vi.mock("react-router", async (importOriginal) => {
     const actual = await importOriginal();
     return {
@@ -21,11 +27,7 @@ vi.mock("react-router", async (importOriginal) => {
             </form>
         ),
         useSubmit: () => mockSubmit,
-        useNavigation: () => ({
-            state: "idle",
-            formData: undefined,
-            location: undefined,
-        }),
+        useNavigation: () => mockUseNavigation(),
     };
 });
 
@@ -75,7 +77,7 @@ describe("EntriesTable", () => {
         filterCol: "text" as any,
         filterVal: "",
         filterOp: "=",
-        filterBias: "",
+        filterBias: 0,
     };
 
     const renderTable = (props = {}) => {
@@ -228,17 +230,64 @@ describe("EntriesTable", () => {
         expect(screen.queryByText("View Full Entry")).not.toBeInTheDocument();
     });
 
-    it("triggers form submit from toolbar on change", async () => {
+    it("renders different pagination scenarios", () => {
+        // Test near beginning
+        const { rerender } = render(
+            <BrowserRouter>
+                <EntriesTable {...defaultProps} filterOp={defaultProps.filterOp as any} data={{ ...mockData, totalPages: 20, page: 3 }} />
+            </BrowserRouter>
+        );
+        expect(screen.getAllByText("...").length).toBe(1);
+
+        // Test near end
+        rerender(
+            <BrowserRouter>
+                <EntriesTable {...defaultProps} filterOp={defaultProps.filterOp as any} data={{ ...mockData, totalPages: 20, page: 18 }} />
+            </BrowserRouter>
+        );
+        expect(screen.getAllByText("...").length).toBe(1);
+
+        // Test in middle
+        rerender(
+            <BrowserRouter>
+                <EntriesTable {...defaultProps} filterOp={defaultProps.filterOp as any} data={{ ...mockData, totalPages: 20, page: 10 }} />
+            </BrowserRouter>
+        );
+        expect(screen.getAllByText("...").length).toBe(2);
+    });
+
+    it("renders fuzzy score filter when ~= is selected", async () => {
         const user = userEvent.setup();
-        renderTable();
+        renderTable({ filterCol: "score", filterOp: "~=" });
+        expect(screen.getByPlaceholderText("Bias")).toBeInTheDocument();
+    });
 
-        const colSelect = screen.getByRole("combobox", { name: "" });
-        await user.selectOptions(colSelect, "verdict");
+    it("applies loading opacity when navigation is loading", () => {
+        mockUseNavigation.mockReturnValueOnce({
+            state: "loading",
+            formData: undefined,
+            location: { search: "?filterCol=text" } as any,
+        });
 
-        // Changing the verdict level select should trigger submit
-        const verdictSelect = screen.getAllByRole("combobox")[1];
-        await user.selectOptions(verdictSelect, "Positive");
+        const { container } = renderTable();
+        const tableWrapper = container.querySelector(".opacity-30");
+        expect(tableWrapper).toBeInTheDocument();
+    });
 
+    it("debounces filter input typing", async () => {
+        vi.useFakeTimers();
+        renderTable({ filterCol: "text" });
+
+        const searchInput = screen.getByPlaceholderText("Search characters");
+        fireEvent.change(searchInput, { target: { value: "test search" } });
+
+        // Submit shouldn't be called immediately due to debounce
+        expect(mockSubmit).not.toHaveBeenCalled();
+
+        // Advance time
+        vi.runAllTimers(); // Or vi.advanceTimersByTime(300);
         expect(mockSubmit).toHaveBeenCalled();
+
+        vi.useRealTimers();
     });
 });

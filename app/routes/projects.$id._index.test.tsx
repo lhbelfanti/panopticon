@@ -134,9 +134,28 @@ describe("ProjectViewPage Route Functions", () => {
         expect(result.status).toBe(302);
         expect(result.headers.get("Location")).toBe("/");
     });
+
+    it("action returns null for unknown intent", async () => {
+        const formData = new FormData();
+        formData.set("intent", "unknown");
+        const request = new Request("http://localhost", { method: "POST", body: formData });
+        const result = await action({ request, params: { id: "123" } } as any);
+        expect(result).toBeNull();
+    });
 });
 
 import { meta } from "./projects.$id._index";
+import ConfirmationModal from "~/components/ConfirmationModal";
+
+vi.mock("~/components/ConfirmationModal", () => ({
+    default: ({ isOpen, onClose, title, description }: any) => isOpen ? (
+        <div data-testid="modal">
+            <h1>{title}</h1>
+            <p>{description}</p>
+            <button onClick={onClose} data-testid="close-modal">Close</button>
+        </div>
+    ) : null,
+}));
 
 describe("ProjectViewPage Route Meta & Edge Cases", () => {
     it("returns expected meta tags", () => {
@@ -147,5 +166,24 @@ describe("ProjectViewPage Route Meta & Edge Cases", () => {
     it("throws 404 if id is missing in loader", async () => {
         await expect(loader({ params: {}, request: new Request("http://localhost") } as any))
             .rejects.toThrow();
+    });
+
+    it("handles closing the delete modal", async () => {
+        const user = userEvent.setup();
+        render(
+            <MemoryRouter>
+                <ProjectViewPage />
+            </MemoryRouter>
+        );
+
+        // Open modal
+        const deleteBtn = screen.getByTitle("projects.view.deleteProject");
+        await user.click(deleteBtn);
+        expect(screen.getByTestId("modal")).toBeInTheDocument();
+
+        // Close modal
+        const closeBtn = screen.getByTestId("close-modal");
+        await user.click(closeBtn);
+        expect(screen.queryByTestId("modal")).not.toBeInTheDocument();
     });
 });

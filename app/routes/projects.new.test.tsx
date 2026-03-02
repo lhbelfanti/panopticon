@@ -107,6 +107,31 @@ describe("NewProjectPage Route Functions", () => {
         expect(result.error).toBe("At least one ML model must be selected");
     });
 
+    it("action redirects on success", async () => {
+        const formData = new FormData();
+        formData.set("name", "New Project");
+        formData.append("behaviors", "Hate Speech");
+        formData.append("models", "roberta");
+        const request = new Request("http://localhost/projects/new", {
+            method: "POST",
+            body: formData,
+        });
+
+        const projectsServer = await import("~/services/api/projects/index.server");
+        const createProjectSpy = vi.spyOn(projectsServer, "createProject").mockResolvedValueOnce({
+            id: 123,
+            name: "New Project",
+            description: "",
+            behaviors: ["Hate Speech"],
+            subprojects: [],
+        } as any);
+
+        const result = await action({ request }) as Response;
+        expect(result.status).toBe(302);
+        expect(result.headers.get("Location")).toBe("/projects/123");
+        createProjectSpy.mockRestore();
+    });
+
     it("loader returns behavior configs", async () => {
         const result = await loader({ request: new Request("http://localhost/projects/new"), params: {} } as any);
         expect(result).toHaveProperty("behaviorConfigs");

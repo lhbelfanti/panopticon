@@ -77,4 +77,11 @@ describe("ConfirmationModal", () => {
 
         expect(onCloseMock).toHaveBeenCalled();
     });
+
+    it("renders with primary colors when isDestructive is false", () => {
+        const { container } = renderModal({ isDestructive: false });
+        // The icon container should have bg-primary/10
+        const iconContainer = container.querySelector(".bg-primary\\/10");
+        expect(iconContainer).toBeInTheDocument();
+    });
 });

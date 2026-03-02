@@ -8,6 +8,8 @@ describe("RegisterForm", () => {
     const defaultProps = {
         setView: vi.fn(),
         t: vi.fn((key: string) => key),
+        actionData: undefined,
+        isSubmitting: false,
     };
 
     const renderForm = () => render(
@@ -63,6 +65,51 @@ describe("RegisterForm", () => {
         );
 
         await user.click(screen.getByText("login.register.loginHere"));
+        expect(setViewMock).toHaveBeenCalledWith("login");
+    });
+
+    it("restores suggested username when Cancel Edition is clicked", async () => {
+        const user = userEvent.setup();
+        renderForm();
+
+        const firstInput = screen.getByLabelText("login.register.firstName");
+        const lastInput = screen.getByLabelText("login.register.lastName");
+        await user.type(firstInput, "John");
+        await user.type(lastInput, "Doe");
+
+        const editBtn = screen.getByTitle("Edit Username");
+        await user.click(editBtn);
+
+        const usernameInput = screen.getByDisplayValue("jdoe");
+        await user.type(usernameInput, "modified");
+        expect(usernameInput).toHaveValue("jdoemodified");
+
+        const cancelBtn = screen.getByTitle("Cancel Edition");
+        await user.click(cancelBtn);
+
+        expect(usernameInput).toHaveValue("jdoe");
+    });
+
+    it("calls setView('login') when form is submitted", async () => {
+        const user = userEvent.setup();
+        const setViewMock = vi.fn();
+        render(
+            <BrowserRouter>
+                <RegisterForm t={defaultProps.t} setView={setViewMock} />
+            </BrowserRouter>
+        );
+
+        const firstInput = screen.getByLabelText("login.register.firstName");
+        const lastInput = screen.getByLabelText("login.register.lastName");
+        const emailInput = screen.getByLabelText("login.register.email");
+
+        await user.type(firstInput, "John");
+        await user.type(lastInput, "Doe");
+        await user.type(emailInput, "john@example.com");
+
+        const submitBtn = screen.getByRole("button", { name: "login.register.requestAccess" });
+        await user.click(submitBtn);
+
         expect(setViewMock).toHaveBeenCalledWith("login");
     });
 });
