@@ -8,15 +8,16 @@ Every commit message must begin with a conventional tag (e.g., `feat`, `fix`, `r
 
 The emojis categorize the impact of the commit:
 
+- `breaking: 💥` : When there is a breaking change (e.g., API changes, database schema changes, etc.).
 - `feat: 🔥` : When a new feature is added.
 - `refactor: 🛠️` : When there is a big refactor (structural changes, major reorganizations).
 - `refactor: ⚙️` : When there is a small refactor (code improvements without functional changes).
-- `feat: 👨‍💻` : When there is a minor change or improvement in an existing feature. (Can also be `chore: 👨‍💻` depending on context).
+- `chore: 👨‍💻` : When there is a minor change or improvement in an existing feature.
 - `fix: 🐛` : When there is a bug fix.
 - `test: 🧪` : For tests.
 - `docs: 📝` : When there is a documentation change.
 - `assets: 🌌` : When new images or visual assets are added or modified.
-- `chore: 🧹` : When files are deleted, dependencies are pruned, or the project is cleaned somehow.
+- `cleanup: 🧹` : When files are deleted, dependencies are pruned, or the project is cleaned somehow.
 - `style: 🎨` : For purely aesthetic changes like indentation, whitespace, or semicolons.
 - `perf: ⚡️` : For performance improvements. When optimizing speed or memory usage.
 - `build: 📦` : For build system changes. When modifying build scripts, dependencies, or build configurations.
