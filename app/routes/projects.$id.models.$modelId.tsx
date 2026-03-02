@@ -1,13 +1,16 @@
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
 import { useLoaderData } from "react-router";
+
 import {
   deleteEntry,
   getEntries,
   predictPendingEntries,
 } from "~/services/api/entries/index.server";
-import type { EntryVerdict } from "~/services/api/entries/types";
 import { getProjectById } from "~/services/api/projects/index.server";
+
 import EntriesTable from "~/components/EntriesTable";
+
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
+import type { EntryVerdict } from "~/services/api/entries/types";
 
 export const meta = () => [{ title: "Panopticon" }];
 

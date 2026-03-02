@@ -1,5 +1,6 @@
-import type { LoaderFunctionArgs } from "react-router";
 import { getEntries } from "~/services/api/entries/index.server";
+
+import type { LoaderFunctionArgs } from "react-router";
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   const { id, modelId } = params;

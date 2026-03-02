@@ -1,18 +1,22 @@
-import type { LoaderFunctionArgs } from "react-router";
 import {
   redirect,
   useActionData,
   useLoaderData,
   useNavigation,
 } from "react-router";
+
 import {
   createProject,
   getBehaviorsConfig,
 } from "~/services/api/projects/index.server";
-import type { MLModel, TargetBehavior } from "~/services/api/projects/types";
+
 import { NewProjectForm } from "~/components/ProjectForms/NewProjectForm";
-import { useTranslation } from "react-i18next";
+
 import { Folder } from "lucide-react";
+import { useTranslation } from "react-i18next";
+
+import type { LoaderFunctionArgs } from "react-router";
+import type { MLModel, TargetBehavior } from "~/services/api/projects/types";
 
 export const meta = () => {
   return [

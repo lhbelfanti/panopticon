@@ -1,22 +1,25 @@
 import { useState } from "react";
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
 import {
   redirect,
   useLoaderData,
   useNavigation,
-  useSubmit,
 } from "react-router";
+
 import {
   deleteProject,
   getBehaviorsConfig,
   getProjectById,
 } from "~/services/api/projects/index.server";
+
 import ConfirmationModal from "~/components/ConfirmationModal";
 import SubprojectCard from "~/components/SubprojectCard";
+import { AdverseBehaviorLabel } from "~/components/AdverseBehaviorLabel";
+
 import { Folder, Trash2 } from "lucide-react";
 import * as LucideIcons from "lucide-react";
 import { Trans, useTranslation } from "react-i18next";
-import { AdverseBehaviorLabel } from "~/components/AdverseBehaviorLabel";
+
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
 
 export const meta = () => {
   return [

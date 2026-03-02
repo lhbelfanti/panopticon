@@ -1,13 +1,16 @@
-import type { MetaFunction } from "react-router";
-import { Link, useLoaderData } from "react-router";
+import { useTranslation } from "react-i18next";
+import { useLoaderData } from "react-router";
+
 import {
   getDashboardSummary,
   getRecentActivities,
 } from "~/services/api/dashboard/index.server";
+
 import { QuickActions } from "~/components/Dashboard/QuickActions";
 import { RecentActivity } from "~/components/Dashboard/RecentActivity";
 import { SummaryGrid } from "~/components/Dashboard/SummaryGrid";
-import { useTranslation } from "react-i18next";
+
+import type { MetaFunction } from "react-router";
 
 export const meta: MetaFunction = () => {
   return [
