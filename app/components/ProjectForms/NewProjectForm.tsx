@@ -126,44 +126,50 @@ export const NewProjectForm = (props: NewProjectFormProps) => {
             return (
               <label
                 key={config.id}
-                title={!isEnabled ? "NOT AVAILABLE" : undefined}
-                className={`${!isEnabled ? "opacity-50 cursor-not-allowed border-white/5 bg-black/20" : checkboxLabelClassName} flex items-center gap-3 p-4 rounded-xl border border-white/5 transition-all h-full ${isEnabled ? "hover:border-primary/50 cursor-pointer hover:shadow-lg hover:shadow-primary/5 group" : "hover:border-white/5 hover:shadow-none"}`}
+                className={`${!isEnabled ? "opacity-60 cursor-not-allowed border-white/5 bg-black/20" : checkboxLabelClassName} flex flex-col justify-center gap-2 p-4 rounded-xl border border-white/5 transition-all h-full ${isEnabled ? "hover:border-primary/50 cursor-pointer hover:shadow-lg hover:shadow-primary/5 group" : "hover:border-white/5 hover:shadow-none"}`}
               >
-                <div className="relative flex items-center justify-center flex-shrink-0">
-                  <input
-                    type="checkbox"
-                    name="behaviors"
-                    value={config.id}
-                    disabled={!isEnabled}
-                    onChange={handleBehaviorChange}
-                    className={checkboxInputClassName}
-                  />
-                  <svg
-                    className={`absolute w-3.5 h-3.5 text-background-dark opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none`}
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth="3"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M5 13l4 4L19 7"
-                    />
-                  </svg>
-                </div>
-                <div className="flex items-center gap-2 overflow-hidden w-full h-full">
-                  <div
-                    className={`p-1.5 rounded-md flex-shrink-0 ${config.bgClass} ${config.colorClass} ${!isEnabled && "saturate-0 opacity-50"}`}
-                  >
-                    <IconComponent size={16} />
-                  </div>
-                  <span
-                    className={`text-sm font-medium transition-colors break-words leading-tight ${isEnabled ? "text-light-gray-80 group-hover:text-white-1" : "text-light-gray-60"}`}
-                    title={isEnabled ? t(`projects.behaviors.${config.id}`) : undefined}
-                  >
-                    {t(`projects.behaviors.${config.id}`)}
+                {!isEnabled && (
+                  <span className="text-[0.65rem] font-bold text-yellow-200/70 uppercase tracking-widest">
+                    {t("common.notAvailable")}
                   </span>
+                )}
+                <div className="flex items-center gap-3 w-full">
+                  <div className="relative flex items-center justify-center flex-shrink-0">
+                    <input
+                      type="checkbox"
+                      name="behaviors"
+                      value={config.id}
+                      disabled={!isEnabled}
+                      onChange={handleBehaviorChange}
+                      className={checkboxInputClassName}
+                    />
+                    <svg
+                      className={`absolute w-3.5 h-3.5 text-background-dark opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none`}
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth="3"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                  </div>
+                  <div className="flex items-center gap-2 overflow-hidden w-full h-full">
+                    <div
+                      className={`p-1.5 rounded-md flex-shrink-0 ${config.bgClass} ${config.colorClass} ${!isEnabled && "saturate-0 opacity-50"}`}
+                    >
+                      <IconComponent size={16} />
+                    </div>
+                    <span
+                      className={`text-sm font-medium transition-colors break-words leading-tight ${isEnabled ? "text-light-gray-80 group-hover:text-white-1" : "text-light-gray-60"}`}
+                      title={isEnabled ? t(`projects.behaviors.${config.id}`) : undefined}
+                    >
+                      {t(`projects.behaviors.${config.id}`)}
+                    </span>
+                  </div>
                 </div>
               </label>
             );
