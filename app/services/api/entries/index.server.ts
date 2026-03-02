@@ -167,3 +167,35 @@ export const predictPendingEntries = async (
 
   return count;
 };
+export const addEntriesToProject = async (
+  projectId: number,
+  modelIds: string[],
+  texts: string[],
+): Promise<number> => {
+  await delay(800);
+
+  let addedCount = 0;
+  modelIds.forEach((modelId) => {
+    const storeKey = `${projectId}_${modelId}`;
+    if (!entriesStore[storeKey]) {
+      entriesStore[storeKey] = generateMockEntries(projectId, modelId);
+    }
+
+    const newEntries = texts.map((text) => {
+      globalEntriesId++;
+      addedCount++;
+      return {
+        id: `entry_${globalEntriesId}_${Date.now()}`,
+        projectId,
+        modelId,
+        text,
+        verdict: "Pending" as const,
+        createdAt: new Date().toISOString(),
+      } as Entry;
+    });
+
+    entriesStore[storeKey] = [...newEntries, ...entriesStore[storeKey]];
+  });
+
+  return addedCount;
+};
