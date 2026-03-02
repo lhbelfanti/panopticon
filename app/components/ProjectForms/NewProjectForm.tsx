@@ -127,7 +127,7 @@ export const NewProjectForm = (props: NewProjectFormProps) => {
               <label
                 key={config.id}
                 title={!isEnabled ? "NOT AVAILABLE" : undefined}
-                className={`${checkboxLabelClassName} ${!isEnabled ? "opacity-50 cursor-not-allowed border-white/5 hover:border-white/5 hover:shadow-none bg-black/20" : ""}`}
+                className={`${!isEnabled ? "opacity-50 cursor-not-allowed border-white/5 bg-black/20" : checkboxLabelClassName} flex items-center gap-3 p-4 rounded-xl border border-white/5 transition-all h-full ${isEnabled ? "hover:border-primary/50 cursor-pointer hover:shadow-lg hover:shadow-primary/5 group" : "hover:border-white/5 hover:shadow-none"}`}
               >
                 <div className="relative flex items-center justify-center flex-shrink-0">
                   <input
@@ -160,7 +160,7 @@ export const NewProjectForm = (props: NewProjectFormProps) => {
                   </div>
                   <span
                     className={`text-sm font-medium transition-colors break-words leading-tight ${isEnabled ? "text-light-gray-80 group-hover:text-white-1" : "text-light-gray-60"}`}
-                    title={t(`projects.behaviors.${config.id}`)}
+                    title={isEnabled ? t(`projects.behaviors.${config.id}`) : undefined}
                   >
                     {t(`projects.behaviors.${config.id}`)}
                   </span>
