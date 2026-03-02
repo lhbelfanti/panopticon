@@ -153,7 +153,29 @@
             "deleteEntry": "Eliminar entrada",
             "deleteEntryDesc": "Est\u00e1 seguro de que desea eliminar esta entrada? Esta acci\u00f3n no se puede deshacer.",
             "exportCsv": "Exportar CSV",
-            "datasetEntries": "Entradas del dataset"
+            "datasetEntries": "Entradas del dataset",
+            "new": {
+                "title": "Agregar Entradas",
+                "subtitle": "Importar datos al proyecto \"{{name}}\" para su análisis.",
+                "tabs": {
+                    "single": "Entrada Individual",
+                    "bulk": "Carga Masiva (CSV)"
+                },
+                "manualEntryLabel": "Contenido del Texto",
+                "placeholder": "Ingrese el texto a analizar (ej. un tweet o post)...",
+                "submit": "Agregar Entrada",
+                "dropzoneTitle": "Arrastra el archivo CSV aquí",
+                "dropzoneSubtitle": "o haz clic para buscar en tus archivos",
+                "selectFile": "Seleccionar CSV",
+                "errorInvalidCsv": "Por favor, selecciona un archivo .csv válido",
+                "confirmUpload": "Procesar y Subir",
+                "csvInstructionsTitle": "Requisitos del Formato CSV",
+                "csvInstruction1": "El archivo debe estar en formato .csv.",
+                "csvInstruction2": "DEBE contener una columna llamada \"text\" (no distingue mayúsculas).",
+                "csvInstruction3": "Otras columnas serán ignoradas durante este proceso.",
+                "successTitle": "Entradas agregadas",
+                "successDesc": "Se han agregado exitosamente {{count}} entradas al proyecto."
+            }
         }
     }
 }
