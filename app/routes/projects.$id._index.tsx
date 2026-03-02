@@ -1,5 +1,6 @@
 import { useState } from "react";
 import {
+  Link,
   redirect,
   useLoaderData,
   useNavigation,
@@ -15,7 +16,7 @@ import ConfirmationModal from "~/components/ConfirmationModal";
 import SubprojectCard from "~/components/SubprojectCard";
 import { AdverseBehaviorLabel } from "~/components/AdverseBehaviorLabel";
 
-import { Folder, Trash2 } from "lucide-react";
+import { Folder, PlusCircle, Trash2 } from "lucide-react";
 import * as LucideIcons from "lucide-react";
 import { Trans, useTranslation } from "react-i18next";
 
@@ -117,8 +118,14 @@ const ProjectViewPage = () => {
             </div>
           </div>
 
-          {/* Actions */}
           <div className="flex items-center gap-3">
+            <Link
+              to={`/projects/${project.id}/entries/new`}
+              className="flex items-center gap-2 px-5 py-2.5 bg-primary hover:bg-primary/90 text-background-dark font-bold rounded-lg transition-all hover:-translate-y-0.5 shadow-lg shadow-primary/20"
+            >
+              <PlusCircle size={18} />
+              {t("sidebar.newEntry")}
+            </Link>
             <button
               type="button"
               onClick={() => setShowDeleteModal(true)}
