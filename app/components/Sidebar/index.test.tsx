@@ -13,6 +13,7 @@ vi.mock("react-router", async (importOriginal) => {
 });
 
 vi.mock("react-i18next", () => ({
+    Trans: ({ i18nKey, children }: any) => children || i18nKey,
     useTranslation: () => ({
         t: (key: string) => key,
         i18n: { language: "en" },

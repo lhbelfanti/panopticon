@@ -5,6 +5,7 @@ import SubprojectCard from "./index";
 
 // Mock react-i18next
 vi.mock("react-i18next", () => ({
+    Trans: ({ i18nKey, children }: any) => children || i18nKey,
     useTranslation: () => ({
         t: (key: string) => key,
     }),
@@ -21,7 +22,7 @@ const mockSubproject = {
     }
 };
 
-const renderSubprojectCard = (subproject: any, projectId: string) => {
+const renderSubprojectCard = (subproject: any, projectId: number) => {
     return render(
         <BrowserRouter>
             <SubprojectCard subproject={subproject} projectId={projectId} />
@@ -31,7 +32,7 @@ const renderSubprojectCard = (subproject: any, projectId: string) => {
 
 describe("SubprojectCard", () => {
     it("renders the subproject model name", () => {
-        renderSubprojectCard(mockSubproject, "123");
+        renderSubprojectCard(mockSubproject, 123);
 
         // According to testing conventions, query by role or text
         expect(
@@ -40,14 +41,14 @@ describe("SubprojectCard", () => {
     });
 
     it("links to the correct URL", () => {
-        renderSubprojectCard(mockSubproject, "123");
+        renderSubprojectCard(mockSubproject, 123);
 
         const link = screen.getByRole("link");
         expect(link).toHaveAttribute("href", "/projects/123/models/roberta_english");
     });
 
     it("renders the open subproject text", () => {
-        renderSubprojectCard(mockSubproject, "123");
+        renderSubprojectCard(mockSubproject, 123);
         expect(screen.getByText("projects.view.openSubproject")).toBeInTheDocument();
     });
 });

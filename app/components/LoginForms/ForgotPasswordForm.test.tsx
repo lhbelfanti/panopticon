@@ -30,7 +30,7 @@ describe("ForgotPasswordForm", () => {
         const setViewMock = vi.fn();
         render(
             <BrowserRouter>
-                <ForgotPasswordForm t={defaultProps.t} setView={setViewMock} />
+                <ForgotPasswordForm t={defaultProps.t} setView={setViewMock} actionData={undefined} isSubmitting={false} />
             </BrowserRouter>
         );
 
@@ -43,7 +43,7 @@ describe("ForgotPasswordForm", () => {
         const setViewMock = vi.fn();
         render(
             <BrowserRouter>
-                <ForgotPasswordForm t={defaultProps.t} setView={setViewMock} />
+                <ForgotPasswordForm t={defaultProps.t} setView={setViewMock} actionData={undefined} isSubmitting={false} />
             </BrowserRouter>
         );
 

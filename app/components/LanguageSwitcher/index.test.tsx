@@ -6,6 +6,7 @@ import { LanguageSwitcher } from "./index";
 const changeLanguageMock = vi.fn();
 
 vi.mock("react-i18next", () => ({
+    Trans: ({ i18nKey, children }: any) => children || i18nKey,
     useTranslation: () => ({
         i18n: {
             language: "en",

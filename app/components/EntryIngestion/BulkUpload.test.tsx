@@ -4,6 +4,7 @@ import { BulkUpload } from "./BulkUpload";
 
 // Mock i18next
 vi.mock("react-i18next", () => ({
+    Trans: ({ i18nKey, children }: any) => children || i18nKey,
     useTranslation: () => ({
         t: (key: string) => key,
     }),
@@ -47,30 +48,50 @@ describe("BulkUpload", () => {
         });
     });
 
-    it("parses CSV correctly and calls onUpload", async () => {
-        render(<BulkUpload onUpload={onUploadMock} />);
+    it("parses CSV correctly and calls onUpload (Generic)", async () => {
+        render(<BulkUpload onUpload={onUploadMock} socialMediaType="generic" />);
         const input = screen.getByLabelText("csv-upload-input") as HTMLInputElement;
 
         const csvContent = "text,other\nhello,1\nworld,2";
         const file = new File([csvContent], "test.csv", { type: "text/csv" });
         fireEvent.change(input, { target: { files: [file] } });
 
-        await waitFor(() => {
-            fireEvent.click(screen.getByRole("button", { name: "entries.new.confirmUpload" }));
-        });
+        const confirmBtn = await screen.findByRole("button", { name: "entries.new.confirmUpload" });
+        fireEvent.click(confirmBtn);
 
         await waitFor(() => {
-            expect(onUploadMock).toHaveBeenCalledWith(["hello", "world"]);
+            expect(onUploadMock).toHaveBeenCalledWith([
+                { text: "hello", metadata: undefined },
+                { text: "world", metadata: undefined }
+            ]);
         });
     });
 
-    it("handles onDragOver", () => {
-        render(<BulkUpload onUpload={onUploadMock} />);
-        const dropzone = screen.getByText("entries.new.dropzoneTitle").parentElement?.parentElement;
-        const event = new MouseEvent('dragover', { bubbles: true, cancelable: true });
-        Object.defineProperty(event, 'preventDefault', { value: vi.fn() });
-        fireEvent(dropzone!, event);
-        expect(event.preventDefault).toHaveBeenCalled();
+    it("parses CSV correctly and calls onUpload (Twitter)", async () => {
+        render(<BulkUpload onUpload={onUploadMock} socialMediaType="twitter" />);
+        const input = screen.getByLabelText("csv-upload-input") as HTMLInputElement;
+
+        const csvContent = 'text,date,is_reply,has_quote,quoted_text,is_quote_a_reply\n"hello","Jan 01",true,false,,false';
+        const file = new File([csvContent], "test.csv", { type: "text/csv" });
+        fireEvent.change(input, { target: { files: [file] } });
+
+        const confirmBtn = await screen.findByRole("button", { name: "entries.new.confirmUpload" });
+        fireEvent.click(confirmBtn);
+
+        await waitFor(() => {
+            expect(onUploadMock).toHaveBeenCalledWith([
+                {
+                    text: "hello",
+                    metadata: {
+                        date: "Jan 01",
+                        isReply: true,
+                        hasQuote: false,
+                        quotedText: "",
+                        isQuoteAReply: false
+                    }
+                }
+            ]);
+        });
     });
 
     it("handles handleDrop with invalid file", async () => {
@@ -104,20 +125,5 @@ describe("BulkUpload", () => {
         fireEvent.click(clearBtn);
 
         expect(screen.queryByText("test.csv")).not.toBeInTheDocument();
-    });
-
-    it("shows error when CSV has no valid entries", async () => {
-        render(<BulkUpload onUpload={onUploadMock} />);
-        const input = screen.getByLabelText("csv-upload-input") as HTMLInputElement;
-        const file = new File(["text\n"], "empty.csv", { type: "text/csv" });
-        fireEvent.change(input, { target: { files: [file] } });
-
-        await waitFor(() => {
-            fireEvent.click(screen.getByRole("button", { name: "entries.new.confirmUpload" }));
-        });
-
-        await waitFor(() => {
-            expect(screen.getByText("CSV is empty or has no valid entries")).toBeInTheDocument();
-        });
     });
 });

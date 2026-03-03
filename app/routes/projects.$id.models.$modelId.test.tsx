@@ -4,6 +4,7 @@ import { MemoryRouter } from "react-router";
 import SubprojectEntriesPage from "./projects.$id.models.$modelId";
 
 vi.mock("react-i18next", () => ({
+    Trans: ({ i18nKey, children }: any) => children || i18nKey,
     useTranslation: () => ({
         t: (key: string) => key,
     }),

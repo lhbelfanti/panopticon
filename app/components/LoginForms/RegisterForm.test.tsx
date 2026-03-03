@@ -60,7 +60,7 @@ describe("RegisterForm", () => {
         const setViewMock = vi.fn();
         render(
             <BrowserRouter>
-                <RegisterForm t={defaultProps.t} setView={setViewMock} />
+                <RegisterForm t={defaultProps.t} setView={setViewMock} actionData={undefined} isSubmitting={false} />
             </BrowserRouter>
         );
 
@@ -95,7 +95,7 @@ describe("RegisterForm", () => {
         const setViewMock = vi.fn();
         render(
             <BrowserRouter>
-                <RegisterForm t={defaultProps.t} setView={setViewMock} />
+                <RegisterForm t={defaultProps.t} setView={setViewMock} actionData={undefined} isSubmitting={false} />
             </BrowserRouter>
         );
 

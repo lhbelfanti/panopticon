@@ -3,6 +3,7 @@ import { describe, it, expect, vi } from "vitest";
 import { SummaryGrid } from "./index";
 
 vi.mock("react-i18next", () => ({
+    Trans: ({ i18nKey, children }: any) => children || i18nKey,
     useTranslation: () => ({
         t: (key: string) => key,
     }),

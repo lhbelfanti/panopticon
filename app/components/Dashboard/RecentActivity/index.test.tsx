@@ -3,6 +3,7 @@ import { describe, it, expect, vi, beforeAll, afterAll } from "vitest";
 import { RecentActivity } from "./index";
 
 vi.mock("react-i18next", () => ({
+    Trans: ({ i18nKey, children }: any) => children || i18nKey,
     useTranslation: () => ({
         t: (key: string, options: any) => options ? `${key} count:${options.count}` : key,
     }),
