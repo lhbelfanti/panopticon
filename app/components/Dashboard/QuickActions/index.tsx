@@ -1,6 +1,7 @@
 import { Link } from "react-router";
 import { CopyPlus, Folder } from "lucide-react";
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
+import { AdverseBehaviorLabel } from "~/components/AdverseBehaviorLabel";
 
 export const QuickActions = () => {
   const { t } = useTranslation();
@@ -22,7 +23,7 @@ export const QuickActions = () => {
             </h2>
           </div>
           <p className="text-light-gray-70 text-sm leading-relaxed pr-4 w-[70%]">
-            {t("dashboard.newProject.desc")}
+            <Trans i18nKey="dashboard.newProject.desc" components={{ 1: <AdverseBehaviorLabel /> }} />
           </p>
         </div>
         <div className="mt-4 pt-4 border-t border-white/5 flex justify-end">
@@ -43,7 +44,7 @@ export const QuickActions = () => {
             </h2>
           </div>
           <p className="text-light-gray-70 text-sm leading-relaxed pr-4 w-[85%]">
-            {t("dashboard.newEntry.desc")}
+            <Trans i18nKey="dashboard.newEntry.desc" components={{ 1: <AdverseBehaviorLabel /> }} />
           </p>
         </div>
         <div className="mt-4 pt-4 border-t border-white/5 flex justify-end">

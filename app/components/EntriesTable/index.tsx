@@ -136,7 +136,7 @@ const EntriesTable = (props: EntriesTableProps) => {
               {t(`projects.models.${modelId}`)}
             </span>
           </h1>
-          <p className="text-light-gray-70 text-sm">{t("projects.entries.desc")}</p>
+          <p className="text-light-gray-70 text-sm mt-5">{t("projects.entries.desc")}</p>
         </div>
       </div>
 
