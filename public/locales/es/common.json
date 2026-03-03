@@ -54,15 +54,15 @@
     },
     "dashboard": {
         "welcome": "¡Bienvenido! ¿Qué deseas hacer hoy?",
-        "subtitle": "Plataforma de análisis de texto avanzada",
+        "subtitle": "Plataforma de detección de <1>Comportamientos Humanos Adversos</1>",
         "newProject": {
             "title": "Nuevo Proyecto",
-            "desc": "Configura un nuevo entorno de análisis, importa datasets y predice Comportamientos Humanos Adversos.",
+            "desc": "Configura un nuevo entorno de análisis, importa datasets y detecta <1>Comportamientos Humanos Adversos</1>",
             "action": "Crear ahora \u2192"
         },
         "newEntry": {
             "title": "Nueva Entrada",
-            "desc": "Agrega entradas a los proyectos para predecir Comportamientos Humanos Adversos sobre ellas, utilizando diferentes modelos de IA.",
+            "desc": "Agrega entradas a los proyectos para detectar <1>Comportamientos Humanos Adversos</1> sobre ellas, utilizando diferentes modelos de IA",
             "action": "Agregar nueva \u2192"
         },
         "summary": {
@@ -102,7 +102,7 @@
             "title": "Nuevo proyecto",
             "subtitle": "Crea un nuevo entorno de análisis de texto.",
             "name": "Nombre del proyecto",
-            "namePlaceholder": "ej. Cohorte Salud Mental 2024",
+            "namePlaceholder": "ej. Cohorte consumo de drogas (Argentina 2026)",
             "description": "Descripción (Opcional)",
             "descriptionPlaceholder": "Breve descripción de los objetivos del análisis...",
             "behaviorsTitle": "Comportamientos a detectar",
@@ -174,7 +174,31 @@
                 "csvInstruction2": "DEBE contener una columna llamada \"text\" (no distingue mayúsculas).",
                 "csvInstruction3": "Otras columnas serán ignoradas durante este proceso.",
                 "successTitle": "Entradas agregadas",
-                "successDesc": "Se han agregado exitosamente {{count}} entradas al proyecto."
+                "successDesc": "Se han agregado exitosamente {{count}} entradas al proyecto.",
+                "targetConfiguration": {
+                    "title": "Configuración del Objetivo",
+                    "targetProject": "Proyecto Objetivo",
+                    "selectProject": "Seleccione un proyecto...",
+                    "mediaType": "Tipo de Medio",
+                    "targetSubprojects": "Subproyectos (Modelos) Objetivo *",
+                    "noSubprojectsError": "Debe seleccionar al menos un subproyecto.",
+                    "finishConfigInfo": "Por favor, complete primero la Configuración del Objetivo"
+                },
+                "interactiveForm": {
+                    "title": "X (FORMULARIO INTERACTIVO)",
+                    "tweetAuthor": "Autor del Tweet",
+                    "authorHandle": "@tweet_author",
+                    "quotedAuthor": "Autor Citado",
+                    "quotedHandle": "@quoted_author",
+                    "datePlaceholder": "01 Ene, 2026, 10:00:00 PM (Opcional)",
+                    "uploadAnother": "Cargar otro",
+                    "isResponse": "Este tweet es una respuesta a otro tweet",
+                    "isQuoteAResponse": "Este tweet es una respuesta a otro tweet",
+                    "tweetCyted": "Tweet citado",
+                    "quote": "Cita",
+                    "quotedPlaceholder": "Ingrese el texto del tweet citado...",
+                    "placeholder": "Ingrese el texto a analizar..."
+                }
             }
         }
     }

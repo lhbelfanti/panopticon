@@ -54,15 +54,15 @@
     },
     "dashboard": {
         "welcome": "Welcome! What do you want to do today?",
-        "subtitle": "Advanced text analysis platform",
+        "subtitle": "<1>Advers Human Behaviours</1> detection platform",
         "newProject": {
             "title": "New Project",
-            "desc": "Set up a new analysis environment, import datasets and predict adverse human behaviors.",
+            "desc": "Set up a new analysis environment, import datasets and detect <1>Adverse Human Behaviours</1>",
             "action": "Create now \u2192"
         },
         "newEntry": {
             "title": "New Entry",
-            "desc": "Add entries to projects to predict adverse human behaviors on them, using different AI models.",
+            "desc": "Add entries to projects to detect <1>Adverse Human Behaviours</1> on them, using different AI models",
             "action": "Add new \u2192"
         },
         "summary": {
@@ -102,7 +102,7 @@
             "title": "New project",
             "subtitle": "Create a new text analysis environment.",
             "name": "Project Name",
-            "namePlaceholder": "e.g. Mental Health Cohort 2024",
+            "namePlaceholder": "e.g. Drug Use Cohort (Argentina 2026)",
             "description": "Description (Optional)",
             "descriptionPlaceholder": "Brief description of the analysis goals...",
             "behaviorsTitle": "Target Behaviors",
@@ -174,7 +174,31 @@
                 "csvInstruction2": "It MUST contain a column named \"text\" (case insensitive).",
                 "csvInstruction3": "Other columns will be ignored during this process.",
                 "successTitle": "Entries added",
-                "successDesc": "Successfully added {{count}} entries to the project."
+                "successDesc": "Successfully added {{count}} entries to the project.",
+                "targetConfiguration": {
+                    "title": "Target Configuration",
+                    "targetProject": "Target Project",
+                    "selectProject": "Select a project...",
+                    "mediaType": "Media Type",
+                    "targetSubprojects": "Target Subprojects (Models) *",
+                    "noSubprojectsError": "You must select at least one subproject.",
+                    "finishConfigInfo": "Please finish the Target Configuration first"
+                },
+                "interactiveForm": {
+                    "title": "X (INTERACTIVE FORM)",
+                    "tweetAuthor": "Tweet Author",
+                    "authorHandle": "@tweet_author",
+                    "quotedAuthor": "Quoted Author",
+                    "quotedHandle": "@quoted_author",
+                    "datePlaceholder": "Jan 01, 2026, 10:00:00 PM (Optional)",
+                    "uploadAnother": "Upload another",
+                    "isResponse": "This tweet is a reply to another tweet",
+                    "isQuoteAResponse": "This tweet is a reply to another tweet",
+                    "tweetCyted": "Quoted tweet",
+                    "quote": "Quote",
+                    "quotedPlaceholder": "Enter the text of the quoted tweet...",
+                    "placeholder": "Enter the text to be analyzed..."
+                }
             }
         }
     }
