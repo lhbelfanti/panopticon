@@ -170,7 +170,8 @@ export const predictPendingEntries = async (
 export const addEntriesToProject = async (
   projectId: number,
   modelIds: string[],
-  texts: string[],
+  entriesData: { text: string; metadata?: any }[],
+  socialMediaType?: string,
 ): Promise<number> => {
   await delay(800);
 
@@ -181,15 +182,17 @@ export const addEntriesToProject = async (
       entriesStore[storeKey] = generateMockEntries(projectId, modelId);
     }
 
-    const newEntries = texts.map((text) => {
+    const newEntries = entriesData.map((data) => {
       globalEntriesId++;
       addedCount++;
       return {
         id: `entry_${globalEntriesId}_${Date.now()}`,
         projectId,
         modelId,
-        text,
+        text: data.text,
         verdict: "Pending" as const,
+        socialMediaType: socialMediaType as any,
+        metadata: data.metadata,
         createdAt: new Date().toISOString(),
       } as Entry;
     });

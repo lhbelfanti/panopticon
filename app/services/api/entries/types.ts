@@ -1,4 +1,13 @@
 export type EntryVerdict = "Pending" | "Positive" | "Negative" | "Error";
+export type SocialMediaType = "twitter"; // Extensible for future platforms
+
+export interface TwitterMetadata {
+  date?: string;
+  isReply: boolean;
+  hasQuote: boolean;
+  quotedText?: string;
+  isQuoteAReply?: boolean;
+}
 
 export interface Entry {
   id: string;
@@ -7,6 +16,8 @@ export interface Entry {
   text: string;
   verdict: EntryVerdict;
   score?: number; // Added for prediction scores
+  socialMediaType?: SocialMediaType;
+  metadata?: TwitterMetadata | any; // Type narrows based on socialMediaType
   createdAt: string;
 }
 
