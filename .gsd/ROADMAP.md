@@ -23,7 +23,7 @@
 **Requirements**: New Project setup, Project View dashboard, Delete Confirmation Modal.
 
 ### Phase 3: Entry Ingestion
-**Status**: ⬜ Not Started
+**Status**: ✅ Completed
 **Objective**: Develop the interface for adding new entries to an existing project (single manual input and bulk CSV upload), including selecting models and behaviors to track. Also includes the single entry detailed view modal.
 **Requirements**: New Entry logic, tabs for bulk/single, form validation, Detalle de Entrada Modal.
 
