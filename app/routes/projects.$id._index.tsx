@@ -76,12 +76,12 @@ const ProjectViewPage = () => {
               {project.name}
             </h1>
             {project.description && (
-              <p className="text-light-gray-70 text-lg max-w-3xl mb-6 truncate text-balance">
+              <p className="text-light-gray-70 text-lg max-w-4xl mt-7 mb-10 truncate text-balance">
                 {project.description}
               </p>
             )}
 
-            <div className="flex flex-col gap-8 mt-6">
+            <div className="flex flex-row gap-20 mt-6">
               <div className="flex flex-col gap-2">
                 <span className="text-[0.65rem] font-bold text-light-gray-50 uppercase tracking-widest">
                   PROJECT ID

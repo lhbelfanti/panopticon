@@ -3,6 +3,7 @@ import { Form } from "react-router";
 import { Trans, useTranslation } from "react-i18next";
 
 import { AdverseBehaviorLabel } from "~/components/AdverseBehaviorLabel";
+import { CustomCheckbox } from "~/components/ui/CustomCheckbox";
 
 import * as LucideIcons from "lucide-react";
 
@@ -56,10 +57,6 @@ export const NewProjectForm = (props: NewProjectFormProps) => {
 
   const inputClassName =
     "w-full bg-sidebar-dark border border-white/10 rounded-lg p-3.5 text-white-1 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all placeholder:opacity-30 shadow-inner";
-  const checkboxLabelClassName =
-    "flex items-center gap-3 p-4 rounded-xl border border-white/5 hover:border-primary/50 bg-background-dark/50 cursor-pointer transition-all hover:shadow-lg hover:shadow-primary/5 group h-full";
-  const checkboxInputClassName =
-    "peer appearance-none w-5 h-5 border-2 border-white/20 rounded bg-transparent checked:bg-primary checked:border-primary transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0";
 
   return (
     <Form method="post" className="p-8 lg:p-10 flex flex-col gap-8">
@@ -124,54 +121,23 @@ export const NewProjectForm = (props: NewProjectFormProps) => {
             const isEnabled = config.enabled;
 
             return (
-              <label
+              <CustomCheckbox
                 key={config.id}
-                className={`${!isEnabled ? "opacity-60 cursor-not-allowed border-white/5 bg-black/20" : checkboxLabelClassName} flex flex-col justify-center gap-2 p-4 rounded-xl border border-white/5 transition-all h-full ${isEnabled ? "hover:border-primary/50 cursor-pointer hover:shadow-lg hover:shadow-primary/5 group" : "hover:border-white/5 hover:shadow-none"}`}
-              >
-                {!isEnabled && (
-                  <span className="text-[0.65rem] font-bold text-yellow-200/70 uppercase tracking-widest">
-                    {t("common.notAvailable")}
-                  </span>
-                )}
-                <div className="flex items-center gap-3 w-full">
-                  <div className="relative flex items-center justify-center flex-shrink-0">
-                    <input
-                      type="checkbox"
-                      name="behaviors"
-                      value={config.id}
-                      disabled={!isEnabled}
-                      onChange={handleBehaviorChange}
-                      className={checkboxInputClassName}
-                    />
-                    <svg
-                      className={`absolute w-3.5 h-3.5 text-background-dark opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none`}
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth="3"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M5 13l4 4L19 7"
-                      />
-                    </svg>
+                name="behaviors"
+                value={config.id}
+                disabled={!isEnabled}
+                onChange={handleBehaviorChange}
+                notAvailableText={t("common.notAvailable")}
+                wrapperClassName="p-4 bg-background-dark/50 pl-3 pr-4"
+                icon={
+                  <div
+                    className={`p-1.5 rounded-md flex-shrink-0 ${config.bgClass} ${config.colorClass}`}
+                  >
+                    <IconComponent size={16} />
                   </div>
-                  <div className="flex items-center gap-2 overflow-hidden w-full h-full">
-                    <div
-                      className={`p-1.5 rounded-md flex-shrink-0 ${config.bgClass} ${config.colorClass} ${!isEnabled && "saturate-0 opacity-50"}`}
-                    >
-                      <IconComponent size={16} />
-                    </div>
-                    <span
-                      className={`text-sm font-medium transition-colors break-words leading-tight ${isEnabled ? "text-light-gray-80 group-hover:text-white-1" : "text-light-gray-60"}`}
-                      title={isEnabled ? t(`projects.behaviors.${config.id}`) : undefined}
-                    >
-                      {t(`projects.behaviors.${config.id}`)}
-                    </span>
-                  </div>
-                </div>
-              </label>
+                }
+                label={t(`projects.behaviors.${config.id}`)}
+              />
             );
           })}
         </div>
@@ -201,32 +167,13 @@ export const NewProjectForm = (props: NewProjectFormProps) => {
             </div>
           )}
           {availableModels.map((m) => (
-            <label key={m} className={checkboxLabelClassName}>
-              <div className="relative flex items-center justify-center flex-shrink-0">
-                <input
-                  type="checkbox"
-                  name="models"
-                  value={m}
-                  className={checkboxInputClassName}
-                />
-                <svg
-                  className="absolute w-3.5 h-3.5 text-background-dark opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth="3"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M5 13l4 4L19 7"
-                  />
-                </svg>
-              </div>
-              <span className="text-light-gray-80 text-sm font-medium group-hover:text-white-1 transition-colors break-words text-left w-full pl-2">
-                {t(`projects.models.${m}`)}
-              </span>
-            </label>
+            <CustomCheckbox
+              key={m}
+              name="models"
+              value={m}
+              wrapperClassName="p-4 bg-background-dark/50"
+              label={t(`projects.models.${m}`)}
+            />
           ))}
         </div>
       </div>

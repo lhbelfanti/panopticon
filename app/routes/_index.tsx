@@ -1,4 +1,4 @@
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 import { useLoaderData } from "react-router";
 
 import {
@@ -9,6 +9,8 @@ import {
 import { QuickActions } from "~/components/Dashboard/QuickActions";
 import { RecentActivity } from "~/components/Dashboard/RecentActivity";
 import { SummaryGrid } from "~/components/Dashboard/SummaryGrid";
+import { AdverseBehaviorLabel } from "~/components/AdverseBehaviorLabel";
+import packageJson from "../../package.json";
 
 import type { MetaFunction } from "react-router";
 
@@ -44,9 +46,9 @@ const Index = () => {
           </h1>
           <div className="flex items-center gap-4">
             <p className="text-light-gray-70 text-lg flex items-center gap-3">
-              {t("dashboard.subtitle")}
+              <Trans i18nKey="dashboard.subtitle" components={{ 1: <AdverseBehaviorLabel /> }} />
               <span className="text-xs font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-full border border-primary/20">
-                v2.4.0
+                v{packageJson.version}
               </span>
             </p>
           </div>
