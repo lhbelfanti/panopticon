@@ -27,10 +27,10 @@
 **Objective**: Develop the interface for adding new entries to an existing project (single manual input and bulk CSV upload), including selecting models and behaviors to track. Also includes the single entry detailed view modal.
 **Requirements**: New Entry logic, tabs for bulk/single, form validation, Detalle de Entrada Modal.
 
-### Phase 4: Prediction Analytics & Insights
-**Status**: ⬜ Not Started
-**Objective**: Implement the async prediction initiation, handle the "Processing" states, and display the predictions in a detailed table format (Modal de Predicciones). Create the statistics overview with charts (Modal de Estadísticas).
-**Requirements**: Prediction action, Modal de Predicciones, Modal de Estadísticas (with Recharts), Export insights functionality.
+### Phase 4: Analysis & History
+**Status**: ✅ Complete
+**Objective**: Develop the analysis infrastructure for subprojects. This includes asynchronous triggering of analysis runs (post-prediction), maintaining a history of runs with status tracking, and generating PDF reports that tell a data-driven story with charts.
+**Requirements**: Analysis triggering with exception criteria, Analysis History UI, Per-subproject insights, PDF export functionality.
 
 ### Phase 5: Containerization
 **Status**: ⬜ Not Started
