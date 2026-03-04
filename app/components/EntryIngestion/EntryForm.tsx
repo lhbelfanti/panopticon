@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Send } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useActionData } from "react-router";
+import { format } from "date-fns";
 import { TweetCard } from "./TweetCard";
 import type { TwitterMetadata } from "~/services/api/entries/types";
 
@@ -26,7 +27,8 @@ export const EntryForm = ({ onSubmit, isSubmitting }: EntryFormProps) => {
     const [uploadAnother, setUploadAnother] = useState(false);
 
     useEffect(() => {
-        if (actionData?.success && !isSubmitting) {
+        // Reset form when action completes successfully (detected via actionData toggle)
+        if (actionData?.success) {
             setEntryData({
                 text: "",
                 metadata: {
@@ -34,11 +36,11 @@ export const EntryForm = ({ onSubmit, isSubmitting }: EntryFormProps) => {
                     hasQuote: false,
                     quotedText: "",
                     isQuoteAReply: false,
-                    date: "",
+                    date: format(new Date(), "yyyy-MM-dd'T'HH:mm"),
                 },
             });
         }
-    }, [actionData, isSubmitting]);
+    }, [actionData]);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -75,9 +77,7 @@ export const EntryForm = ({ onSubmit, isSubmitting }: EntryFormProps) => {
                             checked={uploadAnother}
                             onChange={(e) => setUploadAnother(e.target.checked)}
                         />
-                        <div className="w-10 h-6 bg-background-dark/50 rounded-full border border-white/10 peer-checked:bg-primary peer-checked:border-primary transition-all duration-300 relative">
-                            <div className="absolute left-1 top-1 w-4 h-4 bg-light-gray-70 rounded-full transition-all duration-300 peer-checked:translate-x-4 peer-checked:bg-background-dark"></div>
-                        </div>
+                        <div className="w-10 h-6 bg-background-dark/50 rounded-full border border-white/10 peer-checked:bg-primary peer-checked:border-primary transition-all duration-300 relative after:content-[''] after:absolute after:left-[3px] after:top-[3px] after:w-4 after:h-4 after:bg-light-gray-70 after:rounded-full after:transition-all after:duration-300 peer-checked:after:translate-x-[16px] peer-checked:after:bg-white"></div>
                     </div>
                     <span className="text-light-gray-70 group-hover:text-white-1 transition-colors text-sm font-medium select-none">
                         {t("projects.entries.new.interactiveForm.uploadAnother", "Upload another")}

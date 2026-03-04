@@ -137,10 +137,10 @@ export default function GlobalEntriesNewPage() {
             <div className="max-w-4xl mx-auto">
                 <Link
                     to="/"
-                    className="inline-flex items-center gap-2 text-light-gray-70 hover:text-primary transition-colors mb-8 group"
+                    className="flex items-center gap-2 text-primary hover:text-white-1 transition-colors text-sm font-semibold max-w-max mb-8"
                 >
-                    <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
-                    <span className="font-semibold">{t("navigation.dashboard")}</span>
+                    <ArrowLeft size={16} />
+                    {t("sidebar.home")}
                 </Link>
 
                 <div className="mb-10 animate-in fade-in slide-in-from-top-4 duration-500">
@@ -148,21 +148,21 @@ export default function GlobalEntriesNewPage() {
                         {t("projects.entries.new.title")}
                     </h1>
                     <p className="text-light-gray-70 text-lg">
-                        Select a configuration below to import data into your workspace.
+                        {t("projects.entries.new.subtitleGlobal", "Select a configuration below to import data into your workspace.")}
                     </p>
                 </div>
 
                 {/* Configuration Section */}
                 <div className="bg-surface-dark border border-white/5 rounded-2xl p-6 shadow-xl mb-8 flex flex-col gap-6 relative z-20 animate-in fade-in slide-in-from-bottom-2 duration-500 delay-100">
                     <h2 className="text-lg font-bold text-white-1 border-b border-light-gray-70/20 pb-2">
-                        {t("projects.entries.new.targetConfiguration.title", "Target Configuration")}
+                        {t("projects.entries.new.targetConfiguration.title", "Configuration")}
                     </h2>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         {/* Project Selection */}
                         <div className="flex flex-col gap-2">
                             <label htmlFor="project-select" className="text-sm font-bold text-light-gray-70 uppercase tracking-widest pl-1">
-                                {t("projects.entries.new.targetConfiguration.targetProject", "Target Project")}
+                                {t("projects.entries.new.targetConfiguration.targetProject", "Project")}
                             </label>
                             <select
                                 id="project-select"
@@ -199,7 +199,7 @@ export default function GlobalEntriesNewPage() {
                     {selectedProject && (
                         <div className="flex flex-col gap-3 animate-in fade-in slide-in-from-top-2">
                             <label className="text-sm font-bold text-light-gray-70 uppercase tracking-widest pl-1">
-                                {t("projects.entries.new.targetConfiguration.targetSubprojects", "Target Subprojects (Models) *")}
+                                {t("projects.entries.new.targetConfiguration.targetSubprojects", "Subprojects (Models)")}
                             </label>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
                                 {selectedProject.subprojects.map(sp => {
@@ -253,7 +253,7 @@ export default function GlobalEntriesNewPage() {
                         {(!selectedProjectId || selectedSubprojects.length === 0) && (
                             <div className="absolute inset-0 z-50 flex items-center justify-center bg-surface-dark/60 backdrop-blur-[2px] rounded-2xl rounded-t-none">
                                 <div className="bg-background-dark border border-white/10 px-6 py-3 rounded-full shadow-2xl animate-pulse">
-                                    <span className="font-bold text-white-1">{t("projects.entries.new.targetConfiguration.finishConfigInfo", "Please finish the Target Configuration first")}</span>
+                                    <span className="font-bold text-white-1">{t("projects.entries.new.targetConfiguration.finishConfigInfo", "Please finish the configuration first")}</span>
                                 </div>
                             </div>
                         )}

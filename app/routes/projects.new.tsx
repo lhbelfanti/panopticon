@@ -1,4 +1,5 @@
 import {
+  Link,
   redirect,
   useActionData,
   useLoaderData,
@@ -12,7 +13,7 @@ import {
 
 import { NewProjectForm } from "~/components/ProjectForms/NewProjectForm";
 
-import { Folder } from "lucide-react";
+import { Folder, ArrowLeft } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import type { LoaderFunctionArgs } from "react-router";
@@ -73,6 +74,14 @@ const NewProjectPage = () => {
   return (
     <div className="flex-1 p-8 lg:p-12 overflow-y-auto bg-background-dark min-h-screen custom-scrollbar">
       <div className="max-w-3xl mx-auto">
+        <Link
+          to="/"
+          className="flex items-center gap-2 text-primary hover:text-white-1 transition-colors text-sm font-semibold max-w-max mb-8"
+        >
+          <ArrowLeft size={16} />
+          {t("sidebar.home")}
+        </Link>
+
         <div className="mb-10 animate-in fade-in slide-in-from-bottom-4 duration-500">
           <h1 className="text-4xl font-extrabold text-white-1 mb-3 tracking-tight flex items-center gap-3">
             <Folder size={36} className="text-primary" />

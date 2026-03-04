@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { Upload, X, FileText, CheckCircle2, AlertCircle, DownloadCloud, MessageCircle, TableProperties, Trash2 } from "lucide-react";
-import { useTranslation } from "react-i18next";
+import { useTranslation, Trans } from "react-i18next";
 
 interface BulkUploadProps {
     onUpload: (entriesData: { text: string; metadata?: any }[]) => void;
@@ -16,7 +16,7 @@ export const BulkUpload = ({ onUpload, isSubmitting, socialMediaType = "generic"
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const XLogo = () => (
-        <svg viewBox="0 0 24 24" aria-hidden="true" className="w-full h-full fill-current">
+        <svg viewBox="0 0 24 24" aria-hidden="true" className="w-5 h-5 fill-current">
             <g>
                 <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path>
             </g>
@@ -36,7 +36,7 @@ export const BulkUpload = ({ onUpload, isSubmitting, socialMediaType = "generic"
 
         if (selectedFile) {
             if (selectedFile.type !== "text/csv" && !selectedFile.name.endsWith(".csv")) {
-                setError(t("entries.new.errorInvalidCsv"));
+                setError(t("projects.entries.new.errorInvalidCsv"));
                 return;
             }
             setFile(selectedFile);
@@ -51,7 +51,7 @@ export const BulkUpload = ({ onUpload, isSubmitting, socialMediaType = "generic"
 
         if (droppedFile) {
             if (droppedFile.type !== "text/csv" && !droppedFile.name.endsWith(".csv")) {
-                setError(t("entries.new.errorInvalidCsv", "Invalid file. Please upload a .csv file."));
+                setError(t("projects.entries.new.errorInvalidCsv", "Invalid file. Please upload a .csv file."));
                 return;
             }
             setFile(droppedFile);
@@ -149,10 +149,10 @@ export const BulkUpload = ({ onUpload, isSubmitting, socialMediaType = "generic"
                             isQuoteAReply: getBool("is_quote_a_reply"),
                         };
 
-                        if (metadata.hasQuote && !metadata.quotedText) {
-                            reject(new Error(`Row ${i + 1}: 'has_quote' is true but 'quoted_text' is missing.`));
-                            return;
-                        }
+                        /* 
+                           Only 'text' is mandatory for the upload logic as per user request.
+                           Metadata fields are optional.
+                        */
                     }
 
                     entries.push({ text: txt, metadata });
@@ -195,19 +195,26 @@ export const BulkUpload = ({ onUpload, isSubmitting, socialMediaType = "generic"
                 <div className="flex justify-between items-start mb-4 relative z-10 flex-col md:flex-row gap-4">
                     <div>
                         <h3 className="text-white-1 font-bold flex items-center gap-2 mb-1">
-                            {isTwitter ? <div className="w-4 h-4 text-[#1da1f2]"><XLogo /></div> : <TableProperties size={18} className="text-primary" />}
-                            {isTwitter ? "X Data Format" : "Standard Data Format"}
+                            {isTwitter ? <XLogo /> : <TableProperties size={18} className="text-primary" />}
+                            {t("projects.entries.new.bulkUpload.dataFormatTitle")}
                         </h3>
                         <p className="text-light-gray-70 text-sm">
-                            Make sure your CSV contains the exact headers shown below. <strong className="text-white-1">Mandatory</strong> headers are bolded.
+                            {t("projects.entries.new.bulkUpload.formatInstruction")}
+                        </p>
+                        <p className="text-light-gray-70 text-sm mt-1">
+                            <Trans
+                                i18nKey="projects.entries.new.bulkUpload.mandatoryHeaderNote"
+                                components={{ 1: <span className="text-yellow-400 font-bold" /> }}
+                                defaults="Mandatory headers are <1>bolded</1>."
+                            />
                         </p>
                     </div>
                     <button
                         onClick={generateTemplate}
-                        className="flex items-center gap-2 text-sm font-bold bg-white-1 text-background-dark py-2 px-4 rounded-lg hover:bg-light-gray-70 transition-colors"
+                        className="flex items-center gap-2 px-4 py-2 text-sm font-bold text-white-1 bg-surface-dark border border-white/10 hover:bg-yellow-400 hover:text-background-dark hover:border-yellow-400 rounded-lg transition-colors whitespace-nowrap"
                     >
                         <DownloadCloud size={16} />
-                        Download Template
+                        {t("projects.entries.new.bulkUpload.downloadTemplate")}
                     </button>
                 </div>
 
@@ -216,9 +223,13 @@ export const BulkUpload = ({ onUpload, isSubmitting, socialMediaType = "generic"
                         <thead className="bg-white/5 text-light-gray-50 border-b border-white/10">
                             <tr>
                                 {expectedHeaders.map(header => {
-                                    const isMandatory = header === "text" || header === "quoted_text";
+                                    const isMandatory = header === "text";
+                                    // Custom widths for specific columns
+                                    const widthClass = header === "text" || header === "quoted_text" ? "min-w-[200px] w-auto" :
+                                        header === "date" ? "min-w-[150px] w-[150px]" :
+                                            "w-[100px]";
                                     return (
-                                        <th key={header} className={`p-3 uppercase tracking-wider whitespace-nowrap ${isMandatory ? "font-bold text-white-1" : "font-normal"}`}>
+                                        <th key={header} className={`p-3 uppercase tracking-wider whitespace-nowrap ${widthClass} ${isMandatory ? "font-bold text-yellow-400" : "font-normal"}`}>
                                             {header}
                                         </th>
                                     );
@@ -229,15 +240,15 @@ export const BulkUpload = ({ onUpload, isSubmitting, socialMediaType = "generic"
                             {isTwitter ? (
                                 <>
                                     <tr className="hover:bg-white/5 transition-colors">
-                                        <td className="p-3 border-r border-white/5 whitespace-nowrap">"This is a sample entry"</td>
+                                        <td className="p-3 border-r border-white/5 whitespace-nowrap truncate max-w-[250px]">"This is a sample entry"</td>
                                         <td className="p-3 border-r border-white/5">"Jan 01, 2026"</td>
                                         <td className="p-3 border-r border-white/5 text-purple-400">false</td>
                                         <td className="p-3 border-r border-white/5 text-purple-400">true</td>
-                                        <td className="p-3 border-r border-white/5 whitespace-nowrap">"This is a quoted entry"</td>
+                                        <td className="p-3 border-r border-white/5 whitespace-nowrap truncate max-w-[250px]">"This is a quoted entry"</td>
                                         <td className="p-3 text-purple-400">false</td>
                                     </tr>
                                     <tr className="hover:bg-white/5 transition-colors">
-                                        <td className="p-3 border-r border-white/5 whitespace-nowrap">"Another simple entry"</td>
+                                        <td className="p-3 border-r border-white/5 whitespace-nowrap truncate max-w-[250px]">"Another simple entry"</td>
                                         <td className="p-3 border-r border-white/5 text-gray-400"></td>
                                         <td className="p-3 border-r border-white/5 text-purple-400">false</td>
                                         <td className="p-3 border-r border-white/5 text-purple-400">false</td>
@@ -272,7 +283,7 @@ export const BulkUpload = ({ onUpload, isSubmitting, socialMediaType = "generic"
                 />
 
                 {file ? (
-                    <div className="flex flex-col items-center gap-4">
+                    <div className="flex flex-col items-center gap-4 pointer-events-none">
                         <div className="w-16 h-16 rounded-full bg-primary/20 text-primary flex items-center justify-center animate-bounce-subtle">
                             <FileText size={32} />
                         </div>
@@ -283,32 +294,32 @@ export const BulkUpload = ({ onUpload, isSubmitting, socialMediaType = "generic"
                             </p>
                         </div>
                         <button
-                            onClick={() => setFile(null)}
-                            className="text-light-gray-70 hover:text-bittersweet-shimmer transition-colors p-2"
+                            onClick={() => { setFile(null); setError(null); }}
+                            className="text-light-gray-70 hover:text-bittersweet-shimmer transition-colors p-2 pointer-events-auto"
                             title="Remove file"
                         >
                             <Trash2 size={24} className="text-bittersweet-shimmer" />
                         </button>
                     </div>
                 ) : (
-                    <div className="flex flex-col items-center gap-4">
+                    <div className="flex flex-col items-center gap-4 pointer-events-none">
                         <div className="w-20 h-20 rounded-full bg-white/5 text-light-gray-50 flex items-center justify-center group-hover:bg-primary/10 transition-colors">
                             <Upload size={40} />
                         </div>
                         <div className="text-center">
                             <p className="text-white-1 font-bold text-xl mb-1">
-                                {t("entries.new.dropzoneTitle")}
+                                {t("projects.entries.new.dropzoneTitle")}
                             </p>
                             <p className="text-light-gray-70">
-                                {t("entries.new.dropzoneSubtitle")}
+                                {t("projects.entries.new.dropzoneSubtitle")}
                             </p>
                         </div>
                         <button
                             onClick={() => fileInputRef.current?.click()}
-                            className="mt-2 px-6 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-white-1 font-semibold transition-colors"
-                            title={t("entries.new.selectFile")}
+                            className="mt-2 px-6 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-white-1 font-semibold transition-colors pointer-events-auto"
+                            title={t("projects.entries.new.selectFile")}
                         >
-                            {t("entries.new.selectFile")}
+                            {t("projects.entries.new.selectFile")}
                         </button>
                     </div>
                 )}
@@ -333,7 +344,7 @@ export const BulkUpload = ({ onUpload, isSubmitting, socialMediaType = "generic"
                         ) : (
                             <>
                                 <CheckCircle2 size={18} />
-                                {t("entries.new.confirmUpload")}
+                                {t("projects.entries.new.confirmUpload")}
                             </>
                         )}
                     </button>
@@ -344,12 +355,12 @@ export const BulkUpload = ({ onUpload, isSubmitting, socialMediaType = "generic"
             <div className="bg-white/5 rounded-2xl p-6 border border-white/5">
                 <h4 className="text-white-1 font-bold mb-3 flex items-center gap-2">
                     <AlertCircle size={16} className="text-primary" />
-                    {t("entries.new.csvInstructionsTitle")}
+                    {t("projects.entries.new.csvInstructionsTitle")}
                 </h4>
                 <ul className="text-sm text-light-gray-70 space-y-2 list-disc pl-5">
-                    <li>{t("entries.new.csvInstruction1")}</li>
-                    <li>{t("entries.new.csvInstruction2")}</li>
-                    <li>{t("entries.new.csvInstruction3")}</li>
+                    <li>{t("projects.entries.new.csvInstruction1")}</li>
+                    <li>{t("projects.entries.new.csvInstruction2")}</li>
+                    <li>{t("projects.entries.new.csvInstruction3")}</li>
                 </ul>
             </div>
         </div>

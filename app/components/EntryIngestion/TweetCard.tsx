@@ -22,7 +22,7 @@ interface TweetCardProps {
 }
 
 export const TweetCard: React.FC<TweetCardProps> = ({ mode, initialData, onChange }) => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
 
     const [text, setText] = useState(initialData?.text || "");
     const [metadata, setMetadata] = useState<TwitterMetadata>(
@@ -31,9 +31,17 @@ export const TweetCard: React.FC<TweetCardProps> = ({ mode, initialData, onChang
             hasQuote: false,
             quotedText: "",
             isQuoteAReply: false,
-            date: format(new Date(), "MMM dd, yyyy, hh:mm:ss a"),
+            date: format(new Date(), "yyyy-MM-dd'T'HH:mm"),
         }
     );
+
+    // Sync internal state when initialData prop changes (e.g., reset after submission)
+    React.useEffect(() => {
+        if (initialData) {
+            setText(initialData.text);
+            setMetadata(initialData.metadata);
+        }
+    }, [initialData]);
 
     const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         const newText = e.target.value;
@@ -72,15 +80,27 @@ export const TweetCard: React.FC<TweetCardProps> = ({ mode, initialData, onChang
                             <span className="text-light-gray-60 text-[15px] leading-5">{t("projects.entries.new.interactiveForm.authorHandle", "@tweet_author")}</span>
                             {/* Date Field */}
                             {isInteractive ? (
-                                <input
-                                    type="text"
-                                    placeholder={t("projects.entries.new.interactiveForm.datePlaceholder", "Jan 01, 2026, 10:00:00 PM (Optional)")}
-                                    className="text-light-gray-50 text-[13px] leading-5 bg-transparent border-b border-light-gray-30 focus:outline-none focus:border-[#1da1f2] placeholder:text-light-gray-70 mt-1"
-                                    value={metadata.date || ""}
-                                    onChange={(e) => handleMetadataChange("date", e.target.value)}
-                                />
+                                <div className="flex items-center gap-2 mt-1">
+                                    <input
+                                        type="datetime-local"
+                                        className="text-light-gray-50 text-[13px] leading-5 bg-transparent border-b border-light-gray-30 focus:outline-none focus:border-[#1da1f2] placeholder:text-light-gray-70 [color-scheme:dark]"
+                                        value={metadata.date || ""}
+                                        onChange={(e) => handleMetadataChange("date", e.target.value)}
+                                    />
+                                    {metadata.date && (
+                                        <button
+                                            type="button"
+                                            onClick={() => handleMetadataChange("date", "")}
+                                            className="text-light-gray-50 hover:text-red-400 text-xs px-2 py-0.5 rounded border border-white/10"
+                                        >
+                                            {t("common.delete", "Delete")}
+                                        </button>
+                                    )}
+                                </div>
                             ) : (
-                                <span className="text-light-gray-60 text-[15px] leading-5">{metadata.date}</span>
+                                <span className="text-light-gray-60 text-[15px] leading-5">
+                                    {metadata.date ? new Intl.DateTimeFormat(i18n.language || 'en-US', { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(metadata.date)) : ""}
+                                </span>
                             )}
                         </div>
                     </div>
@@ -106,15 +126,15 @@ export const TweetCard: React.FC<TweetCardProps> = ({ mode, initialData, onChang
 
                 {/* Quoted Tweet Section */}
                 {metadata.hasQuote && (
-                    <div className="border border-white/10 rounded-2xl p-4 sm:p-5 relative mt-10">
+                    <div className={`border ${metadata.isQuoteAReply ? 'rounded-2xl rounded-tl-none border-[#1da1f2] z-10' : 'border-white/10 rounded-2xl'} p-4 sm:p-5 relative mt-10`}>
                         {/* Quoted Tweet Context label */}
-                        <div className="absolute -top-[14px] left-4 bg-white/20 text-white-1 text-[11px] font-bold px-3 py-1 rounded-full z-10">
+                        <div className="absolute -top-[14px] right-4 bg-surface-dark border border-white/20 text-white-1 text-[11px] font-bold px-3 py-1 rounded-full z-30 shadow-sm">
                             {t("projects.entries.new.interactiveForm.tweetCyted", "Tweet citado")}
                         </div>
 
                         {/* Is Quote a Reply Context Header */}
                         {metadata.isQuoteAReply && (
-                            <div className="absolute -top-[28px] left-[-1px] bg-[#4A99E9] text-white-1 text-[10px] font-bold px-3 py-1 rounded-t-xl z-0 whitespace-nowrap overflow-hidden text-ellipsis shadow-sm">
+                            <div className="absolute -top-[24px] left-[-1px] bg-[#4A99E9] text-white-1 text-[10px] font-bold px-3 py-1 rounded-t-xl z-0 whitespace-nowrap overflow-hidden text-ellipsis shadow-sm max-w-[calc(100%-10px)]">
                                 {t("projects.entries.new.interactiveForm.isQuoteAResponse", "Este tweet es una respuesta a otro tweet")}
                             </div>
                         )}
@@ -167,12 +187,10 @@ export const TweetCard: React.FC<TweetCardProps> = ({ mode, initialData, onChang
                                 checked={metadata.isReply}
                                 onChange={(e) => handleMetadataChange("isReply", e.target.checked)}
                             />
-                            <div className="w-10 h-6 bg-background-dark/50 rounded-full border border-white/10 peer-checked:bg-primary peer-checked:border-primary transition-all duration-300 relative">
-                                <div className="absolute left-1 top-1 w-4 h-4 bg-light-gray-70 rounded-full transition-all duration-300 peer-checked:translate-x-4 peer-checked:bg-background-dark"></div>
-                            </div>
+                            <div className="w-10 h-6 bg-background-dark/50 rounded-full border border-white/10 peer-checked:bg-primary peer-checked:border-primary transition-all duration-300 relative after:content-[''] after:absolute after:left-[3px] after:top-[3px] after:w-4 after:h-4 after:bg-light-gray-70 after:rounded-full after:transition-all after:duration-300 peer-checked:after:translate-x-[16px] peer-checked:after:bg-white"></div>
                         </div>
                         <span className="text-light-gray-70 group-hover:text-white-1 transition-colors text-sm font-medium select-none">
-                            ¿Es una respuesta?
+                            {t("projects.entries.new.interactiveForm.isResponseCheckbox", "¿Es una respuesta?")}
                         </span>
                     </label>
 
@@ -186,12 +204,10 @@ export const TweetCard: React.FC<TweetCardProps> = ({ mode, initialData, onChang
                                     handleMetadataChange("hasQuote", e.target.checked);
                                 }}
                             />
-                            <div className="w-10 h-6 bg-background-dark/50 rounded-full border border-white/10 peer-checked:bg-primary peer-checked:border-primary transition-all duration-300 relative">
-                                <div className="absolute left-1 top-1 w-4 h-4 bg-light-gray-70 rounded-full transition-all duration-300 peer-checked:translate-x-4 peer-checked:bg-background-dark"></div>
-                            </div>
+                            <div className="w-10 h-6 bg-background-dark/50 rounded-full border border-white/10 peer-checked:bg-primary peer-checked:border-primary transition-all duration-300 relative after:content-[''] after:absolute after:left-[3px] after:top-[3px] after:w-4 after:h-4 after:bg-light-gray-70 after:rounded-full after:transition-all after:duration-300 peer-checked:after:translate-x-[16px] peer-checked:after:bg-white"></div>
                         </div>
                         <span className="text-light-gray-70 group-hover:text-white-1 transition-colors text-sm font-medium select-none">
-                            ¿Tiene cita?
+                            {t("projects.entries.new.interactiveForm.hasQuoteCheckbox", "¿Tiene cita?")}
                         </span>
                     </label>
 
@@ -204,12 +220,10 @@ export const TweetCard: React.FC<TweetCardProps> = ({ mode, initialData, onChang
                                     checked={metadata.isQuoteAReply || false}
                                     onChange={(e) => handleMetadataChange("isQuoteAReply", e.target.checked)}
                                 />
-                                <div className="w-10 h-6 bg-background-dark/50 rounded-full border border-white/10 peer-checked:bg-primary peer-checked:border-primary transition-all duration-300 relative">
-                                    <div className="absolute left-1 top-1 w-4 h-4 bg-light-gray-70 rounded-full transition-all duration-300 peer-checked:translate-x-4 peer-checked:bg-background-dark"></div>
-                                </div>
+                                <div className="w-10 h-6 bg-background-dark/50 rounded-full border border-white/10 peer-checked:bg-primary peer-checked:border-primary transition-all duration-300 relative after:content-[''] after:absolute after:left-[3px] after:top-[3px] after:w-4 after:h-4 after:bg-light-gray-70 after:rounded-full after:transition-all after:duration-300 peer-checked:after:translate-x-[16px] peer-checked:after:bg-white"></div>
                             </div>
                             <span className="text-light-gray-70 group-hover:text-white-1 transition-colors text-sm font-medium select-none">
-                                ¿La cita es una respuesta?
+                                {t("projects.entries.new.interactiveForm.isQuoteResponseCheckbox", "¿La cita es una respuesta?")}
                             </span>
                         </label>
                     )}
