@@ -24,6 +24,8 @@ import {
 
 import { AnalysisHistoryTable } from "~/components/Analysis/AnalysisHistoryTable";
 import { NewAnalysisForm } from "~/components/Analysis/NewAnalysisForm";
+import { AnalysisReportModal } from "~/components/Modals/AnalysisReportModal";
+import { generateAnalysisPDF } from "~/utils/pdfGenerator";
 
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
 import type { AnalysisRun } from "~/services/api/analysis/types";
@@ -71,6 +73,7 @@ const AnalysisPage = () => {
 
     const [activeTab, setActiveTab] = useState<"new" | "history">("new");
     const [localHistory, setLocalHistory] = useState<AnalysisRun[]>(history);
+    const [selectedRun, setSelectedRun] = useState<AnalysisRun | null>(null);
 
     const isSubmitting = nav.formData?.get("intent") === "trigger_analysis";
 
@@ -131,8 +134,8 @@ const AnalysisPage = () => {
                         <button
                             onClick={() => setActiveTab("new")}
                             className={`flex items-center gap-2 px-6 rounded-lg text-sm font-bold transition-all ${activeTab === "new"
-                                    ? "bg-primary/10 text-primary shadow-md border border-primary/20"
-                                    : "text-light-gray-70 hover:text-white-1 hover:bg-white/5"
+                                ? "bg-primary/10 text-primary shadow-md border border-primary/20"
+                                : "text-light-gray-70 hover:text-white-1 hover:bg-white/5"
                                 }`}
                         >
                             <Zap size={16} />
@@ -141,8 +144,8 @@ const AnalysisPage = () => {
                         <button
                             onClick={() => setActiveTab("history")}
                             className={`flex items-center gap-2 px-6 rounded-lg text-sm font-bold transition-all ${activeTab === "history"
-                                    ? "bg-primary/10 text-primary shadow-md border border-primary/20"
-                                    : "text-light-gray-70 hover:text-white-1 hover:bg-white/5"
+                                ? "bg-primary/10 text-primary shadow-md border border-primary/20"
+                                : "text-light-gray-70 hover:text-white-1 hover:bg-white/5"
                                 }`}
                         >
                             <History size={16} />
@@ -166,15 +169,20 @@ const AnalysisPage = () => {
                         history={localHistory}
                         isRefreshing={nav.state === "loading"}
                         onRefresh={() => submit(null, { replace: true })}
-                        onViewReport={(run) => {
-                            console.log("View report:", run.id);
-                        }}
+                        onViewReport={(run) => setSelectedRun(run)}
                         onDownloadPDF={(runId) => {
-                            console.log("Download PDF:", runId);
+                            const runData = localHistory.find(r => r.id === runId);
+                            if (runData) generateAnalysisPDF(runData, project.name);
                         }}
                     />
                 </div>
             )}
+
+            <AnalysisReportModal
+                isOpen={selectedRun !== null}
+                onClose={() => setSelectedRun(null)}
+                run={selectedRun}
+            />
         </div>
     );
 };
