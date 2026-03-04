@@ -19,6 +19,9 @@ import {
   Trash2,
   X,
   Zap,
+  MousePointer2,
+  CheckSquare,
+  Square
 } from "lucide-react";
 
 import type {
@@ -43,6 +46,10 @@ const EntriesTable = (props: EntriesTableProps) => {
   // Controlled search state for input switching UX
   const [currFilterCol, setCurrFilterCol] = useState<FilterColumn>(filterCol);
   const [localFilterVal, setLocalFilterVal] = useState(filterVal);
+  // Exclusion Mode Logic
+  const [isExcludeMode, setIsExcludeMode] = useState(false);
+  const [excludedIds, setExcludedIds] = useState<Set<string>>(new Set());
+
   const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
@@ -139,6 +146,40 @@ const EntriesTable = (props: EntriesTableProps) => {
           <p className="text-light-gray-70 text-sm mt-5">{t("projects.entries.desc")}</p>
         </div>
       </div>
+
+      {/* Analysis Exclusion Banner */}
+      {isExcludeMode && (
+        <div className="bg-primary/10 border border-primary/20 p-4 rounded-xl flex items-center justify-between animate-in fade-in slide-in-from-top-2 duration-300">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+              <MousePointer2 size={20} />
+            </div>
+            <div>
+              <h3 className="text-white-1 font-bold text-sm">Mode: Exclusion Selection</h3>
+              <p className="text-light-gray-60 text-xs mt-0.5">
+                Select entries to exclude from the next analysis run. Unchecked entries will be ignored.
+                <span className="ml-2 text-primary">({data.total - excludedIds.size} / {data.total} Included)</span>
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setExcludedIds(new Set())}
+              className="px-3 py-1.5 text-xs font-bold text-white-1 hover:text-primary transition-colors"
+            >
+              Reset selection
+            </button>
+            <Link
+              to={`/projects/${project.id}/models/${modelId}/analysis`}
+              state={{ excludedEntryIds: Array.from(excludedIds) }}
+              className="bg-primary hover:bg-primary/90 text-background-dark px-4 py-2 rounded-lg font-bold text-sm shadow-lg shadow-primary/20 transition-all flex items-center gap-2"
+            >
+              <Zap size={16} />
+              Go to Analysis
+            </Link>
+          </div>
+        </div>
+      )}
 
       <div className={tableCardClasses}>
         {/* Toolbar Context */}
@@ -253,6 +294,21 @@ const EntriesTable = (props: EntriesTableProps) => {
                   <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-light-gray-70 pointer-events-none" />
                 </div>
 
+                {/* Exclude Mode Toggle */}
+                <button
+                  type="button"
+                  onClick={() => setIsExcludeMode(!isExcludeMode)}
+                  className={`flex items-center gap-2 px-4 py-2 text-sm font-bold border transition-all rounded-lg ${isExcludeMode
+                    ? "bg-primary text-background-dark border-primary shadow-lg shadow-primary/20"
+                    : "bg-surface-dark text-white-1 border-white/10 hover:border-primary/50"
+                    }`}
+                >
+                  {isExcludeMode ? <CheckSquare size={16} /> : <Square size={16} />}
+                  Exclude entries
+                </button>
+
+                <div className="w-px h-6 bg-white/5 hidden sm:block mx-1" />
+
                 <div className="relative w-40">
                   <input
                     type="number"
@@ -313,6 +369,21 @@ const EntriesTable = (props: EntriesTableProps) => {
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className={tableHeaderRowClasses}>
+                  {isExcludeMode && (
+                    <th className="py-3 px-4 w-1 whitespace-nowrap text-left">
+                      <button
+                        onClick={() => {
+                          if (excludedIds.size > 0) {
+                            setExcludedIds(new Set());
+                          }
+                        }}
+                        className="hover:text-primary transition-colors"
+                        title="Clear Exclusions"
+                      >
+                        <CheckSquare size={16} />
+                      </button>
+                    </th>
+                  )}
                   <th className="py-3 px-4 w-1 whitespace-nowrap text-left">{t("projects.entries.tableId")}</th>
                   <th className="py-3 px-4 text-left">{t("projects.entries.tableText")}</th>
                   <th className="py-3 px-4 w-1 whitespace-nowrap text-left">{t("projects.entries.tableVerdict")}</th>
@@ -339,6 +410,29 @@ const EntriesTable = (props: EntriesTableProps) => {
                       className="hover:bg-white/5 transition-colors group cursor-pointer"
                       onClick={() => setEntryToView(entry)}
                     >
+                      {isExcludeMode && (
+                        <td
+                          className="py-2 px-4 whitespace-nowrap"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            const newExcluded = new Set(excludedIds);
+                            if (newExcluded.has(entry.id)) {
+                              newExcluded.delete(entry.id);
+                            } else {
+                              newExcluded.add(entry.id);
+                            }
+                            setExcludedIds(newExcluded);
+                          }}
+                        >
+                          <div className="flex items-center justify-center">
+                            {!excludedIds.has(entry.id) ? (
+                              <CheckSquare size={18} className="text-primary" />
+                            ) : (
+                              <Square size={18} className="text-light-gray-50 opacity-40" />
+                            )}
+                          </div>
+                        </td>
+                      )}
                       <td className="py-2 px-4 text-sm text-light-gray-50 font-mono whitespace-nowrap text-left">
                         {entry.id.split("_")[1] || entry.id}
                       </td>
