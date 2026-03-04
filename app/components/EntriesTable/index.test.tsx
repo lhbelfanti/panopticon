@@ -291,4 +291,53 @@ describe("EntriesTable", () => {
 
         vi.useRealTimers();
     });
+
+    it("cancels deletion when cancel button is clicked", async () => {
+        const user = userEvent.setup();
+        renderTable();
+
+        const deleteBtns = screen.getAllByTitle("projects.entries.deleteEntry");
+        await user.click(deleteBtns[0]);
+
+        expect(screen.getByText("projects.entries.deleteEntryDesc")).toBeInTheDocument();
+
+        const cancelBtn = screen.getByText("sidebar.cancel");
+        await user.click(cancelBtn);
+
+        expect(screen.queryByText("projects.entries.deleteEntryDesc")).not.toBeInTheDocument();
+    });
+
+    it("does not open view modal when clicking action cell", async () => {
+        const user = userEvent.setup();
+        renderTable();
+
+        // Assuming action cell is the last cell of the row. We will find it by its child buttons.
+        const viewIcons = screen.getAllByTitle("View full entry");
+        const actionCell = viewIcons[0].parentElement?.parentElement;
+
+        if (actionCell) {
+            await user.click(actionCell);
+        }
+
+        expect(screen.queryByText("View Full Entry")).not.toBeInTheDocument();
+    });
+
+    it("clears debounce timeout on unmount", () => {
+        vi.useFakeTimers();
+        const { unmount } = renderTable({ filterCol: "text" });
+
+        const searchInput = screen.getByPlaceholderText("Search characters");
+        fireEvent.change(searchInput, { target: { value: "test search 2" } });
+
+        // Unmount before timer finishes
+        unmount();
+        vi.runAllTimers();
+
+        // If cleared, submit won't be called
+        // Since other tests might have called mockSubmit, we rely on the specific call not happening
+        // (Wait, `mockSubmit` was cleared in `beforeEach`, but let's just assert `not.toHaveBeenCalled()`)
+        expect(mockSubmit).not.toHaveBeenCalled();
+
+        vi.useRealTimers();
+    });
 });

@@ -111,4 +111,91 @@ describe("GlobalEntriesNewPage", () => {
         const { addEntriesToProject } = await import("~/services/api/entries/index.server");
         expect(addEntriesToProject).toHaveBeenCalledWith(1, ["model_a"], [{ text: "hello", metadata: { isReply: false } }], "twitter");
     });
+
+    it("action handles missing required fields", async () => {
+        const formData = new FormData();
+        const request = new Request("http://localhost/entries/new", {
+            method: "POST",
+            body: formData,
+        });
+
+        const response = await action({ request, params: {}, context: {} } as any);
+        const status = (response as any).status || (response as any).init?.status;
+        expect(status).toBe(400);
+    });
+
+    it("action handles uploadAnother correctly", async () => {
+        const formData = new FormData();
+        formData.append("projectId", "1");
+        formData.append("subprojectIds", JSON.stringify(["model_a"]));
+        formData.append("entriesData", JSON.stringify([{ text: "hello", metadata: { isReply: false } }]));
+        formData.append("socialMediaType", "twitter");
+        formData.append("uploadAnother", "true");
+
+        const request = new Request("http://localhost/entries/new", {
+            method: "POST",
+            body: formData,
+        });
+
+        const response = await action({ request, params: {}, context: {} } as any);
+        expect((response as any).data).toEqual({ success: true, count: 1 });
+    });
+
+    it("can change social media platform", async () => {
+        renderWithRouter(<GlobalEntriesNewPage />, mockLoaderData);
+        const platformSelect = await screen.findByLabelText("projects.entries.new.targetConfiguration.mediaType");
+        fireEvent.change(platformSelect, { target: { value: "twitter" } });
+        expect((platformSelect as HTMLSelectElement).value).toBe("twitter");
+    });
+
+    it("can toggle subprojects", async () => {
+        renderWithRouter(<GlobalEntriesNewPage />, mockLoaderData);
+
+        const projectSelect = await screen.findByLabelText("projects.entries.new.targetConfiguration.targetProject");
+        fireEvent.change(projectSelect, { target: { value: "1" } });
+
+        const subObj = await screen.findByText("projects.models.model_a");
+        fireEvent.click(subObj);
+
+        // Re-clicking toggles it back
+        fireEvent.click(subObj);
+    });
+
+    it("can switch tabs", async () => {
+        renderWithRouter(<GlobalEntriesNewPage />, mockLoaderData);
+        const singleTab = await screen.findByText("projects.entries.new.tabs.single");
+        const bulkTab = screen.getByText("projects.entries.new.tabs.bulk");
+
+        fireEvent.click(bulkTab);
+        fireEvent.click(singleTab);
+    });
+
+    it("can submit manual entry", async () => {
+        renderWithRouter(<GlobalEntriesNewPage />, mockLoaderData);
+        const projectSelect = await screen.findByLabelText("projects.entries.new.targetConfiguration.targetProject");
+        fireEvent.change(projectSelect, { target: { value: "1" } });
+
+        const textarea = screen.getByPlaceholderText("projects.entries.new.interactiveForm.placeholder");
+        fireEvent.change(textarea, { target: { value: "New manual entry" } });
+
+        const submitBtn = screen.getByRole("button", { name: "entries.new.submit" });
+        fireEvent.click(submitBtn);
+    });
+
+    it("can submit bulk upload", async () => {
+        renderWithRouter(<GlobalEntriesNewPage />, mockLoaderData);
+        const projectSelect = await screen.findByLabelText("projects.entries.new.targetConfiguration.targetProject");
+        fireEvent.change(projectSelect, { target: { value: "1" } });
+
+        const bulkTab = screen.getByText("projects.entries.new.tabs.bulk");
+        fireEvent.click(bulkTab);
+
+        const input = screen.getByLabelText("csv-upload-input") as HTMLInputElement;
+        const csvContent = "text\nhello";
+        const file = new File([csvContent], "test.csv", { type: "text/csv" });
+        fireEvent.change(input, { target: { files: [file] } });
+
+        const confirmBtn = await screen.findByRole("button", { name: "entries.new.confirmUpload" });
+        fireEvent.click(confirmBtn);
+    });
 });

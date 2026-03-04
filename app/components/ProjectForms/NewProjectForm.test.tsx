@@ -112,6 +112,15 @@ describe("NewProjectForm", () => {
 
         expect(screen.queryByText("projects.models.bert_spanish")).not.toBeInTheDocument();
         expect(screen.getByText("projects.models.roberta_english")).toBeInTheDocument();
+
+        // Uncheck toxicity
+        if (toxCheckbox) await user.click(toxCheckbox);
+        expect(screen.getByText("projects.models.bert_spanish")).toBeInTheDocument();
+    });
+
+    it("displays actionData error if present", () => {
+        renderForm({ actionData: { error: "Something went wrong" } });
+        expect(screen.getByText("Something went wrong")).toBeInTheDocument();
     });
 
     it("shows no models intersection message", async () => {
