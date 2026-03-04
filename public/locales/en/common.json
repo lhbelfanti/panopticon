@@ -156,6 +156,8 @@
             "deleteEntry": "Delete entry",
             "deleteEntryDesc": "Are you sure you want to delete this entry? This action cannot be undone.",
             "exportCsv": "Export CSV",
+            "analysis": "Analysis",
+            "openAnalysis": "Open analysis \u2192",
             "datasetEntries": "Dataset entries",
             "new": {
                 "title": "Add entries",

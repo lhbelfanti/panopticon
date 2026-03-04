@@ -348,14 +348,24 @@ const EntriesTable = (props: EntriesTableProps) => {
             )}
           </Form>
 
-          <a
-            href={`/projects/${project.id}/models/${modelId}/export?filterCol=${filterCol}&filterVal=${encodeURIComponent(filterVal)}&filterOp=${encodeURIComponent(filterOp)}&filterBias=${filterBias}`}
-            download
-            className="flex items-center gap-2 px-4 py-2 text-sm font-bold text-white-1 bg-surface-dark border border-white/10 hover:bg-yellow-400 hover:text-background-dark hover:border-yellow-400 rounded-lg transition-colors whitespace-nowrap"
-          >
-            <Download size={16} />
-            {t("projects.entries.exportCsv")}
-          </a>
+          <div className="flex items-center gap-3">
+            <Link
+              to={`/projects/${project.id}/models/${modelId}/analysis`}
+              className="flex items-center gap-2 px-4 py-2 text-sm font-bold text-white-1 bg-surface-dark border border-white/10 hover:border-primary/50 rounded-lg transition-colors whitespace-nowrap"
+            >
+              <Zap size={16} className="text-primary" />
+              {t("projects.entries.analysis")}
+            </Link>
+
+            <a
+              href={`/projects/${project.id}/models/${modelId}/export?filterCol=${filterCol}&filterVal=${encodeURIComponent(filterVal)}&filterOp=${encodeURIComponent(filterOp)}&filterBias=${filterBias}`}
+              download
+              className="flex items-center gap-2 px-4 py-2 text-sm font-bold text-white-1 bg-surface-dark border border-white/10 hover:bg-yellow-400 hover:text-background-dark hover:border-yellow-400 rounded-lg transition-colors whitespace-nowrap"
+            >
+              <Download size={16} />
+              {t("projects.entries.exportCsv")}
+            </a>
+          </div>
         </div>
 
         {/* Table wrapper */}
