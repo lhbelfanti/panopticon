@@ -1,7 +1,7 @@
 {
     "login": {
-        "description": "Adverse Human Behaviors analysis platform",
-        "signIn": "Log In",
+        "description": "Adverse Human Behaviours analysis platform",
+        "signIn": "Log in",
         "subtitle": "Enter your credentials",
         "username": "Username",
         "email": "Email address",
@@ -39,10 +39,10 @@
     },
     "sidebar": {
         "home": "Home",
-        "quickActions": "Quick Actions",
-        "newEntry": "New Entry",
-        "newProject": "New Project",
-        "yourProjects": "Your Projects",
+        "quickActions": "Quick actions",
+        "newEntry": "New entry",
+        "newProject": "New project",
+        "yourProjects": "Your projects",
         "noActiveProjects": "No active projects",
         "researcherName": "Lucas Belfanti",
         "researcherUser": "@lbelfanti",
@@ -54,14 +54,14 @@
     },
     "dashboard": {
         "welcome": "Welcome! What do you want to do today?",
-        "subtitle": "<1>Advers Human Behaviours</1> detection platform",
+        "subtitle": "<1>Adverse Human Behaviours</1> detection platform",
         "newProject": {
-            "title": "New Project",
+            "title": "New project",
             "desc": "Set up a new analysis environment, import datasets and detect <1>Adverse Human Behaviours</1>",
             "action": "Create now \u2192"
         },
         "newEntry": {
-            "title": "New Entry",
+            "title": "New entry",
             "desc": "Add entries to projects to detect <1>Adverse Human Behaviours</1> on them, using different AI models",
             "action": "Add new \u2192"
         },
@@ -101,17 +101,17 @@
         "new": {
             "title": "New project",
             "subtitle": "Create a new text analysis environment.",
-            "name": "Project Name",
+            "name": "Project name",
             "namePlaceholder": "e.g. Drug Use Cohort (Argentina 2026)",
             "description": "Description (Optional)",
             "descriptionPlaceholder": "Brief description of the analysis goals...",
-            "behaviorsTitle": "Target Behaviors",
+            "behaviorsTitle": "Target behaviors",
             "behaviorsDesc": "Select the <1>Adverse Human Behaviours</1> you'd like to detect in the dataset",
             "modelsTitle": "Models",
             "modelsDesc": "A new subproject will be generated for each selected model. Note: Models are dynamically filtered to only show those compatible with all selected <1>Adverse Human Behaviours</1>.",
             "noModelsIntersection": "No models available for the selected combination of behaviors.",
             "selectBehaviorFirst": "Select at least one behavior to view available models.",
-            "submit": "Create Project",
+            "submit": "Create project",
             "creating": "Creating..."
         },
         "behaviors": {
@@ -133,14 +133,17 @@
             "subprojectsDesc": "Explore the different models applied to this project. Select a subproject to access its specific dataset, evaluate individual predictions, and manage the filtered results.",
             "behaviorsTracked": "<1>Adverse Human Behaviours</1> to detect",
             "emptyModels": "No ML models were configured for this project.",
-            "openSubproject": "Open predictions \u2192"
+            "openSubproject": "Open predictions \u2192",
+            "deleteProject": "Delete project",
+            "deleteProjectDesc": "Are you sure you want to delete the project \"{{name}}\"? This action cannot be undone and will permanently delete all associated entries and subprojects.",
+            "deleteProjectConfirm": "Delete project"
         },
         "entries": {
-            "title": "Analyzed Entries",
+            "title": "Analyzed entries",
             "desc": "View an overarching analysis of your imported corpus data below. Review detailed confidence metrics or filter rows by inferred label values.",
-            "backToProject": "Back to Project",
+            "backToProject": "Back to project",
             "searchPlaceholder": "Search text snippet...",
-            "allVerdicts": "All Verdicts",
+            "allVerdicts": "All verdicts",
             "tableId": "ID",
             "tableText": "Text",
             "tableVerdict": "Verdict",
@@ -155,40 +158,41 @@
             "exportCsv": "Export CSV",
             "datasetEntries": "Dataset entries",
             "new": {
-                "title": "Add Entries",
+                "title": "Add entries",
                 "subtitle": "Import data to project \"{{name}}\" for analysis.",
+                "subtitleGlobal": "Select a configuration below to import data into your workspace.",
                 "tabs": {
-                    "single": "Single Entry",
-                    "bulk": "Bulk Upload"
+                    "single": "Single entry",
+                    "bulk": "Bulk upload"
                 },
-                "manualEntryLabel": "Text Content",
+                "manualEntryLabel": "Text content",
                 "placeholder": "Enter the text to be analyzed (e.g., a tweet or post)...",
-                "submit": "Add Entry",
+                "submit": "Add entry",
                 "dropzoneTitle": "Drop CSV file here",
                 "dropzoneSubtitle": "or click to browse your files",
                 "selectFile": "Select CSV",
                 "errorInvalidCsv": "Please select a valid .csv file",
-                "confirmUpload": "Process and Upload",
-                "csvInstructionsTitle": "CSV Format Requirements",
+                "confirmUpload": "Process and upload",
+                "csvInstructionsTitle": "Requirements",
                 "csvInstruction1": "The file must be in .csv format.",
                 "csvInstruction2": "It MUST contain a column named \"text\" (case insensitive).",
-                "csvInstruction3": "Other columns will be ignored during this process.",
+                "csvInstruction3": "Use the template to see all supported fields for this configuration.",
                 "successTitle": "Entries added",
                 "successDesc": "Successfully added {{count}} entries to the project.",
                 "targetConfiguration": {
-                    "title": "Target Configuration",
-                    "targetProject": "Target Project",
+                    "title": "Configuration",
+                    "targetProject": "Project",
                     "selectProject": "Select a project...",
-                    "mediaType": "Media Type",
-                    "targetSubprojects": "Target Subprojects (Models) *",
+                    "mediaType": "Media type",
+                    "targetSubprojects": "Subprojects (Models)",
                     "noSubprojectsError": "You must select at least one subproject.",
-                    "finishConfigInfo": "Please finish the Target Configuration first"
+                    "finishConfigInfo": "Please finish the Configuration first"
                 },
                 "interactiveForm": {
                     "title": "X (INTERACTIVE FORM)",
-                    "tweetAuthor": "Tweet Author",
+                    "tweetAuthor": "Tweet author",
                     "authorHandle": "@tweet_author",
-                    "quotedAuthor": "Quoted Author",
+                    "quotedAuthor": "Quoted author",
                     "quotedHandle": "@quoted_author",
                     "datePlaceholder": "Jan 01, 2026, 10:00:00 PM (Optional)",
                     "uploadAnother": "Upload another",
@@ -197,9 +201,26 @@
                     "tweetCyted": "Quoted tweet",
                     "quote": "Quote",
                     "quotedPlaceholder": "Enter the text of the quoted tweet...",
-                    "placeholder": "Enter the text to be analyzed..."
+                    "placeholder": "Enter the text to be analyzed...",
+                    "isResponseCheckbox": "Is it a reply?",
+                    "hasQuoteCheckbox": "Has quote?",
+                    "isQuoteResponseCheckbox": "Is the quote a reply?"
+                },
+                "bulkUpload": {
+                    "dataFormatTitle": "Data format",
+                    "formatInstruction": "Make sure your CSV contains the exact headers shown below.",
+                    "mandatoryHeaderNote": "Mandatory headers are <1>bolded</1>.",
+                    "downloadTemplate": "Download template"
                 }
             }
+        }
+    },
+    "navigation": {
+        "dashboard": "Dashboard"
+    },
+    "entries": {
+        "new": {
+            "submit": "Add entry"
         }
     }
 }

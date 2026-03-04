@@ -24,7 +24,7 @@
             "lastName": "Apellido",
             "suggestedUsername": "Nombre de usuario sugerido",
             "email": "Correo electrónico",
-            "requestAccess": "Solicitar Registro",
+            "requestAccess": "Solicitar registro",
             "haveAccount": "¿Ya tiene una cuenta?",
             "loginHere": "Inicie sesión aquí"
         },
@@ -39,10 +39,10 @@
     },
     "sidebar": {
         "home": "Inicio",
-        "quickActions": "Acciones Rápidas",
-        "newEntry": "Nueva Entrada",
-        "newProject": "Nuevo Proyecto",
-        "yourProjects": "Tus Proyectos",
+        "quickActions": "Acciones rápidas",
+        "newEntry": "Nueva entrada",
+        "newProject": "Nuevo proyecto",
+        "yourProjects": "Tus proyectos",
         "noActiveProjects": "No hay proyectos activos",
         "researcherName": "Lucas Belfanti",
         "researcherUser": "@lbelfanti",
@@ -56,12 +56,12 @@
         "welcome": "¡Bienvenido! ¿Qué deseas hacer hoy?",
         "subtitle": "Plataforma de detección de <1>Comportamientos Humanos Adversos</1>",
         "newProject": {
-            "title": "Nuevo Proyecto",
+            "title": "Nuevo proyecto",
             "desc": "Configura un nuevo entorno de análisis, importa datasets y detecta <1>Comportamientos Humanos Adversos</1>",
             "action": "Crear ahora \u2192"
         },
         "newEntry": {
-            "title": "Nueva Entrada",
+            "title": "Nueva entrada",
             "desc": "Agrega entradas a los proyectos para detectar <1>Comportamientos Humanos Adversos</1> sobre ellas, utilizando diferentes modelos de IA",
             "action": "Agregar nueva \u2192"
         },
@@ -111,7 +111,7 @@
             "modelsDesc": "Se generará un subproyecto por cada modelo seleccionado. Nota: Los modelos se filtran dinámicamente para mostrar sólo los compatibles con todos los <1>Comportamientos Humanos Adversos</1> seleccionados.",
             "noModelsIntersection": "No hay modelos disponibles para la combinación de comportamientos seleccionada.",
             "selectBehaviorFirst": "Seleccione al menos un comportamiento para ver los modelos disponibles.",
-            "submit": "Crear Proyecto",
+            "submit": "Crear proyecto",
             "creating": "Creando..."
         },
         "behaviors": {
@@ -133,14 +133,17 @@
             "subprojectsDesc": "Explore the different models applied to this project. Select a subproject to access its specific dataset, evaluate predictions, and manage the filtered results.",
             "behaviorsTracked": "<1>Comportamientos Humanos Adversos</1> a detectar",
             "emptyModels": "No hay modelos CL configurados para este proyecto.",
-            "openSubproject": "Explore subproject \u2192"
+            "openSubproject": "Explore subproject \u2192",
+            "deleteProject": "Eliminar proyecto",
+            "deleteProjectDesc": "¿Estás seguro de que deseas eliminar el proyecto \"{{name}}\"? Esta acción no se puede deshacer y eliminará permanentemente todas las entradas y subproyectos asociados.",
+            "deleteProjectConfirm": "Eliminar proyecto"
         },
         "entries": {
-            "title": "Entradas Analizadas",
+            "title": "Entradas analizadas",
             "desc": "Revise un análisis global de los datos de su corpus a continuación. Consulte las métricas de confianza detalladas o filtre las filas según los valores inferidos.",
             "backToProject": "Volver al proyecto",
             "searchPlaceholder": "Buscar fragmento de texto...",
-            "allVerdicts": "Todos los Veredictos",
+            "allVerdicts": "Todos los veredictos",
             "tableId": "ID",
             "tableText": "Texto",
             "tableVerdict": "Veredicto",
@@ -155,40 +158,41 @@
             "exportCsv": "Exportar CSV",
             "datasetEntries": "Entradas del dataset",
             "new": {
-                "title": "Agregar Entradas",
+                "title": "Agregar entradas",
                 "subtitle": "Importar datos al proyecto \"{{name}}\" para su análisis.",
+                "subtitleGlobal": "Selecciona una configuración a continuación para importar datos a tu espacio de trabajo.",
                 "tabs": {
-                    "single": "Entrada Individual",
-                    "bulk": "Carga Masiva (CSV)"
+                    "single": "Entrada individual",
+                    "bulk": "Carga masiva (CSV)"
                 },
-                "manualEntryLabel": "Contenido del Texto",
+                "manualEntryLabel": "Contenido del texto",
                 "placeholder": "Ingrese el texto a analizar (ej. un tweet o post)...",
-                "submit": "Agregar Entrada",
+                "submit": "Agregar entrada",
                 "dropzoneTitle": "Arrastra el archivo CSV aquí",
                 "dropzoneSubtitle": "o haz clic para buscar en tus archivos",
                 "selectFile": "Seleccionar CSV",
                 "errorInvalidCsv": "Por favor, selecciona un archivo .csv válido",
-                "confirmUpload": "Procesar y Subir",
-                "csvInstructionsTitle": "Requisitos del Formato CSV",
+                "confirmUpload": "Procesar y subir",
+                "csvInstructionsTitle": "Requisitos",
                 "csvInstruction1": "El archivo debe estar en formato .csv.",
                 "csvInstruction2": "DEBE contener una columna llamada \"text\" (no distingue mayúsculas).",
-                "csvInstruction3": "Otras columnas serán ignoradas durante este proceso.",
+                "csvInstruction3": "Usa la plantilla para ver todos los campos compatibles con esta configuración.",
                 "successTitle": "Entradas agregadas",
                 "successDesc": "Se han agregado exitosamente {{count}} entradas al proyecto.",
                 "targetConfiguration": {
-                    "title": "Configuración del Objetivo",
-                    "targetProject": "Proyecto Objetivo",
+                    "title": "Configuración",
+                    "targetProject": "Proyecto",
                     "selectProject": "Seleccione un proyecto...",
-                    "mediaType": "Tipo de Medio",
-                    "targetSubprojects": "Subproyectos (Modelos) Objetivo *",
+                    "mediaType": "Tipo de medio",
+                    "targetSubprojects": "Subproyectos (Modelos)",
                     "noSubprojectsError": "Debe seleccionar al menos un subproyecto.",
-                    "finishConfigInfo": "Por favor, complete primero la Configuración del Objetivo"
+                    "finishConfigInfo": "Por favor, complete primero la Configuración"
                 },
                 "interactiveForm": {
                     "title": "X (FORMULARIO INTERACTIVO)",
-                    "tweetAuthor": "Autor del Tweet",
+                    "tweetAuthor": "Autor del tweet",
                     "authorHandle": "@tweet_author",
-                    "quotedAuthor": "Autor Citado",
+                    "quotedAuthor": "Autor citado",
                     "quotedHandle": "@quoted_author",
                     "datePlaceholder": "01 Ene, 2026, 10:00:00 PM (Opcional)",
                     "uploadAnother": "Cargar otro",
@@ -197,9 +201,26 @@
                     "tweetCyted": "Tweet citado",
                     "quote": "Cita",
                     "quotedPlaceholder": "Ingrese el texto del tweet citado...",
-                    "placeholder": "Ingrese el texto a analizar..."
+                    "placeholder": "Ingrese el texto a analizar...",
+                    "isResponseCheckbox": "¿Es una respuesta?",
+                    "hasQuoteCheckbox": "¿Tiene cita?",
+                    "isQuoteResponseCheckbox": "¿La cita es una respuesta?"
+                },
+                "bulkUpload": {
+                    "dataFormatTitle": "Formato de datos",
+                    "formatInstruction": "Asegúrate de que tu CSV contenga exactamente los encabezados mostrados abajo.",
+                    "mandatoryHeaderNote": "Los encabezados obligatorios están en <1>negrita</1>.",
+                    "downloadTemplate": "Descargar plantilla"
                 }
             }
+        }
+    },
+    "navigation": {
+        "dashboard": "Panel"
+    },
+    "entries": {
+        "new": {
+            "submit": "Agregar entrada"
         }
     }
 }
