@@ -1,0 +1,111 @@
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import { NewAnalysisForm } from "./NewAnalysisForm";
+
+vi.mock("react-i18next", () => ({
+    Trans: ({ i18nKey, children }: any) => children || i18nKey,
+    useTranslation: () => ({
+        t: (key: string) => key,
+    }),
+}));
+
+describe("NewAnalysisForm", () => {
+    const onSubmitMock = vi.fn();
+
+    const defaultProps = {
+        subprojectId: "roberta",
+        excludedEntryIds: [],
+        isSubmitting: false,
+        onSubmit: onSubmitMock,
+    };
+
+    beforeEach(() => {
+        vi.clearAllMocks();
+    });
+
+    const renderForm = (props = {}) =>
+        render(<NewAnalysisForm {...defaultProps} {...props} />);
+
+    it("renders the form title", () => {
+        renderForm();
+        expect(screen.getByText("Generate Subproject Analysis")).toBeInTheDocument();
+    });
+
+    it("shows 'All' and 'Full subproject data' when no entries are excluded", () => {
+        renderForm({ excludedEntryIds: [] });
+        expect(screen.getByText("All")).toBeInTheDocument();
+        expect(screen.getByText("Full subproject data")).toBeInTheDocument();
+    });
+
+    it("shows exclusion count when entries are excluded", () => {
+        renderForm({ excludedEntryIds: ["e1", "e2", "e3"] });
+        expect(screen.getByText("*")).toBeInTheDocument();
+        expect(screen.getByText("3 entries excluded")).toBeInTheDocument();
+    });
+
+    it("shows 'None applied' for selection criteria when no exclusions", () => {
+        renderForm({ excludedEntryIds: [] });
+        expect(screen.getByText("None applied")).toBeInTheDocument();
+        expect(screen.getByText("Standard baseline")).toBeInTheDocument();
+    });
+
+    it("shows 'Excluded list' for selection criteria when entries are excluded", () => {
+        renderForm({ excludedEntryIds: ["e1"] });
+        expect(screen.getByText("Excluded list")).toBeInTheDocument();
+        expect(screen.getByText("Manual exclusion list")).toBeInTheDocument();
+    });
+
+    it("renders 'Generate Analysis' button when not submitting", () => {
+        renderForm();
+        expect(screen.getByRole("button", { name: /Generate Analysis/i })).toBeInTheDocument();
+    });
+
+    it("button is enabled when not submitting", () => {
+        renderForm({ isSubmitting: false });
+        const btn = screen.getByRole("button", { name: /Generate Analysis/i });
+        expect(btn).not.toBeDisabled();
+    });
+
+    it("button is disabled when isSubmitting is true", () => {
+        renderForm({ isSubmitting: true });
+        const btn = screen.getByRole("button", { name: /Starting Analysis.../i });
+        expect(btn).toBeDisabled();
+    });
+
+    it("shows 'Starting Analysis...' text when isSubmitting is true", () => {
+        renderForm({ isSubmitting: true });
+        expect(screen.getByText("Starting Analysis...")).toBeInTheDocument();
+    });
+
+    it("calls onSubmit with excludedEntryIds when button is clicked", async () => {
+        const user = userEvent.setup();
+        const excludedEntryIds = ["e1", "e2"];
+        renderForm({ excludedEntryIds });
+
+        const btn = screen.getByRole("button", { name: /Generate Analysis/i });
+        await user.click(btn);
+
+        expect(onSubmitMock).toHaveBeenCalledWith(excludedEntryIds);
+    });
+
+    it("calls onSubmit with empty array when no exclusions", async () => {
+        const user = userEvent.setup();
+        renderForm({ excludedEntryIds: [] });
+
+        await user.click(screen.getByRole("button", { name: /Generate Analysis/i }));
+
+        expect(onSubmitMock).toHaveBeenCalledWith([]);
+    });
+
+    it("renders 'Ready to process' status indicator", () => {
+        renderForm();
+        expect(screen.getByText("Ready to process")).toBeInTheDocument();
+    });
+
+    it("renders hint cards for guidance", () => {
+        renderForm();
+        expect(screen.getByText("Exclude Sensitive Data")).toBeInTheDocument();
+        expect(screen.getByText("Traceable History")).toBeInTheDocument();
+    });
+});
