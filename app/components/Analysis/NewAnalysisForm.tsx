@@ -74,7 +74,7 @@ export const NewAnalysisForm = ({
                                 <CheckCircle2 size={14} />
                                 <span className="text-[10px] font-bold uppercase tracking-widest">Ready to process</span>
                             </div>
-                            <p className="text-[11px] text-light-gray-70 italic max-w-xs">
+                            <p className="text-[11px] text-light-gray-70 italic max-w-[250px]">
                                 Analysis results will be saved to your history for future access.
                             </p>
                         </div>
@@ -98,40 +98,36 @@ export const NewAnalysisForm = ({
                             )}
                         </button>
                     </div>
-                </div>
-            </div>
-
-            {/* Integrated Guidance Info */}
-            <div className="bg-white/5 rounded-2xl p-6 border border-white/5 flex flex-col gap-6">
-                <div className="flex flex-col gap-5">
-                    <div className="flex items-start gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-primary shrink-0">
-                            <AlertCircle size={20} />
-                        </div>
-                        <div className="flex flex-col gap-1">
-                            <h4 className="text-white-1 font-bold text-sm tracking-tight uppercase tracking-widest">Analysis guide</h4>
-                            <p className="text-light-gray-70 text-xs">Helpful pointers for generating and managing your subproject insights.</p>
-                        </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pl-1">
-                        <div className="flex flex-col gap-2">
-                            <div className="flex items-center gap-2 text-primary">
-                                <Filter size={16} />
-                                <h5 className="text-white-1 font-bold text-xs uppercase tracking-widest">Exclude sensitive data</h5>
+                    {/* Integrated Guidance Info */}
+                    <div className="mt-8 pt-8 border-t border-white/5 flex flex-col gap-6">
+                        <div className="flex flex-col gap-5">
+                            <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-primary shrink-0">
+                                    <AlertCircle size={20} />
+                                </div>
+                                <h4 className="text-white-1 font-bold text-sm tracking-tight uppercase tracking-widest">Analysis guide</h4>
                             </div>
-                            <p className="text-light-gray-70 text-sm leading-relaxed">
-                                Use the entries table filters to identify outlier data points or test cases you want to ignore to ensure your charts accurately reflect true performance.
-                            </p>
-                        </div>
-                        <div className="flex flex-col gap-2">
-                            <div className="flex items-center gap-2 text-primary">
-                                <Layers size={16} />
-                                <h5 className="text-white-1 font-bold text-xs uppercase tracking-widest">Traceable history</h5>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pl-1">
+                                <div className="flex flex-col gap-2">
+                                    <div className="flex items-center gap-2 text-primary">
+                                        <Filter size={16} />
+                                        <h5 className="text-white-1 font-bold text-xs uppercase tracking-widest">Exclude sensitive data</h5>
+                                    </div>
+                                    <p className="text-light-gray-70 text-sm leading-relaxed">
+                                        Use the entries table filters to identify outlier data points or test cases you want to ignore to ensure your charts accurately reflect true performance.
+                                    </p>
+                                </div>
+                                <div className="flex flex-col gap-2">
+                                    <div className="flex items-center gap-2 text-primary">
+                                        <Layers size={16} />
+                                        <h5 className="text-white-1 font-bold text-xs uppercase tracking-widest">Traceable history</h5>
+                                    </div>
+                                    <p className="text-light-gray-70 text-sm leading-relaxed">
+                                        Every analysis is saved. You can always come back and re-download the PDF report or view the visual insights as they were when they were generated.
+                                    </p>
+                                </div>
                             </div>
-                            <p className="text-light-gray-70 text-sm leading-relaxed">
-                                Every analysis is saved. You can always come back and re-download the PDF report or view the visual insights as they were when they were generated.
-                            </p>
                         </div>
                     </div>
                 </div>

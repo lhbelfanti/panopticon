@@ -107,7 +107,7 @@ export const AnalysisReportModal = ({ isOpen, onClose, run }: AnalysisReportModa
                                 </span>
                                 <span className="text-4xl font-extrabold text-white-1">{result.analyzedEntries}</span>
                                 <span className="text-[11px] text-light-gray-70 font-semibold mt-1">out of {result.totalEntries} available</span>
-                                <div className="absolute top-0 right-0 p-6 opacity-5 group-hover:opacity-10 transition-opacity"><BarChart3 size={64} /></div>
+                                <div className="absolute top-5 right-0 p-6 opacity-5 group-hover:opacity-10 transition-opacity"><BarChart3 size={64} /></div>
                             </div>
                             <div className="bg-bittersweet-shimmer/10 border border-bittersweet-shimmer/20 p-6 rounded-2xl flex flex-col gap-2 relative overflow-hidden group">
                                 <span className="text-xs font-bold text-bittersweet-shimmer/80 uppercase tracking-widest leading-none flex items-center gap-2">
@@ -116,7 +116,7 @@ export const AnalysisReportModal = ({ isOpen, onClose, run }: AnalysisReportModa
                                 </span>
                                 <span className="text-4xl font-extrabold text-bittersweet-shimmer">{result.excludedEntries}</span>
                                 <span className="text-[11px] text-bittersweet-shimmer/60 font-semibold mt-1">Based on selection criteria</span>
-                                <div className="absolute top-0 right-0 p-6 opacity-5 group-hover:opacity-10 transition-opacity"><XSquare size={64} /></div>
+                                <div className="absolute top-5 right-0 p-6 opacity-5 group-hover:opacity-10 transition-opacity"><XSquare size={64} /></div>
                             </div>
                             <div className="bg-primary/10 border border-primary/20 p-6 rounded-2xl flex flex-col gap-2 relative overflow-hidden group">
                                 <span className="text-xs font-bold text-primary/80 uppercase tracking-widest leading-none flex items-center gap-2">
@@ -125,7 +125,7 @@ export const AnalysisReportModal = ({ isOpen, onClose, run }: AnalysisReportModa
                                 </span>
                                 <span className="text-4xl font-extrabold text-primary">{Math.round(result.confidenceMetrics.average * 100)}%</span>
                                 <span className="text-[11px] text-primary/60 font-semibold mt-1">Median: {Math.round(result.confidenceMetrics.median * 100)}%</span>
-                                <div className="absolute top-0 right-0 p-6 opacity-5 group-hover:opacity-10 transition-opacity"><CheckCircle2 size={64} /></div>
+                                <div className="absolute top-5 right-0 p-6 opacity-5 group-hover:opacity-10 transition-opacity"><CheckCircle2 size={64} /></div>
                             </div>
                         </div>
 

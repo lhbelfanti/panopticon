@@ -132,7 +132,7 @@ const AnalysisPage = () => {
             </div>
 
             {/* Tab Navigation (Centered on top of content) */}
-            <div className="flex justify-center mb-8 relative z-10">
+            <div className="flex justify-center relative z-10">
                 <div className="flex gap-1 bg-white/5 p-1 rounded-xl border border-white/5 max-w-fit">
                     <button
                         onClick={() => setActiveTab("new")}
