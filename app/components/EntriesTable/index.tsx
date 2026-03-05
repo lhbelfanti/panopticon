@@ -33,8 +33,18 @@ import type { Project } from "~/services/api/projects/types";
 import type { EntriesTableProps } from "./types";
 
 const EntriesTable = (props: EntriesTableProps) => {
-  const { project, modelId, data, filterCol, filterVal, filterOp, filterBias } =
-    props;
+  const {
+    project,
+    modelId,
+    data,
+    filterCol,
+    filterVal,
+    filterOp,
+    filterBias,
+    isExclusionOnly = false,
+    excludedIds: externalExcludedIds,
+    onExcludedIdsChange
+  } = props;
   const { t } = useTranslation();
   const submit = useSubmit();
   const nav = useNavigation();
@@ -46,9 +56,21 @@ const EntriesTable = (props: EntriesTableProps) => {
   // Controlled search state for input switching UX
   const [currFilterCol, setCurrFilterCol] = useState<FilterColumn>(filterCol);
   const [localFilterVal, setLocalFilterVal] = useState(filterVal);
+  // -- Selection State Logic --
+  const [internalExcludedIds, setInternalExcludedIds] = useState<Set<string>>(new Set());
+
+  // Use external state if provided, otherwise fallback to local
+  const excludedIds = externalExcludedIds || internalExcludedIds;
+  const setExcludedIds = (newIds: Set<string>) => {
+    if (onExcludedIdsChange) {
+      onExcludedIdsChange(newIds);
+    } else {
+      setInternalExcludedIds(newIds);
+    }
+  };
+
   // Exclusion Mode Logic
-  const [isExcludeMode, setIsExcludeMode] = useState(false);
-  const [excludedIds, setExcludedIds] = useState<Set<string>>(new Set());
+  const [isExcludeMode, setIsExcludeMode] = useState(isExclusionOnly);
 
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -117,35 +139,37 @@ const EntriesTable = (props: EntriesTableProps) => {
 
   return (
     <div className={containerClasses}>
-      {/* Header / Breadcrumb */}
-      <div className={headerSectionClasses}>
-        <Link
-          to={`/projects/${project.id}`}
-          className="flex items-center gap-2 text-primary hover:text-white-1 transition-colors text-sm font-semibold max-w-max"
-        >
-          <ArrowLeft size={16} />
-          {t("projects.entries.backToProject")}
-        </Link>
+      {/* Header / Breadcrumb - Hidden in exclusion-only mode */}
+      {!isExclusionOnly && (
+        <div className={headerSectionClasses}>
+          <Link
+            to={`/projects/${project.id}`}
+            className="flex items-center gap-2 text-primary hover:text-white-1 transition-colors text-sm font-semibold max-w-max"
+          >
+            <ArrowLeft size={16} />
+            {t("projects.entries.backToProject")}
+          </Link>
 
-        <div>
-          <h1 className="text-3xl font-extrabold text-white-1 mb-1 tracking-tight flex items-center gap-3">
-            {/* Title should be clickable, go to project screen, hover yellow, text-white-1 */}
-            <Link
-              to={`/projects/${project.id}`}
-              className="text-white-1 hover:text-yellow-400 transition-colors flex items-center gap-2"
-            >
-              <Folder size={28} className="text-primary" />
-              {project.name}
-            </Link>
-            <span className="opacity-50">/</span>
-            <span className="text-primary flex items-center gap-2">
-              <Box size={28} />
-              {t(`projects.models.${modelId}`)}
-            </span>
-          </h1>
-          <p className="text-light-gray-70 text-sm mt-5">{t("projects.entries.desc")}</p>
+          <div>
+            <h1 className="text-3xl font-extrabold text-white-1 mb-1 tracking-tight flex items-center gap-3">
+              {/* Title should be clickable, go to project screen, hover yellow, text-white-1 */}
+              <Link
+                to={`/projects/${project.id}`}
+                className="text-white-1 hover:text-yellow-400 transition-colors flex items-center gap-2"
+              >
+                <Folder size={28} className="text-primary" />
+                {project.name}
+              </Link>
+              <span className="opacity-50">/</span>
+              <span className="text-primary flex items-center gap-2">
+                <Box size={28} />
+                {t(`projects.models.${modelId}`)}
+              </span>
+            </h1>
+            <p className="text-light-gray-70 text-sm mt-5">{t("projects.entries.desc")}</p>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Analysis Exclusion Banner */}
       {isExcludeMode && (
@@ -169,14 +193,16 @@ const EntriesTable = (props: EntriesTableProps) => {
             >
               Reset selection
             </button>
-            <Link
-              to={`/projects/${project.id}/models/${modelId}/analysis`}
-              state={{ excludedEntryIds: Array.from(excludedIds) }}
-              className="bg-primary hover:bg-primary/90 text-background-dark px-4 py-2 rounded-lg font-bold text-sm shadow-lg shadow-primary/20 transition-all flex items-center gap-2"
-            >
-              <Zap size={16} />
-              Go to Analysis
-            </Link>
+            {!isExclusionOnly && (
+              <Link
+                to={`/projects/${project.id}/models/${modelId}/analysis`}
+                state={{ excludedEntryIds: Array.from(excludedIds) }}
+                className="bg-primary hover:bg-primary/90 text-background-dark px-4 py-2 rounded-lg font-bold text-sm shadow-lg shadow-primary/20 transition-all flex items-center gap-2"
+              >
+                <Zap size={16} />
+                Go to Analysis
+              </Link>
+            )}
           </div>
         </div>
       )}
@@ -334,21 +360,6 @@ const EntriesTable = (props: EntriesTableProps) => {
           </Form>
 
           <div className="flex items-center gap-3">
-            {/* Exclude Mode Toggle - Always Visible */}
-            <button
-              type="button"
-              onClick={() => setIsExcludeMode(!isExcludeMode)}
-              className={`flex items-center gap-2 px-4 py-2 text-sm font-bold border transition-all rounded-lg ${isExcludeMode
-                ? "bg-primary text-background-dark border-primary shadow-lg shadow-primary/20"
-                : "bg-surface-dark text-white-1 border-white/10 hover:border-primary/50"
-                }`}
-            >
-              {isExcludeMode ? <CheckSquare size={16} /> : <Square size={16} />}
-              Exclude entries
-            </button>
-
-            <div className="w-px h-6 bg-white/5 hidden sm:block mx-1" />
-
             <Link
               to={`/projects/${project.id}/models/${modelId}/analysis`}
               className="flex items-center gap-2 px-4 py-2 text-sm font-bold text-white-1 bg-surface-dark border border-white/10 hover:border-primary/50 rounded-lg transition-colors whitespace-nowrap"

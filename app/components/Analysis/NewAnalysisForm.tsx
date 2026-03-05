@@ -16,7 +16,8 @@ export const NewAnalysisForm = ({
     subprojectId,
     excludedEntryIds,
     isSubmitting,
-    onSubmit
+    onSubmit,
+    onOpenExclusions
 }: NewAnalysisFormProps) => {
     const { t } = useTranslation();
 
@@ -29,7 +30,7 @@ export const NewAnalysisForm = ({
                         <h2 className="text-3xl font-extrabold text-white-1 tracking-tight">Generate subproject analysis</h2>
                         <p className="text-light-gray-70 text-base">
                             Configure how you want to derive high-level metrics and insights for this model.
-                            You can apply entry exclusions from the previous screen.
+                            You can apply entry exclusions directly from this screen.
                         </p>
                     </div>
 
@@ -50,22 +51,27 @@ export const NewAnalysisForm = ({
                             </div>
                         </div>
 
-                        {/* Exceptions Summary */}
-                        <div className="flex-1 bg-background-dark/50 border border-white/5 rounded-xl p-6 flex flex-col justify-between items-start relative group/mini overflow-hidden">
-
-                            <div className="flex items-center gap-2 text-xs uppercase font-bold text-light-gray-50 tracking-widest leading-none">
-                                <XSquare size={14} className="text-bittersweet-shimmer" />
-                                Selection criteria
+                        {/* Exclusions Summary Trigger */}
+                        <button
+                            onClick={onOpenExclusions}
+                            className="flex-1 bg-background-dark/50 border border-white/5 hover:border-primary/50 hover:bg-white/5 rounded-xl p-6 flex flex-col justify-between items-start relative group/mini overflow-hidden transition-all text-left"
+                        >
+                            <div className="flex items-center gap-2 text-xs uppercase font-bold text-light-gray-50 tracking-widest leading-none group-hover/mini:text-primary transition-colors">
+                                <XSquare size={14} className="text-bittersweet-shimmer group-hover/mini:text-primary transition-colors" />
+                                Exclusions
                             </div>
                             <div className="flex flex-col gap-1 max-w-[140px] truncate">
-                                <span className="text-white-1 text-sm font-bold truncate">
-                                    {excludedEntryIds.length > 0 ? "Excluded list" : "None applied"}
+                                <span className="text-white-1 text-sm font-bold truncate group-hover/mini:text-primary transition-colors">
+                                    {excludedEntryIds.length > 0 ? "Refine list" : "None applied"}
                                 </span>
                                 <span className="text-[10px] text-light-gray-70 uppercase tracking-widest leading-none font-medium">
-                                    {excludedEntryIds.length > 0 ? "Manual exclusion list" : "Standard baseline"}
+                                    {excludedEntryIds.length > 0 ? "Click to manage" : "Standard baseline"}
                                 </span>
                             </div>
-                        </div>
+                            <div className="absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover/mini:opacity-100 transition-opacity">
+                                <ChevronRight size={16} className="text-primary" />
+                            </div>
+                        </button>
                     </div>
 
                     <div className="flex items-center justify-between pt-6 border-t border-white/5">

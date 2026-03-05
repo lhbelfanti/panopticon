@@ -18,6 +18,7 @@ describe("NewAnalysisForm", () => {
         excludedEntryIds: [],
         isSubmitting: false,
         onSubmit: onSubmitMock,
+        onOpenExclusions: vi.fn(),
     };
 
     beforeEach(() => {
@@ -44,16 +45,27 @@ describe("NewAnalysisForm", () => {
         expect(screen.getByText("3 entries excluded")).toBeInTheDocument();
     });
 
-    it("shows 'None applied' for selection criteria when no exclusions", () => {
+    it("shows 'None applied' for exclusions when no exclusions", () => {
         renderForm({ excludedEntryIds: [] });
         expect(screen.getByText("None applied")).toBeInTheDocument();
         expect(screen.getByText("Standard baseline")).toBeInTheDocument();
     });
 
-    it("shows 'Excluded list' for selection criteria when entries are excluded", () => {
+    it("shows 'Refine list' for exclusions when entries are excluded", () => {
         renderForm({ excludedEntryIds: ["e1"] });
-        expect(screen.getByText("Excluded list")).toBeInTheDocument();
-        expect(screen.getByText("Manual exclusion list")).toBeInTheDocument();
+        expect(screen.getByText("Refine list")).toBeInTheDocument();
+        expect(screen.getByText("Click to manage")).toBeInTheDocument();
+    });
+
+    it("calls onOpenExclusions when the Exclusions card is clicked", async () => {
+        const onOpenExclusions = vi.fn();
+        const user = userEvent.setup();
+        renderForm({ onOpenExclusions });
+
+        const exclusionsCard = screen.getByRole("button", { name: /exclusions/i });
+        await user.click(exclusionsCard);
+
+        expect(onOpenExclusions).toHaveBeenCalled();
     });
 
     it("renders 'Generate Analysis' button when not submitting", () => {

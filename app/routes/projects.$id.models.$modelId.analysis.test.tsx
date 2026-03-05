@@ -36,10 +36,20 @@ vi.mock("~/components/Analysis/AnalysisHistoryTable", () => ({
 }));
 
 vi.mock("~/components/Analysis/NewAnalysisForm", () => ({
-    NewAnalysisForm: ({ onSubmit, excludedEntryIds }: any) => (
+    NewAnalysisForm: ({ onSubmit, excludedEntryIds, onOpenExclusions }: any) => (
         <div data-testid="new-analysis-form">
             <button data-testid="submit-btn" onClick={() => onSubmit([])}>submit</button>
+            <button data-testid="open-exclusions-btn" onClick={onOpenExclusions}>open-exclusions</button>
             <span data-testid="excluded-count">{excludedEntryIds?.length ?? 0}</span>
+        </div>
+    ),
+}));
+
+vi.mock("~/components/EntriesTable", () => ({
+    __esModule: true,
+    default: ({ excludedIds, onExcludedIdsChange }: any) => (
+        <div data-testid="entries-table-modal">
+            <button data-testid="toggle-id-1" onClick={() => onExcludedIdsChange(new Set([...excludedIds, "1"]))}>exclude-1</button>
         </div>
     ),
 }));
@@ -69,7 +79,14 @@ vi.mock("react-router", async (importOriginal) => {
     const actual = await importOriginal();
     return {
         ...(actual as any),
-        useLoaderData: () => stabelLoaderData,
+        useLoaderData: () => ({
+            ...stabelLoaderData,
+            entriesData: { entries: [], total: 0, page: 1, limit: 10, totalPages: 0 },
+            filterCol: "id",
+            filterVal: "",
+            filterOp: "",
+            filterBias: 0
+        }),
         useNavigation: () => ({ state: "idle", formData: null }),
         useLocation: () => ({ state: null }),
         useSubmit: () => mockSubmit,
@@ -140,6 +157,38 @@ describe("AnalysisPage Route Component", () => {
         const formArg: FormData = mockSubmit.mock.calls[0][0];
         expect(formArg.get("intent")).toBe("trigger_analysis");
     });
+
+    it("opens and closes the exclusion modal", () => {
+        renderPage();
+
+        // Modal should not be visible initially
+        expect(screen.queryByTestId("entries-table-modal")).not.toBeInTheDocument();
+
+        // Open modal
+        fireEvent.click(screen.getByTestId("open-exclusions-btn"));
+        expect(screen.getByTestId("entries-table-modal")).toBeInTheDocument();
+        expect(screen.getByText(/Refine exclusions/i)).toBeInTheDocument();
+
+        // Close modal via 'Apply & close'
+        fireEvent.click(screen.getByText(/Apply & close/i));
+        expect(screen.queryByTestId("entries-table-modal")).not.toBeInTheDocument();
+    });
+
+    it("updates excluded count when state changes in the modal", () => {
+        renderPage();
+
+        // Open modal
+        fireEvent.click(screen.getByTestId("open-exclusions-btn"));
+
+        // Toggle entry 1 in modal
+        fireEvent.click(screen.getByTestId("toggle-id-1"));
+
+        // Close modal
+        fireEvent.click(screen.getByText(/Apply & close/i));
+
+        // Count should be 1
+        expect(screen.getByTestId("excluded-count")).toHaveTextContent("1");
+    });
 });
 
 // ─── Loader & Action Tests ────────────────────────────────────────────────────
@@ -158,7 +207,12 @@ vi.mock("~/services/api/analysis/index.server", () => ({
     triggerProjectAnalysis: vi.fn(async () => ({ id: "run_123", status: "processing" })),
 }));
 
+vi.mock("~/services/api/entries/index.server", () => ({
+    getEntries: vi.fn(async () => ({ entries: [], total: 0, page: 1, limit: 10, totalPages: 0 })),
+}));
+
 import { getSubprojectAnalysisHistory, triggerProjectAnalysis } from "~/services/api/analysis/index.server";
+import { getEntries } from "~/services/api/entries/index.server";
 
 describe("AnalysisPage Loader", () => {
     it("returns project, modelId, history for valid params", async () => {

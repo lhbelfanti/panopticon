@@ -13,7 +13,8 @@ import {
     Box,
     BarChart3,
     Zap,
-    History
+    History,
+    X
 } from "lucide-react";
 
 import { getProjectById } from "~/services/api/projects/index.server";
@@ -21,9 +22,11 @@ import {
     getSubprojectAnalysisHistory,
     triggerProjectAnalysis
 } from "~/services/api/analysis/index.server";
+import { getEntries } from "~/services/api/entries/index.server";
 
 import { AnalysisHistoryTable } from "~/components/Analysis/AnalysisHistoryTable";
 import { NewAnalysisForm } from "~/components/Analysis/NewAnalysisForm";
+import EntriesTable from "~/components/EntriesTable";
 import { AnalysisReportModal } from "~/components/Modals/AnalysisReportModal";
 import { generateAnalysisPDF } from "~/utils/pdfGenerator";
 
@@ -32,7 +35,7 @@ import type { AnalysisRun } from "~/services/api/analysis/types";
 
 export const meta = () => [{ title: "Panopticon | Analysis" }];
 
-export const loader = async ({ params }: LoaderFunctionArgs) => {
+export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     const { id, modelId } = params;
     if (!id || !modelId) throw new Response("Not Found", { status: 404 });
 
@@ -41,7 +44,26 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
 
     const history = await getSubprojectAnalysisHistory(modelId);
 
-    return { project, modelId, history };
+    const url = new URL(request.url);
+    const filterCol = (url.searchParams.get("filterCol") || "id") as any;
+    const filterVal = url.searchParams.get("filterVal") || "";
+    const filterOp = (url.searchParams.get("filterOp") || "") as any;
+    const filterBias = parseFloat(url.searchParams.get("filterBias") || "0");
+    const page = parseInt(url.searchParams.get("page") || "1", 10);
+    const limit = 10;
+
+    const entriesData = await getEntries({
+        projectId: parseInt(id),
+        modelId,
+        page,
+        limit,
+        filterCol,
+        filterVal,
+        filterOp,
+        filterBias,
+    });
+
+    return { project, modelId, history, entriesData, filterCol, filterVal, filterOp, filterBias };
 };
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
@@ -62,18 +84,28 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 };
 
 const AnalysisPage = () => {
-    const { project, modelId, history } = useLoaderData<typeof loader>();
+    const { project, modelId, history, entriesData, filterCol, filterVal, filterOp, filterBias } = useLoaderData<typeof loader>();
     const { t } = useTranslation();
     const location = useLocation();
     const submit = useSubmit();
     const nav = useNavigation();
 
-    // Catch passed state from EntriesTable
+    // Catch passed state from EntriesTable (legacy support for navigation from entries table)
     const passedExcludedIds = location.state?.excludedEntryIds || [];
 
     const [activeTab, setActiveTab] = useState<"new" | "history">("new");
     const [localHistory, setLocalHistory] = useState<AnalysisRun[]>(history);
     const [selectedRun, setSelectedRun] = useState<AnalysisRun | null>(null);
+
+    // Exclusion Modal State
+    const [showExclusionModal, setShowExclusionModal] = useState(false);
+    const [excludedEntryIds, setExcludedEntryIds] = useState<string[]>(passedExcludedIds);
+
+    useEffect(() => {
+        if (passedExcludedIds.length > 0) {
+            setExcludedEntryIds(passedExcludedIds);
+        }
+    }, [passedExcludedIds]);
 
     const isSubmitting = nav.formData?.get("intent") === "trigger_analysis";
 
@@ -88,10 +120,10 @@ const AnalysisPage = () => {
         setLocalHistory(history);
     }, [history]);
 
-    const handleGenerate = (excludedIds: string[]) => {
+    const handleGenerate = () => {
         const formData = new FormData();
         formData.append("intent", "trigger_analysis");
-        formData.append("excludedIds", JSON.stringify(excludedIds));
+        formData.append("excludedIds", JSON.stringify(excludedEntryIds));
         submit(formData, { method: "post" });
     };
 
@@ -161,9 +193,10 @@ const AnalysisPage = () => {
             {activeTab === "new" ? (
                 <NewAnalysisForm
                     subprojectId={modelId}
-                    excludedEntryIds={passedExcludedIds}
+                    excludedEntryIds={excludedEntryIds}
                     isSubmitting={isSubmitting}
                     onSubmit={handleGenerate}
+                    onOpenExclusions={() => setShowExclusionModal(true)}
                 />
             ) : (
                 <div className="max-w-6xl mx-auto py-6">
@@ -177,6 +210,60 @@ const AnalysisPage = () => {
                             if (runData) generateAnalysisPDF(runData, project.name);
                         }}
                     />
+                </div>
+            )}
+
+            {/* Integrated Exclusion Modal */}
+            {showExclusionModal && (
+                <div className="fixed inset-0 z-[110] flex items-center justify-center bg-black/80 backdrop-blur-md p-4 animate-in fade-in duration-300">
+                    <div className="bg-background-dark w-full max-w-[95vw] h-[90vh] rounded-2xl border border-white/10 shadow-2xl overflow-hidden flex flex-col relative">
+                        {/* Modal Header */}
+                        <div className="p-6 border-b border-white/5 flex items-center justify-between bg-surface-dark/50">
+                            <div>
+                                <h2 className="text-xl font-bold text-white-1 flex items-center gap-3">
+                                    <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center text-primary">
+                                        <History size={20} />
+                                    </div>
+                                    Refine exclusions
+                                </h2>
+                                <p className="text-light-gray-60 text-xs mt-1">
+                                    Select entries to ignore in this analysis. {excludedEntryIds.length} entries currently excluded.
+                                </p>
+                            </div>
+                            <button
+                                onClick={() => setShowExclusionModal(false)}
+                                className="p-3 rounded-xl bg-white/5 text-light-gray-70 hover:text-white-1 hover:bg-white/10 transition-all"
+                            >
+                                <X size={24} />
+                            </button>
+                        </div>
+
+                        {/* Modal Content - The Entries Table */}
+                        <div className="flex-1 overflow-hidden flex flex-col">
+                            <EntriesTable
+                                project={project}
+                                modelId={modelId}
+                                data={entriesData}
+                                filterCol={filterCol}
+                                filterVal={filterVal}
+                                filterOp={filterOp}
+                                filterBias={filterBias}
+                                isExclusionOnly={true}
+                                excludedIds={new Set(excludedEntryIds)}
+                                onExcludedIdsChange={(newSet: Set<string>) => setExcludedEntryIds(Array.from(newSet))}
+                            />
+                        </div>
+
+                        {/* Modal Footer */}
+                        <div className="p-6 border-t border-white/5 bg-surface-dark/50 flex justify-end">
+                            <button
+                                onClick={() => setShowExclusionModal(false)}
+                                className="bg-primary hover:bg-primary/90 text-background-dark px-8 py-3 rounded-xl font-bold transition-all hover:scale-105 active:scale-95 shadow-xl shadow-primary/20"
+                            >
+                                Apply & close
+                            </button>
+                        </div>
+                    </div>
                 </div>
             )}
 

@@ -13,4 +13,8 @@ export interface EntriesTableProps {
   filterVal: string;
   filterOp: FilterOperator;
   filterBias: number;
+  // Modal / Selection Support
+  isExclusionOnly?: boolean;
+  excludedIds?: Set<string>;
+  onExcludedIdsChange?: (ids: Set<string>) => void;
 }

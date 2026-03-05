@@ -13,4 +13,5 @@ export interface NewAnalysisFormProps {
     excludedEntryIds: string[];
     isSubmitting?: boolean;
     onSubmit: (excludedIds: string[]) => void;
+    onOpenExclusions?: () => void;
 }
