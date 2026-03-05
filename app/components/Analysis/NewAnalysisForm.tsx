@@ -35,7 +35,7 @@ export const NewAnalysisForm = ({
                     <div className="flex gap-4 items-stretch h-36">
                         {/* Selection Summary */}
                         <div className="flex-1 bg-background-dark/50 border border-white/5 rounded-xl p-6 flex flex-col justify-between items-start">
-                            <div className="flex items-center gap-2 text-[10px] uppercase font-bold text-light-gray-50 tracking-widest leading-none">
+                            <div className="flex items-center gap-2 text-xs uppercase font-bold text-light-gray-50 tracking-widest leading-none">
                                 <Layers size={14} className="text-primary" />
                                 Current selection
                             </div>
@@ -52,7 +52,7 @@ export const NewAnalysisForm = ({
                         {/* Exceptions Summary */}
                         <div className="flex-1 bg-background-dark/50 border border-white/5 rounded-xl p-6 flex flex-col justify-between items-start relative group/mini overflow-hidden">
 
-                            <div className="flex items-center gap-2 text-[10px] uppercase font-bold text-light-gray-50 tracking-widest leading-none">
+                            <div className="flex items-center gap-2 text-xs uppercase font-bold text-light-gray-50 tracking-widest leading-none">
                                 <XSquare size={14} className="text-bittersweet-shimmer" />
                                 Selection criteria
                             </div>
