@@ -40,12 +40,11 @@ describe("SubprojectCard", () => {
         ).toBeInTheDocument();
     });
 
-    it("links to the correct URLs", () => {
+    it("links to the correct URL", () => {
         renderSubprojectCard(mockSubproject, 123);
 
-        const links = screen.getAllByRole("link");
-        expect(links.some(l => l.getAttribute("href") === "/projects/123/models/roberta_english")).toBe(true);
-        expect(links.some(l => l.getAttribute("href") === "/projects/123/models/roberta_english/analysis")).toBe(true);
+        const link = screen.getByRole("link");
+        expect(link).toHaveAttribute("href", "/projects/123/models/roberta_english");
     });
 
     it("renders the open subproject text", () => {
