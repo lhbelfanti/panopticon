@@ -15,8 +15,8 @@ export const generateAnalysisPDF = async (run: AnalysisRun, projectName: string)
     const doc = new jsPDF();
 
     // -- Styling Constants (Matching Panopticon Dark Theme) --
-    const backgroundColor = "#0a0a0a";
-    const surfaceColor = "#141414";
+    const backgroundColor = "#1a1a1a"; // Lightened for better depth
+    const surfaceColor = "#242424"; // Slightly lighter for cards
     const primaryColor: [number, number, number] = [238, 189, 43]; // #eebd2b
     const textWhite = "#FFFFFF";
     const textGray = "#9CA3AF";
@@ -33,31 +33,38 @@ export const generateAnalysisPDF = async (run: AnalysisRun, projectName: string)
     applyBackground();
 
     // -- Header & Logo --
+    const logoSize = 18;
     try {
-        // Logo is at /public/panopticon-logo-no-text.png, maps to /panopticon-logo-no-text.png in production
-        // But in this environment we need the absolute path or a base64 string.
-        // For simplicity and reliability in jspdf without external fetch, we'll draw a symbol if image load fails
-        // but here we can try to use the public path if we assume it's accessible.
-        doc.addImage("/panopticon-logo-no-text.png", "PNG", pageWidth - margin - 15, margin, 15, 15);
+        doc.addImage("/panopticon-logo-no-text.png", "PNG", margin, margin, logoSize, logoSize);
     } catch (e) {
-        // Fallback: draw a primary colored square as a logo placeholder
         doc.setFillColor(...primaryColor);
-        doc.rect(pageWidth - margin - 15, margin, 15, 15, "F");
+        doc.rect(margin, margin, logoSize, logoSize, "F");
     }
 
+    // PANOPTICON Wordmark (Matching Sidebar style)
     doc.setFont("helvetica", "bold");
+    doc.setFontSize(14);
+    doc.setTextColor(...primaryColor);
+    const brandName = "PANOPTICON";
+    const charSpacing = 1.8;
+    let brandX = margin + logoSize + 4;
+    for (let i = 0; i < brandName.length; i++) {
+        doc.text(brandName[i], brandX, margin + (logoSize / 2) + 2);
+        brandX += doc.getTextWidth(brandName[i]) + charSpacing;
+    }
+
     doc.setFontSize(28);
     doc.setTextColor(textWhite);
-    doc.text("Analysis Report", margin, margin + 12);
+    doc.text("Analysis Report", margin, margin + logoSize + 15);
 
     doc.setFont("helvetica", "normal");
     doc.setFontSize(10);
     doc.setTextColor(textGray);
-    doc.text(`Generated on: ${new Date(run.timestamp).toLocaleString()}`, margin, margin + 22);
-    doc.text(`Run ID: ${run.id.split('_')[1].toUpperCase()}`, margin, margin + 28);
+    doc.text(`Generated on: ${new Date(run.timestamp).toLocaleString()}`, margin, margin + logoSize + 25);
+    doc.text(`Run ID: ${run.id.split('_')[1].toUpperCase()}`, margin, margin + logoSize + 31);
 
     // -- Project Context Card --
-    let cursorY = margin + 45;
+    let cursorY = margin + logoSize + 45;
     doc.setFillColor(surfaceColor);
     doc.roundedRect(margin, cursorY, pageWidth - (margin * 2), 35, 3, 3, "F");
 
