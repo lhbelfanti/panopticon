@@ -34,7 +34,7 @@ export const generateAnalysisPDF = async (run: AnalysisRun, projectName: string)
 
     // -- Header & Logo --
     const logoSize = 25;
-    const logoX = pageWidth - margin - logoSize;
+    const logoX = pageWidth - margin - logoSize - 10; // Moved 10 units more to the left
     const logoY = margin;
 
     // Background "PANOPTICON" wordmark (behind logo)
@@ -42,7 +42,6 @@ export const generateAnalysisPDF = async (run: AnalysisRun, projectName: string)
     doc.setFontSize(28);
     doc.setTextColor(45, 45, 45); // Very subtle dark grey for background wordmark on #1a1a1a bg
     const bgBrandName = "PANOPTICON";
-    const bgWidth = doc.getTextWidth(bgBrandName);
     doc.text(bgBrandName, logoX + (logoSize / 2), logoY + (logoSize / 2) + 4, { align: "center" });
 
     // Logo Icon
@@ -51,6 +50,25 @@ export const generateAnalysisPDF = async (run: AnalysisRun, projectName: string)
     } catch (e) {
         doc.setFillColor(...primaryColor);
         doc.rect(logoX, logoY, logoSize, logoSize, "F");
+    }
+
+    // Foreground "PANOPTICON" wordmark (below logo)
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(8);
+    doc.setTextColor(...primaryColor);
+    const brandName = "PANOPTICON";
+    // Matching Sidebar's tracking-[0.2em] with character spacing
+    const charSpacing = 1.0;
+    let brandWidth = 0;
+    for (let i = 0; i < brandName.length; i++) {
+        brandWidth += doc.getTextWidth(brandName[i]) + (i < brandName.length - 1 ? charSpacing : 0);
+    }
+
+    let currentX = logoX + (logoSize / 2) - (brandWidth / 2);
+    const brandY = logoY + logoSize + 4;
+    for (let i = 0; i < brandName.length; i++) {
+        doc.text(brandName[i], currentX, brandY);
+        currentX += doc.getTextWidth(brandName[i]) + charSpacing;
     }
 
     doc.setFontSize(28);
