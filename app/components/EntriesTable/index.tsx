@@ -181,11 +181,7 @@ const EntriesTable = (props: EntriesTableProps) => {
               <MousePointer2 size={20} />
             </div>
             <div>
-              <h3 className="text-white-1 font-bold text-sm">Mode: Exclusion Selection</h3>
-              <p className="text-light-gray-60 text-xs mt-0.5">
-                Select entries to exclude from the next analysis run. Unchecked entries will be ignored.
-                <span className="ml-2 text-primary">({data.total - excludedIds.size} / {data.total} Included)</span>
-              </p>
+              <h3 className="text-white-1 font-bold text-sm">Exclude entries</h3>
             </div>
           </div>
           <div className="flex items-center gap-3">
@@ -393,27 +389,30 @@ const EntriesTable = (props: EntriesTableProps) => {
               <thead>
                 <tr className={tableHeaderRowClasses}>
                   {isExcludeMode && (
-                    <th className="py-3 px-4 w-1 whitespace-nowrap text-left">
-                      <button
-                        onClick={() => {
-                          const allIdsOnPage = data.entries.map(e => e.id);
-                          const areAllExcluded = allIdsOnPage.every(id => excludedIds.has(id));
+                    <th className="py-3 px-4 whitespace-nowrap text-left">
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => {
+                            const allIdsOnPage = data.entries.map(e => e.id);
+                            const areAllExcluded = allIdsOnPage.every(id => excludedIds.has(id));
 
-                          const newExcluded = new Set(excludedIds);
-                          if (areAllExcluded) {
-                            // Deselect All on current page
-                            allIdsOnPage.forEach(id => newExcluded.delete(id));
-                          } else {
-                            // Select All on current page
-                            allIdsOnPage.forEach(id => newExcluded.add(id));
-                          }
-                          setExcludedIds(newExcluded);
-                        }}
-                        className="hover:text-primary transition-colors flex items-center justify-center p-1 rounded hover:bg-white/5"
-                        title={data.entries.every(e => excludedIds.has(e.id)) ? "Deselect page" : "Select page"}
-                      >
-                        {data.entries.every(e => excludedIds.has(e.id)) ? <Square size={16} className="text-light-gray-50 opacity-40" /> : <CheckSquare size={16} className="text-primary" />}
-                      </button>
+                            const newExcluded = new Set(excludedIds);
+                            if (areAllExcluded) {
+                              // Deselect All on current page
+                              allIdsOnPage.forEach(id => newExcluded.delete(id));
+                            } else {
+                              // Select All on current page
+                              allIdsOnPage.forEach(id => newExcluded.add(id));
+                            }
+                            setExcludedIds(newExcluded);
+                          }}
+                          className="hover:text-primary transition-colors flex items-center justify-center p-1 rounded hover:bg-white/5"
+                          title={data.entries.every(e => excludedIds.has(e.id)) ? "Deselect page" : "Select page"}
+                        >
+                          {data.entries.every(e => excludedIds.has(e.id)) ? <Square size={16} className="text-light-gray-50 opacity-40" /> : <CheckSquare size={16} className="text-primary" />}
+                        </button>
+                        <span>Selected entries</span>
+                      </div>
                     </th>
                   )}
                   <th className="py-3 px-4 w-1 whitespace-nowrap text-left">{t("projects.entries.tableId")}</th>
@@ -616,9 +615,11 @@ const EntriesTable = (props: EntriesTableProps) => {
               </button>
             </Form>
           </div>
+        </div>
 
-          {/* Predict Pending Button */}
-          <div className="w-1/4 flex justify-end">
+        {/* Predict Pending Button */}
+        {!isExclusionOnly && data.entries.some((e) => e.verdict === "Pending") && (
+          <div className="flex justify-end mt-4">
             <button
               type="button"
               onClick={handlePredictPending}
@@ -629,61 +630,63 @@ const EntriesTable = (props: EntriesTableProps) => {
               {isPredicting ? "Predicting..." : "Predict Pending"}
             </button>
           </div>
-        </div>
+        )}
       </div>
 
       {/* View Full Entry Modal */}
-      {entryToView && (
-        <div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in duration-200"
-          onClick={() => setEntryToView(null)}
-        >
+      {
+        entryToView && (
           <div
-            className="bg-surface-dark w-full max-w-2xl rounded-2xl border border-white/10 shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200 flex flex-col"
-            onClick={(e) => e.stopPropagation()}
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in duration-200"
+            onClick={() => setEntryToView(null)}
           >
-            <div className="p-4 border-b border-white/5 flex items-center justify-between bg-black/20">
-              <h3 className="text-sm font-bold text-white-1 uppercase tracking-widest flex items-center gap-2">
-                <FileText size={16} className="text-primary" />
-                View Full Entry
-              </h3>
-              <button
-                onClick={() => setEntryToView(null)}
-                className="p-1.5 rounded-lg text-light-gray-70 hover:text-white-1 hover:bg-white/10 transition-colors"
-              >
-                <X size={18} />
-              </button>
-            </div>
-            <div className="p-6">
-              <div className="bg-background-dark border border-white/5 rounded-xl p-4 max-h-[60vh] overflow-y-auto w-full text-light-gray-80 text-sm whitespace-pre-wrap font-mono leading-relaxed">
-                {entryToView.text}
-              </div>
-              <div className="flex gap-4 mt-6 items-center">
-                <span className="text-xs text-light-gray-70 uppercase tracking-widest font-bold">
-                  Verdict:
-                </span>
-                <span
-                  className={`px-2 py-0.5 text-xs font-bold rounded-full border ${getVerdictStyle(entryToView.verdict)}`}
+            <div
+              className="bg-surface-dark w-full max-w-2xl rounded-2xl border border-white/10 shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200 flex flex-col"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="p-4 border-b border-white/5 flex items-center justify-between bg-black/20">
+                <h3 className="text-sm font-bold text-white-1 uppercase tracking-widest flex items-center gap-2">
+                  <FileText size={16} className="text-primary" />
+                  View Full Entry
+                </h3>
+                <button
+                  onClick={() => setEntryToView(null)}
+                  className="p-1.5 rounded-lg text-light-gray-70 hover:text-white-1 hover:bg-white/10 transition-colors"
                 >
-                  {entryToView.verdict}
-                </span>
+                  <X size={18} />
+                </button>
+              </div>
+              <div className="p-6">
+                <div className="bg-background-dark border border-white/5 rounded-xl p-4 max-h-[60vh] overflow-y-auto w-full text-light-gray-80 text-sm whitespace-pre-wrap font-mono leading-relaxed">
+                  {entryToView.text}
+                </div>
+                <div className="flex gap-4 mt-6 items-center">
+                  <span className="text-xs text-light-gray-70 uppercase tracking-widest font-bold">
+                    Verdict:
+                  </span>
+                  <span
+                    className={`px-2 py-0.5 text-xs font-bold rounded-full border ${getVerdictStyle(entryToView.verdict)}`}
+                  >
+                    {entryToView.verdict}
+                  </span>
 
-                {entryToView.score !== undefined && (
-                  <>
-                    <div className="w-px h-4 bg-white/10 mx-2" />
-                    <span className="text-xs text-light-gray-70 uppercase tracking-widest font-bold">
-                      Score:
-                    </span>
-                    <span className="text-xs text-light-gray-80 font-mono">
-                      {(entryToView.score * 100).toFixed(2)}%
-                    </span>
-                  </>
-                )}
+                  {entryToView.score !== undefined && (
+                    <>
+                      <div className="w-px h-4 bg-white/10 mx-2" />
+                      <span className="text-xs text-light-gray-70 uppercase tracking-widest font-bold">
+                        Score:
+                      </span>
+                      <span className="text-xs text-light-gray-80 font-mono">
+                        {(entryToView.score * 100).toFixed(2)}%
+                      </span>
+                    </>
+                  )}
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      )}
+        )
+      }
 
       {/* Entry Deletion Modal */}
       <ConfirmationModal
@@ -701,7 +704,7 @@ const EntriesTable = (props: EntriesTableProps) => {
         isDestructive={true}
         hiddenInputs={{ intent: "delete_entry", entryId: entryToDelete || "" }}
       />
-    </div>
+    </div >
   );
 };
 
