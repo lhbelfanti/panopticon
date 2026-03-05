@@ -102,7 +102,7 @@ export const AnalysisReportModal = ({ isOpen, onClose, run }: AnalysisReportModa
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                             <div className="bg-white/5 border border-white/5 p-6 rounded-2xl flex flex-col gap-2 relative overflow-hidden group">
                                 <span className="text-xs font-bold text-light-gray-60 uppercase tracking-widest leading-none flex items-center gap-2">
-                                    <BarChart3 size={12} className="text-primary" />
+                                    <BarChart3 size={12} className="text-light-gray-60" />
                                     Total analyzed
                                 </span>
                                 <span className="text-4xl font-extrabold text-white-1">{result.analyzedEntries}</span>
