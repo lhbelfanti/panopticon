@@ -124,8 +124,10 @@ const EntriesTable = (props: EntriesTableProps) => {
   };
 
   // Convention: extract long Tailwind strings into variables
-  const containerClasses =
-    "flex-1 p-6 lg:p-10 overflow-y-auto bg-background-dark min-h-screen custom-scrollbar relative flex flex-col gap-6";
+  const containerClasses = isExclusionOnly
+    ? "flex flex-col flex-1 gap-6 relative px-2 pb-4 overflow-hidden"
+    : "flex-1 p-6 lg:p-10 overflow-y-auto bg-background-dark min-h-screen custom-scrollbar relative flex flex-col gap-6";
+
   const headerSectionClasses =
     "flex flex-col gap-4 animate-in fade-in slide-in-from-bottom-2 duration-300";
   const tableCardClasses =
