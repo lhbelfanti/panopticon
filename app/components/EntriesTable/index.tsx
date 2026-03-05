@@ -294,21 +294,6 @@ const EntriesTable = (props: EntriesTableProps) => {
                   <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-light-gray-70 pointer-events-none" />
                 </div>
 
-                {/* Exclude Mode Toggle */}
-                <button
-                  type="button"
-                  onClick={() => setIsExcludeMode(!isExcludeMode)}
-                  className={`flex items-center gap-2 px-4 py-2 text-sm font-bold border transition-all rounded-lg ${isExcludeMode
-                    ? "bg-primary text-background-dark border-primary shadow-lg shadow-primary/20"
-                    : "bg-surface-dark text-white-1 border-white/10 hover:border-primary/50"
-                    }`}
-                >
-                  {isExcludeMode ? <CheckSquare size={16} /> : <Square size={16} />}
-                  Exclude entries
-                </button>
-
-                <div className="w-px h-6 bg-white/5 hidden sm:block mx-1" />
-
                 <div className="relative w-40">
                   <input
                     type="number"
@@ -349,6 +334,21 @@ const EntriesTable = (props: EntriesTableProps) => {
           </Form>
 
           <div className="flex items-center gap-3">
+            {/* Exclude Mode Toggle - Always Visible */}
+            <button
+              type="button"
+              onClick={() => setIsExcludeMode(!isExcludeMode)}
+              className={`flex items-center gap-2 px-4 py-2 text-sm font-bold border transition-all rounded-lg ${isExcludeMode
+                ? "bg-primary text-background-dark border-primary shadow-lg shadow-primary/20"
+                : "bg-surface-dark text-white-1 border-white/10 hover:border-primary/50"
+                }`}
+            >
+              {isExcludeMode ? <CheckSquare size={16} /> : <Square size={16} />}
+              Exclude entries
+            </button>
+
+            <div className="w-px h-6 bg-white/5 hidden sm:block mx-1" />
+
             <Link
               to={`/projects/${project.id}/models/${modelId}/analysis`}
               className="flex items-center gap-2 px-4 py-2 text-sm font-bold text-white-1 bg-surface-dark border border-white/10 hover:border-primary/50 rounded-lg transition-colors whitespace-nowrap"
@@ -383,14 +383,23 @@ const EntriesTable = (props: EntriesTableProps) => {
                     <th className="py-3 px-4 w-1 whitespace-nowrap text-left">
                       <button
                         onClick={() => {
-                          if (excludedIds.size > 0) {
-                            setExcludedIds(new Set());
+                          const allIdsOnPage = data.entries.map(e => e.id);
+                          const areAllExcluded = allIdsOnPage.every(id => excludedIds.has(id));
+
+                          const newExcluded = new Set(excludedIds);
+                          if (areAllExcluded) {
+                            // Deselect All on current page
+                            allIdsOnPage.forEach(id => newExcluded.delete(id));
+                          } else {
+                            // Select All on current page
+                            allIdsOnPage.forEach(id => newExcluded.add(id));
                           }
+                          setExcludedIds(newExcluded);
                         }}
-                        className="hover:text-primary transition-colors"
-                        title="Clear Exclusions"
+                        className="hover:text-primary transition-colors flex items-center justify-center p-1 rounded hover:bg-white/5"
+                        title={data.entries.every(e => excludedIds.has(e.id)) ? "Deselect page" : "Select page"}
                       >
-                        <CheckSquare size={16} />
+                        {data.entries.every(e => excludedIds.has(e.id)) ? <Square size={16} className="text-light-gray-50 opacity-40" /> : <CheckSquare size={16} className="text-primary" />}
                       </button>
                     </th>
                   )}
