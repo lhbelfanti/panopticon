@@ -110,7 +110,7 @@ export const AnalysisHistoryTable = ({
                                                 <>
                                                     <button
                                                         onClick={() => onViewReport?.(run)}
-                                                        className="text-xs font-bold text-primary hover:text-white-1 flex items-center gap-1.5 transition-colors"
+                                                        className="text-xs font-bold text-light-gray-60 hover:text-primary flex items-center gap-1.5 transition-colors cursor-pointer"
                                                     >
                                                         <FileBarChart size={14} />
                                                         View report
