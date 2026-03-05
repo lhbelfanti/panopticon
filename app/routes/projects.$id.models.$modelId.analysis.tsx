@@ -114,7 +114,7 @@ const AnalysisPage = () => {
                     <div>
                         <h1 className="text-4xl font-extrabold text-white-1 mb-2 tracking-tight flex items-center gap-4">
                             <BarChart3 size={36} className="text-primary" />
-                            Subproject Analysis
+                            Subproject analysis
                         </h1>
                         <nav className="flex items-center gap-3 text-light-gray-50 font-medium">
                             <Link to={`/projects/${project.id}`} className="hover:text-yellow-400 flex items-center gap-1.5 transition-colors">
@@ -132,7 +132,7 @@ const AnalysisPage = () => {
             </div>
 
             {/* Tab Navigation (Centered on top of content) */}
-            <div className="flex justify-center mb-8">
+            <div className="flex justify-center">
                 <div className="flex bg-surface-dark border border-white/5 p-1 rounded-xl shadow-inner h-12">
                     <button
                         onClick={() => setActiveTab("new")}

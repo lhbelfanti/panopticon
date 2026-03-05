@@ -80,7 +80,7 @@ describe("AnalysisReportModal", () => {
     it("shows processing state for a processing run", () => {
         const run = makeCompletedRun({ status: "processing", result: undefined });
         render(<AnalysisReportModal isOpen={true} onClose={onCloseMock} run={run} />);
-        expect(screen.getByText("Analysis Processing")).toBeInTheDocument();
+        expect(screen.getByText("Analysis processing")).toBeInTheDocument();
     });
 
     it("shows close button in processing state that calls onClose", async () => {
@@ -94,7 +94,7 @@ describe("AnalysisReportModal", () => {
 
     it("renders the full report for a completed run", () => {
         render(<AnalysisReportModal isOpen={true} onClose={onCloseMock} run={makeCompletedRun()} />);
-        expect(screen.getByText("Analysis Report")).toBeInTheDocument();
+        expect(screen.getByText("Analysis report")).toBeInTheDocument();
     });
 
     it("displays analyzedEntries count", () => {
@@ -120,8 +120,8 @@ describe("AnalysisReportModal", () => {
 
     it("renders chart containers", () => {
         render(<AnalysisReportModal isOpen={true} onClose={onCloseMock} run={makeCompletedRun()} />);
-        expect(screen.getByText("Behavior Distribution")).toBeInTheDocument();
-        expect(screen.getByText("Confidence Distribution")).toBeInTheDocument();
+        expect(screen.getByText("Behavior distribution")).toBeInTheDocument();
+        expect(screen.getByText("Confidence distribution")).toBeInTheDocument();
         expect(screen.getAllByTestId("responsive-container").length).toBeGreaterThan(0);
     });
 
@@ -151,6 +151,6 @@ describe("AnalysisReportModal", () => {
 
     it("renders Executive Summary section heading", () => {
         render(<AnalysisReportModal isOpen={true} onClose={onCloseMock} run={makeCompletedRun()} />);
-        expect(screen.getByText("Executive Summary")).toBeInTheDocument();
+        expect(screen.getByText("Executive summary")).toBeInTheDocument();
     });
 });

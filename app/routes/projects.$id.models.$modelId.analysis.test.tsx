@@ -94,7 +94,7 @@ describe("AnalysisPage Route Component", () => {
 
     it("renders the page heading", () => {
         renderPage();
-        expect(screen.getByText("Subproject Analysis")).toBeInTheDocument();
+        expect(screen.getByText("Subproject analysis")).toBeInTheDocument();
     });
 
     it("renders 'New analysis' and 'History' tab buttons", () => {

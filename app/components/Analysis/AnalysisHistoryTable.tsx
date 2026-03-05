@@ -48,7 +48,7 @@ export const AnalysisHistoryTable = ({
             <div className="flex justify-between items-center px-2">
                 <div className="flex items-center gap-2">
                     <Clock size={20} className="text-primary" />
-                    <h3 className="text-lg font-bold text-white-1 uppercase tracking-tight">Recent Analysis History</h3>
+                    <h3 className="text-lg font-bold text-white-1 uppercase tracking-tight">Recent analysis history</h3>
                 </div>
                 <button
                     onClick={onRefresh}
@@ -64,7 +64,7 @@ export const AnalysisHistoryTable = ({
                 <table className="w-full text-left border-collapse">
                     <thead className="bg-black/20 border-b border-white/5">
                         <tr className="text-[0.65rem] font-bold text-light-gray-70 uppercase tracking-widest leading-none">
-                            <th className="py-4 px-6">ID & Timestamp</th>
+                            <th className="py-4 px-6">ID & timestamp</th>
                             <th className="py-4 px-6 text-center">Status</th>
                             <th className="py-4 px-6 text-center">Exclusions</th>
                             <th className="py-4 px-6 text-right">Actions</th>
@@ -105,7 +105,7 @@ export const AnalysisHistoryTable = ({
                                         </div>
                                     </td>
                                     <td className="py-4 px-6 text-right">
-                                        <div className="flex items-center justify-end gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <div className="flex items-center justify-end gap-3 transition-opacity">
                                             {run.status === "completed" && (
                                                 <>
                                                     <button
@@ -113,7 +113,7 @@ export const AnalysisHistoryTable = ({
                                                         className="text-xs font-bold text-primary hover:text-white-1 flex items-center gap-1.5 transition-colors"
                                                     >
                                                         <FileBarChart size={14} />
-                                                        View Report
+                                                        View report
                                                     </button>
                                                     <div className="w-px h-3 bg-white/10" />
                                                     <button

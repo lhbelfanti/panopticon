@@ -29,7 +29,7 @@ describe("NewAnalysisForm", () => {
 
     it("renders the form title", () => {
         renderForm();
-        expect(screen.getByText("Generate Subproject Analysis")).toBeInTheDocument();
+        expect(screen.getByText("Generate subproject analysis")).toBeInTheDocument();
     });
 
     it("shows 'All' and 'Full subproject data' when no entries are excluded", () => {
@@ -58,24 +58,24 @@ describe("NewAnalysisForm", () => {
 
     it("renders 'Generate Analysis' button when not submitting", () => {
         renderForm();
-        expect(screen.getByRole("button", { name: /Generate Analysis/i })).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: /generate analysis/i })).toBeInTheDocument();
     });
 
     it("button is enabled when not submitting", () => {
         renderForm({ isSubmitting: false });
-        const btn = screen.getByRole("button", { name: /Generate Analysis/i });
+        const btn = screen.getByRole("button", { name: /generate analysis/i });
         expect(btn).not.toBeDisabled();
     });
 
     it("button is disabled when isSubmitting is true", () => {
         renderForm({ isSubmitting: true });
-        const btn = screen.getByRole("button", { name: /Starting Analysis.../i });
+        const btn = screen.getByRole("button", { name: /starting analysis.../i });
         expect(btn).toBeDisabled();
     });
 
     it("shows 'Starting Analysis...' text when isSubmitting is true", () => {
         renderForm({ isSubmitting: true });
-        expect(screen.getByText("Starting Analysis...")).toBeInTheDocument();
+        expect(screen.getByText("Starting analysis...")).toBeInTheDocument();
     });
 
     it("calls onSubmit with excludedEntryIds when button is clicked", async () => {
@@ -83,7 +83,7 @@ describe("NewAnalysisForm", () => {
         const excludedEntryIds = ["e1", "e2"];
         renderForm({ excludedEntryIds });
 
-        const btn = screen.getByRole("button", { name: /Generate Analysis/i });
+        const btn = screen.getByRole("button", { name: /generate analysis/i });
         await user.click(btn);
 
         expect(onSubmitMock).toHaveBeenCalledWith(excludedEntryIds);
@@ -93,7 +93,7 @@ describe("NewAnalysisForm", () => {
         const user = userEvent.setup();
         renderForm({ excludedEntryIds: [] });
 
-        await user.click(screen.getByRole("button", { name: /Generate Analysis/i }));
+        await user.click(screen.getByRole("button", { name: /generate analysis/i }));
 
         expect(onSubmitMock).toHaveBeenCalledWith([]);
     });
@@ -105,7 +105,7 @@ describe("NewAnalysisForm", () => {
 
     it("renders hint cards for guidance", () => {
         renderForm();
-        expect(screen.getByText("Exclude Sensitive Data")).toBeInTheDocument();
-        expect(screen.getByText("Traceable History")).toBeInTheDocument();
+        expect(screen.getByText("Exclude sensitive data")).toBeInTheDocument();
+        expect(screen.getByText("Traceable history")).toBeInTheDocument();
     });
 });

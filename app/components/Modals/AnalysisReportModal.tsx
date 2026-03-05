@@ -34,7 +34,7 @@ export const AnalysisReportModal = ({ isOpen, onClose, run }: AnalysisReportModa
                 <div className="bg-surface-dark border border-white/10 rounded-2xl p-12 shadow-2xl flex flex-col items-center gap-6 max-w-md w-full animate-in zoom-in-95 duration-200">
                     <Loader2 size={48} className="text-primary animate-spin" />
                     <div className="text-center">
-                        <h3 className="text-xl font-bold text-white-1 mb-2">Analysis Processing</h3>
+                        <h3 className="text-xl font-bold text-white-1 mb-2">Analysis processing</h3>
                         <p className="text-light-gray-70 text-sm">Please wait while we generate the insights and metrics for this run.</p>
                     </div>
                     <button onClick={onClose} className="mt-4 px-6 py-2 bg-white/5 hover:bg-white/10 text-white-1 rounded-lg font-bold transition-colors">
@@ -78,7 +78,7 @@ export const AnalysisReportModal = ({ isOpen, onClose, run }: AnalysisReportModa
                             <FileBarChart size={24} />
                         </div>
                         <div>
-                            <h2 className="text-2xl font-extrabold text-white-1 tracking-tight">Analysis Report</h2>
+                            <h2 className="text-2xl font-extrabold text-white-1 tracking-tight">Analysis report</h2>
                             <p className="text-light-gray-60 text-sm md:text-base font-medium flex items-center gap-2 mt-1">
                                 <span className="font-mono text-white-1">{run.id.split('_')[1]}</span>
                                 <span className="opacity-50">•</span>
@@ -101,18 +101,18 @@ export const AnalysisReportModal = ({ isOpen, onClose, run }: AnalysisReportModa
                         {/* Summary Metrics */}
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                             <div className="bg-white/5 border border-white/5 p-6 rounded-2xl flex flex-col gap-2 relative overflow-hidden group">
-                                <span className="text-xs font-bold text-light-gray-60 uppercase tracking-widest leading-none">Total Analyzed</span>
+                                <span className="text-xs font-bold text-light-gray-60 uppercase tracking-widest leading-none">Total analyzed</span>
                                 <span className="text-4xl font-extrabold text-white-1">{result.analyzedEntries}</span>
                                 <span className="text-[11px] text-light-gray-70 font-semibold mt-1">out of {result.totalEntries} available</span>
                                 <div className="absolute top-0 right-0 p-6 opacity-5 group-hover:opacity-10 transition-opacity"><FileBarChart size={64} /></div>
                             </div>
                             <div className="bg-bittersweet-shimmer/10 border border-bittersweet-shimmer/20 p-6 rounded-2xl flex flex-col gap-2 relative overflow-hidden group">
-                                <span className="text-xs font-bold text-bittersweet-shimmer/80 uppercase tracking-widest leading-none">Excluded from Dataset</span>
+                                <span className="text-xs font-bold text-bittersweet-shimmer/80 uppercase tracking-widest leading-none">Excluded from dataset</span>
                                 <span className="text-4xl font-extrabold text-bittersweet-shimmer">{result.excludedEntries}</span>
                                 <span className="text-[11px] text-bittersweet-shimmer/60 font-semibold mt-1">Based on selection criteria</span>
                             </div>
                             <div className="bg-primary/10 border border-primary/20 p-6 rounded-2xl flex flex-col gap-2 relative overflow-hidden group">
-                                <span className="text-xs font-bold text-primary/80 uppercase tracking-widest leading-none">Overall Confidence</span>
+                                <span className="text-xs font-bold text-primary/80 uppercase tracking-widest leading-none">Overall confidence</span>
                                 <span className="text-4xl font-extrabold text-primary">{Math.round(result.confidenceMetrics.average * 100)}%</span>
                                 <span className="text-[11px] text-primary/60 font-semibold mt-1">Median: {Math.round(result.confidenceMetrics.median * 100)}%</span>
                             </div>
@@ -124,7 +124,7 @@ export const AnalysisReportModal = ({ isOpen, onClose, run }: AnalysisReportModa
                         <div className="flex flex-col gap-5">
                             <h3 className="text-xl font-bold text-white-1 flex items-center gap-3">
                                 <span className="w-1.5 h-6 bg-primary rounded-full"></span>
-                                Executive Summary
+                                Executive summary
                             </h3>
                             <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 {result.insights.map((insight, idx) => (
@@ -141,7 +141,7 @@ export const AnalysisReportModal = ({ isOpen, onClose, run }: AnalysisReportModa
                             {/* Behavior Distribution Chart */}
                             <div className="flex flex-col gap-6 bg-background-dark/40 border border-white/5 p-6 rounded-2xl">
                                 <div className="flex flex-col gap-1">
-                                    <h4 className="text-white-1 font-bold text-lg">Behavior Distribution</h4>
+                                    <h4 className="text-white-1 font-bold text-lg">Behavior distribution</h4>
                                     <p className="text-xs text-light-gray-60 font-semibold">Frequency of detected adverse behaviors across the analyzed dataset.</p>
                                 </div>
                                 <div className="h-[280px] w-full">
@@ -165,7 +165,7 @@ export const AnalysisReportModal = ({ isOpen, onClose, run }: AnalysisReportModa
                             {/* Confidence Distribution Chart */}
                             <div className="flex flex-col gap-6 bg-background-dark/40 border border-white/5 p-6 rounded-2xl">
                                 <div className="flex flex-col gap-1">
-                                    <h4 className="text-white-1 font-bold text-lg">Confidence Distribution</h4>
+                                    <h4 className="text-white-1 font-bold text-lg">Confidence distribution</h4>
                                     <p className="text-xs text-light-gray-60 font-semibold">Breakdown of model confidence scores across all predictions.</p>
                                 </div>
                                 <div className="h-[280px] w-full flex items-center justify-center relative">

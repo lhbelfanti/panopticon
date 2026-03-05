@@ -54,7 +54,7 @@ describe("AnalysisHistoryTable", () => {
 
     it("renders table headers correctly", () => {
         renderTable();
-        expect(screen.getByText("ID & Timestamp")).toBeInTheDocument();
+        expect(screen.getByText("ID & timestamp")).toBeInTheDocument();
         expect(screen.getByText("Status")).toBeInTheDocument();
         expect(screen.getByText("Exclusions")).toBeInTheDocument();
         expect(screen.getByText("Actions")).toBeInTheDocument();
@@ -72,11 +72,9 @@ describe("AnalysisHistoryTable", () => {
 
         expect(screen.getByText("completed")).toBeInTheDocument();
 
-        // Hover to reveal action buttons (opacity-0 group-hover pattern)
         const row = screen.getByText("completed").closest("tr");
-        if (row) await user.hover(row);
 
-        expect(screen.getByText("View Report")).toBeInTheDocument();
+        expect(screen.getByText("View report")).toBeInTheDocument();
         expect(screen.getByText("PDF")).toBeInTheDocument();
     });
 
@@ -88,9 +86,8 @@ describe("AnalysisHistoryTable", () => {
         expect(screen.getByText("processing")).toBeInTheDocument();
 
         const row = screen.getByText("processing").closest("tr");
-        if (row) await user.hover(row);
 
-        expect(screen.queryByText("View Report")).not.toBeInTheDocument();
+        expect(screen.queryByText("View report")).not.toBeInTheDocument();
         expect(screen.queryByText("PDF")).not.toBeInTheDocument();
     });
 
@@ -102,9 +99,8 @@ describe("AnalysisHistoryTable", () => {
         expect(screen.getByText("failed")).toBeInTheDocument();
 
         const row = screen.getByText("failed").closest("tr");
-        if (row) await user.hover(row);
 
-        expect(screen.queryByText("View Report")).not.toBeInTheDocument();
+        expect(screen.queryByText("View report")).not.toBeInTheDocument();
         expect(screen.queryByText("PDF")).not.toBeInTheDocument();
     });
 
@@ -113,7 +109,7 @@ describe("AnalysisHistoryTable", () => {
         const run = makRun({ status: "completed" });
         renderTable({ history: [run] });
 
-        const viewBtn = screen.getByText("View Report");
+        const viewBtn = screen.getByText("View report");
         await user.click(viewBtn);
 
         expect(onViewReportMock).toHaveBeenCalledWith(run);
