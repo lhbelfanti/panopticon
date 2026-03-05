@@ -128,30 +128,32 @@ const AnalysisPage = () => {
                             </Link>
                         </nav>
                     </div>
+                </div>
+            </div>
 
-                    {/* Tab Navigation */}
-                    <div className="flex bg-surface-dark border border-white/5 p-1 rounded-xl shadow-inner h-12">
-                        <button
-                            onClick={() => setActiveTab("new")}
-                            className={`flex items-center gap-2 px-6 rounded-lg text-sm font-bold transition-all ${activeTab === "new"
-                                ? "bg-primary/10 text-primary shadow-md border border-primary/20"
-                                : "text-light-gray-70 hover:text-white-1 hover:bg-white/5"
-                                }`}
-                        >
-                            <Zap size={16} />
-                            New analysis
-                        </button>
-                        <button
-                            onClick={() => setActiveTab("history")}
-                            className={`flex items-center gap-2 px-6 rounded-lg text-sm font-bold transition-all ${activeTab === "history"
-                                ? "bg-primary/10 text-primary shadow-md border border-primary/20"
-                                : "text-light-gray-70 hover:text-white-1 hover:bg-white/5"
-                                }`}
-                        >
-                            <History size={16} />
-                            History
-                        </button>
-                    </div>
+            {/* Tab Navigation (Centered on top of content) */}
+            <div className="flex justify-center mb-8">
+                <div className="flex bg-surface-dark border border-white/5 p-1 rounded-xl shadow-inner h-12">
+                    <button
+                        onClick={() => setActiveTab("new")}
+                        className={`flex items-center gap-2 px-6 rounded-lg text-sm font-bold transition-all ${activeTab === "new"
+                            ? "bg-primary/10 text-primary shadow-md border border-primary/20"
+                            : "text-light-gray-70 hover:text-white-1 hover:bg-white/5"
+                            }`}
+                    >
+                        <Zap size={16} />
+                        New analysis
+                    </button>
+                    <button
+                        onClick={() => setActiveTab("history")}
+                        className={`flex items-center gap-2 px-6 rounded-lg text-sm font-bold transition-all ${activeTab === "history"
+                            ? "bg-primary/10 text-primary shadow-md border border-primary/20"
+                            : "text-light-gray-70 hover:text-white-1 hover:bg-white/5"
+                            }`}
+                    >
+                        <History size={16} />
+                        History
+                    </button>
                 </div>
             </div>
 
