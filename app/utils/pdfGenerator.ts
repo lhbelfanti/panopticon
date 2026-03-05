@@ -33,38 +33,38 @@ export const generateAnalysisPDF = async (run: AnalysisRun, projectName: string)
     applyBackground();
 
     // -- Header & Logo --
-    const logoSize = 18;
+    const logoSize = 25;
+    const logoX = pageWidth - margin - logoSize;
+    const logoY = margin;
+
+    // Background "PANOPTICON" wordmark (behind logo)
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(28);
+    doc.setTextColor(45, 45, 45); // Very subtle dark grey for background wordmark on #1a1a1a bg
+    const bgBrandName = "PANOPTICON";
+    const bgWidth = doc.getTextWidth(bgBrandName);
+    doc.text(bgBrandName, logoX + (logoSize / 2), logoY + (logoSize / 2) + 4, { align: "center" });
+
+    // Logo Icon
     try {
-        doc.addImage("/panopticon-logo-no-text.png", "PNG", margin, margin, logoSize, logoSize);
+        doc.addImage("/panopticon-logo-no-text.png", "PNG", logoX, logoY, logoSize, logoSize);
     } catch (e) {
         doc.setFillColor(...primaryColor);
-        doc.rect(margin, margin, logoSize, logoSize, "F");
-    }
-
-    // PANOPTICON Wordmark (Matching Sidebar style)
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(14);
-    doc.setTextColor(...primaryColor);
-    const brandName = "PANOPTICON";
-    const charSpacing = 1.8;
-    let brandX = margin + logoSize + 4;
-    for (let i = 0; i < brandName.length; i++) {
-        doc.text(brandName[i], brandX, margin + (logoSize / 2) + 2);
-        brandX += doc.getTextWidth(brandName[i]) + charSpacing;
+        doc.rect(logoX, logoY, logoSize, logoSize, "F");
     }
 
     doc.setFontSize(28);
     doc.setTextColor(textWhite);
-    doc.text("Analysis Report", margin, margin + logoSize + 15);
+    doc.text("Analysis Report", margin, margin + 12);
 
     doc.setFont("helvetica", "normal");
     doc.setFontSize(10);
     doc.setTextColor(textGray);
-    doc.text(`Generated on: ${new Date(run.timestamp).toLocaleString()}`, margin, margin + logoSize + 25);
-    doc.text(`Run ID: ${run.id.split('_')[1].toUpperCase()}`, margin, margin + logoSize + 31);
+    doc.text(`Generated on: ${new Date(run.timestamp).toLocaleString()}`, margin, margin + 22);
+    doc.text(`Run ID: ${run.id.split('_')[1].toUpperCase()}`, margin, margin + 28);
 
     // -- Project Context Card --
-    let cursorY = margin + logoSize + 45;
+    let cursorY = margin + 45;
     doc.setFillColor(surfaceColor);
     doc.roundedRect(margin, cursorY, pageWidth - (margin * 2), 35, 3, 3, "F");
 
