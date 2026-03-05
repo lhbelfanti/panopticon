@@ -7,7 +7,8 @@ import {
     FileBarChart,
     ChevronRight,
     Search,
-    Filter
+    Filter,
+    AlertCircle
 } from "lucide-react";
 import type { NewAnalysisFormProps } from "./types";
 
@@ -100,29 +101,38 @@ export const NewAnalysisForm = ({
                 </div>
             </div>
 
-            {/* Hint / How It Works */}
-            <div className="grid grid-cols-2 gap-8 px-4">
-                <div className="flex gap-4">
-                    <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-primary border border-white/5 shrink-0">
-                        <Filter size={20} />
+            {/* Integrated Guidance Info */}
+            <div className="bg-white/5 rounded-2xl p-6 border border-white/5 flex flex-col gap-6">
+                <div className="flex flex-col gap-5">
+                    <div className="flex items-start gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-primary shrink-0">
+                            <AlertCircle size={20} />
+                        </div>
+                        <div className="flex flex-col gap-1">
+                            <h4 className="text-white-1 font-bold text-sm tracking-tight uppercase tracking-widest">Analysis guide</h4>
+                            <p className="text-light-gray-70 text-xs">Helpful pointers for generating and managing your subproject insights.</p>
+                        </div>
                     </div>
-                    <div className="flex flex-col gap-2">
-                        <h4 className="text-white-1 font-bold text-sm tracking-tight uppercase tracking-widest">Exclude sensitive data</h4>
-                        <p className="text-light-gray-70 text-sm leading-relaxed">
-                            Use the Entries table filters to identify outlier data points or test cases you want to ignore to ensure your charts accurately reflect true performance.
-                        </p>
-                    </div>
-                </div>
 
-                <div className="flex gap-4">
-                    <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-primary border border-white/5 shrink-0">
-                        <Layers size={20} />
-                    </div>
-                    <div className="flex flex-col gap-2">
-                        <h4 className="text-white-1 font-bold text-sm tracking-tight uppercase tracking-widest">Traceable history</h4>
-                        <p className="text-light-gray-70 text-sm leading-relaxed">
-                            Every analysis is saved. You can always come back and re-download the PDF report or view the visual insights as they were when they were generated.
-                        </p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pl-1">
+                        <div className="flex flex-col gap-2">
+                            <div className="flex items-center gap-2 text-primary">
+                                <Filter size={16} />
+                                <h5 className="text-white-1 font-bold text-xs uppercase tracking-widest">Exclude sensitive data</h5>
+                            </div>
+                            <p className="text-light-gray-70 text-sm leading-relaxed">
+                                Use the entries table filters to identify outlier data points or test cases you want to ignore to ensure your charts accurately reflect true performance.
+                            </p>
+                        </div>
+                        <div className="flex flex-col gap-2">
+                            <div className="flex items-center gap-2 text-primary">
+                                <Layers size={16} />
+                                <h5 className="text-white-1 font-bold text-xs uppercase tracking-widest">Traceable history</h5>
+                            </div>
+                            <p className="text-light-gray-70 text-sm leading-relaxed">
+                                Every analysis is saved. You can always come back and re-download the PDF report or view the visual insights as they were when they were generated.
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -95,7 +95,7 @@ const AnalysisPage = () => {
         submit(formData, { method: "post" });
     };
 
-    const containerClasses = "flex-1 p-8 lg:p-12 overflow-y-auto bg-background-dark min-h-screen custom-scrollbar relative";
+    const containerClasses = "flex-1 pt-8 pl-8 pr-8 lg:pt-12 lg:pl-12 lg:pr-12 pb-0 overflow-y-auto bg-background-dark min-h-screen custom-scrollbar relative";
     const headerClasses = "flex flex-col gap-4 animate-in fade-in slide-in-from-bottom-2 duration-300 mb-10 pb-6 border-b border-white/5";
 
     return (
@@ -132,12 +132,12 @@ const AnalysisPage = () => {
             </div>
 
             {/* Tab Navigation (Centered on top of content) */}
-            <div className="flex justify-center">
-                <div className="flex bg-surface-dark border border-white/5 p-1 rounded-xl shadow-inner h-12">
+            <div className="flex justify-center mb-8 relative z-10">
+                <div className="flex gap-1 bg-white/5 p-1 rounded-xl border border-white/5 max-w-fit">
                     <button
                         onClick={() => setActiveTab("new")}
-                        className={`flex items-center gap-2 px-6 rounded-lg text-sm font-bold transition-all ${activeTab === "new"
-                            ? "bg-primary/10 text-primary shadow-md border border-primary/20"
+                        className={`flex items-center gap-2 px-6 py-2.5 rounded-lg font-bold text-sm transition-all ${activeTab === "new"
+                            ? "bg-primary text-background-dark shadow-lg shadow-primary/20"
                             : "text-light-gray-70 hover:text-white-1 hover:bg-white/5"
                             }`}
                     >
@@ -146,8 +146,8 @@ const AnalysisPage = () => {
                     </button>
                     <button
                         onClick={() => setActiveTab("history")}
-                        className={`flex items-center gap-2 px-6 rounded-lg text-sm font-bold transition-all ${activeTab === "history"
-                            ? "bg-primary/10 text-primary shadow-md border border-primary/20"
+                        className={`flex items-center gap-2 px-6 py-2.5 rounded-lg font-bold text-sm transition-all ${activeTab === "history"
+                            ? "bg-primary text-background-dark shadow-lg shadow-primary/20"
                             : "text-light-gray-70 hover:text-white-1 hover:bg-white/5"
                             }`}
                     >

@@ -11,7 +11,7 @@ import {
     Pie,
     Cell
 } from "recharts";
-import { X, FileBarChart, Loader2 } from "lucide-react";
+import { X, FileBarChart, Loader2, BarChart3, XSquare, CheckCircle2 } from "lucide-react";
 
 import type { AnalysisRun } from "~/services/api/analysis/types";
 
@@ -101,38 +101,49 @@ export const AnalysisReportModal = ({ isOpen, onClose, run }: AnalysisReportModa
                         {/* Summary Metrics */}
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                             <div className="bg-white/5 border border-white/5 p-6 rounded-2xl flex flex-col gap-2 relative overflow-hidden group">
-                                <span className="text-xs font-bold text-light-gray-60 uppercase tracking-widest leading-none">Total analyzed</span>
+                                <span className="text-xs font-bold text-light-gray-60 uppercase tracking-widest leading-none flex items-center gap-2">
+                                    <BarChart3 size={12} className="text-primary" />
+                                    Total analyzed
+                                </span>
                                 <span className="text-4xl font-extrabold text-white-1">{result.analyzedEntries}</span>
                                 <span className="text-[11px] text-light-gray-70 font-semibold mt-1">out of {result.totalEntries} available</span>
-                                <div className="absolute top-0 right-0 p-6 opacity-5 group-hover:opacity-10 transition-opacity"><FileBarChart size={64} /></div>
+                                <div className="absolute top-0 right-0 p-6 opacity-5 group-hover:opacity-10 transition-opacity"><BarChart3 size={64} /></div>
                             </div>
                             <div className="bg-bittersweet-shimmer/10 border border-bittersweet-shimmer/20 p-6 rounded-2xl flex flex-col gap-2 relative overflow-hidden group">
-                                <span className="text-xs font-bold text-bittersweet-shimmer/80 uppercase tracking-widest leading-none">Excluded from dataset</span>
+                                <span className="text-xs font-bold text-bittersweet-shimmer/80 uppercase tracking-widest leading-none flex items-center gap-2">
+                                    <XSquare size={12} />
+                                    Excluded from dataset
+                                </span>
                                 <span className="text-4xl font-extrabold text-bittersweet-shimmer">{result.excludedEntries}</span>
                                 <span className="text-[11px] text-bittersweet-shimmer/60 font-semibold mt-1">Based on selection criteria</span>
+                                <div className="absolute top-0 right-0 p-6 opacity-5 group-hover:opacity-10 transition-opacity"><XSquare size={64} /></div>
                             </div>
                             <div className="bg-primary/10 border border-primary/20 p-6 rounded-2xl flex flex-col gap-2 relative overflow-hidden group">
-                                <span className="text-xs font-bold text-primary/80 uppercase tracking-widest leading-none">Overall confidence</span>
+                                <span className="text-xs font-bold text-primary/80 uppercase tracking-widest leading-none flex items-center gap-2">
+                                    <CheckCircle2 size={12} />
+                                    Overall confidence
+                                </span>
                                 <span className="text-4xl font-extrabold text-primary">{Math.round(result.confidenceMetrics.average * 100)}%</span>
                                 <span className="text-[11px] text-primary/60 font-semibold mt-1">Median: {Math.round(result.confidenceMetrics.median * 100)}%</span>
+                                <div className="absolute top-0 right-0 p-6 opacity-5 group-hover:opacity-10 transition-opacity"><CheckCircle2 size={64} /></div>
                             </div>
                         </div>
 
                         <hr className="border-white/5" />
 
                         {/* Story / Insights */}
-                        <div className="flex flex-col gap-5">
+                        <div className="flex flex-col gap-6">
                             <h3 className="text-xl font-bold text-white-1 flex items-center gap-3">
                                 <span className="w-1.5 h-6 bg-primary rounded-full"></span>
                                 Executive summary
                             </h3>
-                            <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="columns-1 md:columns-2 gap-6 space-y-6">
                                 {result.insights.map((insight, idx) => (
-                                    <li key={idx} className="bg-surface-dark border border-white/5 p-4 rounded-xl text-sm text-light-gray-70 leading-relaxed font-medium">
-                                        {insight}
-                                    </li>
+                                    <div key={idx} className="break-inside-avoid bg-white/5 border border-white/5 p-5 rounded-2xl text-sm text-white-1/90 leading-relaxed font-semibold shadow-sm hover:border-white/10 transition-colors">
+                                        <p>{insight}</p>
+                                    </div>
                                 ))}
-                            </ul>
+                            </div>
                         </div>
 
                         {/* Charts Area */}
