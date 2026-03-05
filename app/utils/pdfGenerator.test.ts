@@ -15,6 +15,11 @@ const mockAddPage = vi.fn();
 const mockSetPage = vi.fn();
 const mockSplitTextToSize = vi.fn((text: string) => [text]);
 const mockGetNumberOfPages = vi.fn(() => 1);
+const mockSetFillColor = vi.fn();
+const mockRect = vi.fn();
+const mockRoundedRect = vi.fn();
+const mockAddImage = vi.fn();
+const mockGetTextWidth = vi.fn(() => 50);
 
 vi.mock("jspdf", () => {
     return {
@@ -30,8 +35,17 @@ vi.mock("jspdf", () => {
             this.addPage = mockAddPage;
             this.setPage = mockSetPage;
             this.splitTextToSize = mockSplitTextToSize;
+            this.setFillColor = mockSetFillColor;
+            this.rect = mockRect;
+            this.roundedRect = mockRoundedRect;
+            this.addImage = mockAddImage;
+            this.getTextWidth = mockGetTextWidth;
             this.internal = {
                 getNumberOfPages: mockGetNumberOfPages,
+                pageSize: {
+                    getWidth: vi.fn(() => 210),
+                    getHeight: vi.fn(() => 297),
+                }
             };
             this.lastAutoTable = { finalY: 180 };
             return this;

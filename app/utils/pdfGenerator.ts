@@ -14,73 +14,161 @@ export const generateAnalysisPDF = async (run: AnalysisRun, projectName: string)
     const { result } = run;
     const doc = new jsPDF();
 
-    // -- Styling Constants --
-    const primaryColor: [number, number, number] = [255, 193, 7]; // Yellow-amber
-    const darkGray: [number, number, number] = [40, 40, 45];
-    const lightGray: [number, number, number] = [120, 120, 130];
-    const bittersweet: [number, number, number] = [255, 107, 107];
+    // -- Styling Constants (Matching Panopticon Dark Theme) --
+    const backgroundColor = "#0a0a0a";
+    const surfaceColor = "#141414";
+    const primaryColor: [number, number, number] = [238, 189, 43]; // #eebd2b
+    const textWhite = "#FFFFFF";
+    const textGray = "#9CA3AF";
+    const bittersweetColor: [number, number, number] = [255, 107, 107];
     const margin = 20;
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
 
-    // -- Header --
+    const applyBackground = () => {
+        doc.setFillColor(backgroundColor);
+        doc.rect(0, 0, pageWidth, pageHeight, "F");
+    };
+
+    applyBackground();
+
+    // -- Header & Logo --
+    try {
+        // Logo is at /public/panopticon-logo-no-text.png, maps to /panopticon-logo-no-text.png in production
+        // But in this environment we need the absolute path or a base64 string.
+        // For simplicity and reliability in jspdf without external fetch, we'll draw a symbol if image load fails
+        // but here we can try to use the public path if we assume it's accessible.
+        doc.addImage("/panopticon-logo-no-text.png", "PNG", pageWidth - margin - 15, margin, 15, 15);
+    } catch (e) {
+        // Fallback: draw a primary colored square as a logo placeholder
+        doc.setFillColor(...primaryColor);
+        doc.rect(pageWidth - margin - 15, margin, 15, 15, "F");
+    }
+
     doc.setFont("helvetica", "bold");
-    doc.setFontSize(24);
-    doc.setTextColor(...darkGray);
-    doc.text("Analysis Report", margin, margin + 10);
+    doc.setFontSize(28);
+    doc.setTextColor(textWhite);
+    doc.text("Analysis Report", margin, margin + 12);
 
     doc.setFont("helvetica", "normal");
     doc.setFontSize(10);
-    doc.setTextColor(...lightGray);
-    doc.text(`Generated on: ${new Date(run.timestamp).toLocaleString()}`, margin, margin + 18);
-    doc.text(`Run ID: ${run.id}`, margin, margin + 24);
+    doc.setTextColor(textGray);
+    doc.text(`Generated on: ${new Date(run.timestamp).toLocaleString()}`, margin, margin + 22);
+    doc.text(`Run ID: ${run.id.split('_')[1].toUpperCase()}`, margin, margin + 28);
 
-    // -- Project Info --
-    doc.setDrawColor(...primaryColor);
-    doc.setLineWidth(1);
-    doc.line(margin, margin + 32, 210 - margin, margin + 32); // Horizontal rule
+    // -- Project Context Card --
+    let cursorY = margin + 45;
+    doc.setFillColor(surfaceColor);
+    doc.roundedRect(margin, cursorY, pageWidth - (margin * 2), 35, 3, 3, "F");
 
-    doc.setFontSize(12);
-    doc.setTextColor(...darkGray);
+    doc.setFontSize(10);
     doc.setFont("helvetica", "bold");
-    doc.text("Context", margin, margin + 44);
+    doc.setTextColor(...primaryColor);
+    doc.text("PROJECT CONTEXT", margin + 8, cursorY + 10);
 
     doc.setFont("helvetica", "normal");
-    doc.setFontSize(10);
-    doc.text(`Project: ${projectName}`, margin, margin + 52);
-    doc.text(`Subproject (Model): ${run.subprojectId}`, margin, margin + 58);
+    doc.setTextColor(textWhite);
+    doc.setFontSize(11);
+    doc.text(`Project: ${projectName}`, margin + 8, cursorY + 20);
+    doc.text(`Subproject: ${run.subprojectId}`, margin + 8, cursorY + 27);
 
-    // -- High-Level Metrics (Rendered as text blocks) --
-    let cursorY = margin + 75;
+    // -- Key Metrics Cards --
+    cursorY += 45;
+    const cardWidth = (pageWidth - (margin * 2) - 10) / 3;
 
-    doc.setFontSize(12);
+    const drawMetricCard = (x: number, y: number, label: string, value: string, subValue: string, color: [number, number, number]) => {
+        doc.setFillColor(surfaceColor);
+        doc.roundedRect(x, y, cardWidth, 40, 4, 4, "F");
+
+        doc.setFontSize(8);
+        doc.setFont("helvetica", "bold");
+        doc.setTextColor(textGray);
+        doc.text(label.toUpperCase(), x + 6, y + 10);
+
+        doc.setFontSize(18);
+        doc.setTextColor(...color);
+        doc.text(value, x + 6, y + 22);
+
+        doc.setFontSize(8);
+        doc.setTextColor(textGray);
+        doc.text(subValue, x + 6, y + 32);
+    };
+
+    drawMetricCard(margin, cursorY, "Total analyzed", result.analyzedEntries.toString(), `of ${result.totalEntries} available`, primaryColor);
+    drawMetricCard(margin + cardWidth + 5, cursorY, "Excluded", result.excludedEntries.toString(), "Selection criteria", bittersweetColor);
+    drawMetricCard(margin + (cardWidth + 5) * 2, cursorY, "Confidence", `${Math.round(result.confidenceMetrics.average * 100)}%`, `Median: ${Math.round(result.confidenceMetrics.median * 100)}%`, primaryColor);
+
+    // -- Behavior Distribution Chart (Graphical) --
+    cursorY += 55;
     doc.setFont("helvetica", "bold");
-    doc.text("Executive Metrics", margin, cursorY);
+    doc.setFontSize(14);
+    doc.setTextColor(textWhite);
+    doc.text("Behavior Detection Trends", margin, cursorY);
 
     cursorY += 10;
-    doc.setFontSize(10);
-    doc.setFont("helvetica", "normal");
+    const chartHeight = 60;
+    const chartWidth = pageWidth - (margin * 2);
+    doc.setFillColor(surfaceColor);
+    doc.roundedRect(margin, cursorY, chartWidth, chartHeight + 20, 4, 4, "F");
 
-    // Metric 1
-    doc.setTextColor(...primaryColor);
-    doc.text(`Analyzed Entries: ${result.analyzedEntries}`, margin, cursorY);
-    doc.setTextColor(...lightGray);
-    doc.text(`(out of ${result.totalEntries})`, margin + 60, cursorY);
+    const maxCount = Math.max(...result.behaviorDistribution.map(b => b.count), 1);
+    const barSpacing = chartWidth / (result.behaviorDistribution.length || 1);
+    const barWidth = Math.min(barSpacing * 0.6, 20);
 
-    cursorY += 8;
-    // Metric 2
-    doc.setTextColor(...bittersweet);
-    doc.text(`Excluded Entries: ${result.excludedEntries}`, margin, cursorY);
+    result.behaviorDistribution.forEach((b, i) => {
+        const barHeight = (b.count / maxCount) * chartHeight;
+        const x = margin + (i * barSpacing) + (barSpacing / 2) - (barWidth / 2);
+        const y = cursorY + chartHeight + 10 - barHeight;
 
-    cursorY += 8;
-    // Metric 3
-    doc.setTextColor(...darkGray);
-    doc.text(`Average Confidence: ${(result.confidenceMetrics.average * 100).toFixed(1)}%`, margin, cursorY);
+        doc.setFillColor(...primaryColor);
+        doc.roundedRect(x, y, barWidth, barHeight, 2, 2, "F");
 
-    // -- Behavior Distribution Table --
-    cursorY += 25;
-    doc.setFontSize(12);
+        doc.setFontSize(7);
+        doc.setTextColor(textWhite);
+        doc.text(b.count.toString(), x + (barWidth / 2), y - 3, { align: "center" });
+
+        doc.setTextColor(textGray);
+        const label = b.behaviorId.split('_').pop()?.toUpperCase() || "";
+        doc.text(label, x + (barWidth / 2), cursorY + chartHeight + 15, { align: "center" });
+    });
+
+    // -- Executive Summary (Investigation Conclusion) --
+    cursorY += chartHeight + 45;
+
+    // Check for page break
+    if (cursorY > pageHeight - 60) {
+        doc.addPage();
+        applyBackground();
+        cursorY = margin + 10;
+    }
+
     doc.setFont("helvetica", "bold");
-    doc.setTextColor(...darkGray);
-    doc.text("Behavior Detection Distribution", margin, cursorY);
+    doc.setFontSize(14);
+    doc.setTextColor(textWhite);
+    const summaryTitle = "Investigation Conclusion";
+    doc.text(summaryTitle, margin, cursorY);
+
+    const titleWidth = doc.getTextWidth(summaryTitle);
+    doc.setDrawColor(...primaryColor);
+    doc.setLineWidth(1);
+    doc.line(margin, cursorY + 2, margin + titleWidth, cursorY + 2);
+
+    cursorY += 12;
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(10);
+    doc.setTextColor(textWhite);
+
+    const conclusionText = result.insights.join(" ");
+    const splitConclusion = doc.splitTextToSize(conclusionText, chartWidth);
+    doc.text(splitConclusion, margin, cursorY);
+
+    cursorY += (splitConclusion.length * 5) + 15;
+
+    // -- Audit Details Table --
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(12);
+    doc.setTextColor(textWhite);
+    doc.text("Dataset Breakdown", margin, cursorY);
 
     const behaviorBody = result.behaviorDistribution.map(b => [
         b.behaviorId.replace(/_/g, " ").toUpperCase(),
@@ -92,36 +180,12 @@ export const generateAnalysisPDF = async (run: AnalysisRun, projectName: string)
         startY: cursorY + 6,
         head: [['Behavior', 'Count', 'Percentage']],
         body: behaviorBody,
-        theme: 'striped',
-        headStyles: { fillColor: primaryColor, textColor: 255 },
+        theme: 'plain',
+        headStyles: { fillColor: backgroundColor, textColor: primaryColor, fontStyle: 'bold' },
+        bodyStyles: { textColor: textWhite, fillColor: backgroundColor },
+        alternateRowStyles: { fillColor: surfaceColor },
         styles: { font: "helvetica", fontSize: 9 },
         margin: { left: margin, right: margin }
-    });
-
-    cursorY = (doc as any).lastAutoTable.finalY + 20;
-
-    // -- Insights Narrative --
-    // Check page break
-    if (cursorY > 250) {
-        doc.addPage();
-        cursorY = margin + 10;
-    }
-
-    doc.setFontSize(12);
-    doc.setFont("helvetica", "bold");
-    doc.setTextColor(...darkGray);
-    doc.text("Key Insights", margin, cursorY);
-
-    cursorY += 10;
-    doc.setFontSize(10);
-    doc.setFont("helvetica", "normal");
-    doc.setTextColor(...lightGray);
-
-    result.insights.forEach(insight => {
-        // Simple word wrap
-        const splitText = doc.splitTextToSize(`• ${insight}`, 170);
-        doc.text(splitText, margin, cursorY);
-        cursorY += (splitText.length * 6) + 4;
     });
 
     // -- Footer --
@@ -129,11 +193,11 @@ export const generateAnalysisPDF = async (run: AnalysisRun, projectName: string)
     for (let i = 1; i <= pageCount; i++) {
         doc.setPage(i);
         doc.setFontSize(8);
-        doc.setTextColor(...lightGray);
+        doc.setTextColor(textGray);
         doc.text(
-            `Panopticon Analysis Report - Page ${i} of ${pageCount}`,
-            105,
-            285,
+            `Panopticon Intelligence - Subproject Analysis Report - Page ${i} of ${pageCount}`,
+            pageWidth / 2,
+            pageHeight - 10,
             { align: "center" }
         );
     }
