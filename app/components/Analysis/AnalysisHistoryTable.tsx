@@ -118,7 +118,7 @@ export const AnalysisHistoryTable = ({
                                                     <div className="w-px h-3 bg-white/10" />
                                                     <button
                                                         onClick={() => onDownloadPDF?.(run.id)}
-                                                        className="text-xs font-bold text-light-gray-60 hover:text-white-1 flex items-center gap-1.5 transition-colors"
+                                                        className="text-xs font-bold text-light-gray-60 hover:text-primary flex items-center gap-1.5 transition-colors cursor-pointer"
                                                     >
                                                         <Download size={14} />
                                                         PDF
