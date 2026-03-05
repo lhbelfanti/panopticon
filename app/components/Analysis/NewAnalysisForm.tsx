@@ -68,9 +68,15 @@ export const NewAnalysisForm = ({
                     </div>
 
                     <div className="flex items-center justify-between pt-6 border-t border-white/5">
-                        <p className="text-[11px] text-light-gray-70 italic max-w-xs">
-                            Analysis results will be saved to your history for future access.
-                        </p>
+                        <div className="flex items-center gap-4">
+                            <div className="flex items-center gap-1.5 px-3 py-1.5 bg-green-400/10 text-green-400 border border-green-400/20 rounded-lg">
+                                <CheckCircle2 size={14} />
+                                <span className="text-[10px] font-bold uppercase tracking-widest">Ready to process</span>
+                            </div>
+                            <p className="text-[11px] text-light-gray-70 italic max-w-xs">
+                                Analysis results will be saved to your history for future access.
+                            </p>
+                        </div>
 
                         <button
                             onClick={() => onSubmit(excludedEntryIds)}
@@ -84,10 +90,6 @@ export const NewAnalysisForm = ({
                                 </>
                             ) : (
                                 <>
-                                    <div className="flex items-center gap-1.5 pr-3 border-r border-background-dark/20 mr-1">
-                                        <CheckCircle2 size={14} />
-                                        <span className="text-[10px] font-bold uppercase whitespace-nowrap">Ready to process</span>
-                                    </div>
                                     <Zap size={18} />
                                     <span className="text-xs whitespace-nowrap">Generate analysis</span>
                                     <ChevronRight size={18} className="opacity-50" />
