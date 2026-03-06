@@ -8,7 +8,8 @@ import {
     ChevronRight,
     Search,
     Filter,
-    AlertCircle
+    AlertCircle,
+    Plus
 } from "lucide-react";
 import type { NewAnalysisFormProps } from "./types";
 
@@ -44,10 +45,16 @@ export const NewAnalysisForm = ({
                                 <XSquare size={16} className="text-bittersweet-shimmer group-hover/mini:text-primary transition-colors" />
                                 Exclusions
                             </div>
-                            <div className="flex flex-col gap-1 w-full">
-                                <span className="text-2xl font-extrabold text-white-1 leading-none group-hover/mini:text-primary transition-colors">
-                                    {excludedEntryIds.length > 0 ? "Refine list" : "Manage"}
-                                </span>
+                            <div className="flex flex-col gap-1 w-full mt-2">
+                                <div className="flex items-center gap-3">
+                                    <span className="text-2xl font-extrabold text-white-1 leading-none group-hover/mini:text-primary transition-colors">
+                                        {excludedEntryIds.length > 0 ? "Refine list" : "Manage"}
+                                    </span>
+                                    <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] font-bold uppercase tracking-widest text-white-1 group-hover/mini:bg-primary group-hover/mini:text-background-dark group-hover/mini:border-primary transition-all shadow-sm">
+                                        <Plus size={12} strokeWidth={3} />
+                                        <span>Add exclusions</span>
+                                    </div>
+                                </div>
                                 <span className="text-xs font-semibold text-light-gray-70 leading-relaxed mt-1">
                                     {excludedEntryIds.length > 0
                                         ? `${excludedEntryIds.length} entries currently excluded. Click to modify.`
