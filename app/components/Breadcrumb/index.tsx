@@ -20,8 +20,8 @@ export const Breadcrumb = ({ items, className = "" }: BreadcrumbProps) => {
                 const isLast = index === items.length - 1;
 
                 const content = (
-                    <div className={`flex items-center gap-2 transition-colors ${isLast ? 'text-yellow-400' : 'text-white-1 hover:text-primary transition-colors'}`}>
-                        {item.icon && <span className={isLast ? 'text-primary' : 'text-primary'}>{item.icon}</span>}
+                    <div className={`flex items-center gap-2 transition-colors text-3xl font-extrabold tracking-tight ${isLast ? 'text-yellow-400' : 'text-white-1 hover:text-yellow-400'}`}>
+                        {item.icon && <span className="text-primary flex items-center">{item.icon}</span>}
                         <span>{item.label}</span>
                     </div>
                 );
