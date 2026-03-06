@@ -102,6 +102,20 @@ const AnalysisPage = () => {
     const [showExclusionModal, setShowExclusionModal] = useState(false);
     const [excludedEntryIds, setExcludedEntryIds] = useState<string[]>(passedExcludedIds);
 
+    // Scroll to top and lock body scroll when exclusion modal opens
+    useEffect(() => {
+        if (showExclusionModal) {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "unset";
+        }
+
+        return () => {
+            document.body.style.overflow = "unset";
+        };
+    }, [showExclusionModal]);
+
     useEffect(() => {
         if (passedExcludedIds.length > 0) {
             setExcludedEntryIds(passedExcludedIds);
