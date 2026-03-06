@@ -163,21 +163,22 @@ const AnalysisPage = () => {
 
                 <div className="flex justify-between items-end">
                     <div>
-                        <h1 className="text-4xl font-extrabold text-white-1 mb-2 tracking-tight flex items-center gap-4">
-                            <BarChart3 size={36} className="text-primary" />
-                            Subproject analysis
-                        </h1>
-                        <nav className="flex items-center gap-3 text-light-gray-50 font-medium">
-                            <Link to={`/projects/${project.id}`} className="hover:text-yellow-400 flex items-center gap-1.5 transition-colors">
-                                <Folder size={18} />
+                        <h1 className="text-3xl font-extrabold text-white-1 mb-2 tracking-tight flex items-center gap-3 transition-colors">
+                            <Link to={`/projects/${project.id}`} className="hover:text-yellow-400 flex items-center gap-2 transition-colors">
+                                <Folder size={28} className="text-primary" />
                                 {project.name}
                             </Link>
-                            <span className="opacity-30">/</span>
-                            <Link to={`/projects/${project.id}/models/${modelId}`} className="hover:text-primary flex items-center gap-1.5 transition-colors text-white-1">
-                                <Box size={18} />
+                            <span className="opacity-50 text-light-gray-50">/</span>
+                            <Link to={`/projects/${project.id}/models/${modelId}`} className="hover:text-primary flex items-center gap-2 transition-colors">
+                                <Box size={28} className="text-primary" />
                                 {t(`projects.models.${modelId}`)}
                             </Link>
-                        </nav>
+                            <span className="opacity-50 text-light-gray-50">/</span>
+                            <span className="text-white-1 flex items-center gap-2">
+                                <BarChart3 size={28} className="text-primary" />
+                                Analysis
+                            </span>
+                        </h1>
                     </div>
                 </div>
             </div>

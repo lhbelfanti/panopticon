@@ -9,7 +9,7 @@ import {
     useSubmit,
 } from "react-router";
 import { useTranslation } from "react-i18next";
-import { ArrowLeft, PlusCircle, TableProperties, CheckCircle2 } from "lucide-react";
+import { ArrowLeft, PlusCircle, TableProperties, CheckCircle2, CopyPlus } from "lucide-react";
 
 import { getProjects } from "~/services/api/projects/index.server";
 import { getSupportedPlatforms } from "~/services/api/entries/mocks/platforms";
@@ -145,7 +145,7 @@ export default function GlobalEntriesNewPage() {
 
                 <div className="mb-10 animate-in fade-in slide-in-from-top-4 duration-500">
                     <h1 className="text-4xl font-extrabold text-white-1 mb-3 tracking-tight flex items-center gap-3">
-                        <PlusCircle size={36} className="text-primary" />
+                        <CopyPlus size={36} className="text-primary" />
                         {t("projects.entries.new.title")}
                     </h1>
                     <p className="text-light-gray-70 text-lg">
