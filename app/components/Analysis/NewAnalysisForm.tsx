@@ -88,29 +88,25 @@ export const NewAnalysisForm = ({
                             </div>
                         </div>
 
-                        <div className="flex flex-col items-start w-full pt-6 border-t border-white/5 pr-4">
+                        <div className="flex justify-end w-full pt-6 border-t border-white/5">
                             <button
                                 onClick={() => onSubmit(excludedEntryIds)}
                                 disabled={isSubmitting}
-                                className="w-full justify-center bg-primary hover:bg-primary/90 text-background-dark px-8 py-5 rounded-xl font-bold flex items-center gap-4 transition-all hover:scale-[1.02] active:scale-95 disabled:opacity-50 disabled:hover:scale-100 shadow-xl shadow-primary/20"
+                                className="bg-primary hover:bg-primary/90 text-background-dark px-6 py-3 rounded-xl font-bold flex items-center gap-3 transition-all hover:scale-105 active:scale-95 disabled:opacity-50 disabled:hover:scale-100 shadow-lg shadow-primary/20"
                             >
                                 {isSubmitting ? (
                                     <>
-                                        <Layers className="animate-pulse" size={24} />
-                                        <span className="text-lg">Starting analysis...</span>
+                                        <Layers className="animate-pulse" size={18} />
+                                        <span>Starting analysis...</span>
                                     </>
                                 ) : (
                                     <>
-                                        <Zap size={24} />
-                                        <span className="text-lg whitespace-nowrap">Generate analysis</span>
-                                        <ChevronRight size={20} className="opacity-50" />
+                                        <Zap size={18} />
+                                        <span className="whitespace-nowrap">Generate analysis</span>
+                                        <ChevronRight size={18} className="opacity-50 -ml-1" />
                                     </>
                                 )}
                             </button>
-                            <div className="flex items-center gap-1.5 mt-4 mx-auto px-4 py-2 bg-green-400/10 text-green-400 border border-green-400/20 rounded-lg">
-                                <CheckCircle2 size={16} />
-                                <span className="text-xs font-bold uppercase tracking-widest">Ready to process</span>
-                            </div>
                         </div>
                     </div>
 

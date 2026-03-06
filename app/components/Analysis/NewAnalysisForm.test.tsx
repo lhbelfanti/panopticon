@@ -110,10 +110,6 @@ describe("NewAnalysisForm", () => {
         expect(onSubmitMock).toHaveBeenCalledWith([]);
     });
 
-    it("renders 'Ready to process' status indicator", () => {
-        renderForm();
-        expect(screen.getByText("Ready to process")).toBeInTheDocument();
-    });
 
     it("renders hint cards for guidance", () => {
         renderForm();
