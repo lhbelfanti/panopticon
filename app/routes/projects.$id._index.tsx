@@ -16,7 +16,7 @@ import ConfirmationModal from "~/components/ConfirmationModal";
 import SubprojectCard from "~/components/SubprojectCard";
 import { AdverseBehaviorLabel } from "~/components/AdverseBehaviorLabel";
 
-import { Folder, PlusCircle, Trash2 } from "lucide-react";
+import { Folder, PlusCircle, Trash2, ArrowLeft } from "lucide-react";
 import * as LucideIcons from "lucide-react";
 import { Trans, useTranslation } from "react-i18next";
 
@@ -68,8 +68,19 @@ const ProjectViewPage = () => {
   return (
     <div className="flex-1 p-8 lg:p-12 overflow-y-auto bg-background-dark min-h-screen custom-scrollbar relative">
       <div className="max-w-6xl mx-auto flex flex-col gap-10">
+        {/* Navigation */}
+        <div className="animate-in fade-in slide-in-from-top-4 duration-300">
+          <Link
+            to="/"
+            className="flex items-center gap-2 text-primary hover:text-white-1 transition-colors text-sm font-semibold max-w-max"
+          >
+            <ArrowLeft size={16} />
+            {t("sidebar.home")}
+          </Link>
+        </div>
+
         {/* Header */}
-        <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 flex justify-between items-start">
+        <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 flex justify-between items-start -mt-2">
           <div>
             <h1 className="text-4xl font-extrabold text-white-1 mb-3 tracking-tight flex items-center gap-3">
               <Folder size={36} className="text-primary" />

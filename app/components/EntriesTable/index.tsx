@@ -199,7 +199,7 @@ const EntriesTable = (props: EntriesTableProps) => {
               <Link
                 to={`/projects/${project.id}/models/${modelId}/analysis`}
                 state={{ excludedEntryIds: Array.from(excludedIds) }}
-                className="bg-primary hover:bg-primary/90 text-background-dark px-4 py-2 rounded-lg font-bold text-sm shadow-lg shadow-primary/20 transition-all flex items-center gap-2"
+                className="bg-yellow-500 hover:bg-yellow-400 text-background-dark px-4 py-2 rounded-lg font-bold text-sm shadow-lg shadow-yellow-500/20 transition-all flex items-center gap-2"
               >
                 <Zap size={16} />
                 Go to Analysis
