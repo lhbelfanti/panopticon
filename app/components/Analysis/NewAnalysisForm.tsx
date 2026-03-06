@@ -40,18 +40,18 @@ export const NewAnalysisForm = ({
                             {/* Exclusions Summary Trigger (Primary Action) */}
                             <button
                                 onClick={onOpenExclusions}
-                                className="flex-1 bg-surface-dark border border-white/10 hover:border-primary/50 hover:bg-white/5 rounded-xl p-6 flex flex-col justify-between items-start relative group/mini overflow-hidden transition-all text-left shadow-lg"
+                                className="flex-1 bg-surface-dark border-2 border-bittersweet-shimmer/30 hover:border-bittersweet-shimmer hover:bg-white/5 rounded-xl p-6 flex flex-col justify-between items-start relative group/mini overflow-hidden transition-all text-left shadow-lg"
                             >
-                                <div className="flex items-center gap-2 text-xs uppercase font-bold text-light-gray-50 tracking-widest leading-none group-hover/mini:text-primary transition-colors mb-4">
-                                    <XSquare size={16} className="text-bittersweet-shimmer group-hover/mini:text-primary transition-colors" />
+                                <div className="flex items-center gap-2 text-xs uppercase font-bold text-light-gray-50 tracking-widest leading-none group-hover/mini:text-bittersweet-shimmer transition-colors mb-4">
+                                    <XSquare size={16} className="text-bittersweet-shimmer" />
                                     Exclusions
                                 </div>
                                 <div className="flex flex-col gap-1 w-full mt-2">
                                     <div className="flex items-center gap-3">
-                                        <span className="text-2xl font-extrabold text-white-1 leading-none group-hover/mini:text-primary transition-colors">
+                                        <span className="text-2xl font-extrabold text-white-1 leading-none group-hover/mini:text-bittersweet-shimmer transition-colors">
                                             {excludedEntryIds.length > 0 ? "Refine list" : "Manage"}
                                         </span>
-                                        <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] font-bold uppercase tracking-widest text-white-1 group-hover/mini:bg-primary group-hover/mini:text-background-dark group-hover/mini:border-primary transition-all shadow-sm">
+                                        <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-bittersweet-shimmer/10 border border-bittersweet-shimmer/30 text-[10px] font-bold uppercase tracking-widest text-bittersweet-shimmer group-hover/mini:bg-bittersweet-shimmer group-hover/mini:text-background-dark group-hover/mini:border-bittersweet-shimmer transition-all shadow-sm">
                                             <Plus size={12} strokeWidth={3} />
                                             <span>Add exclusions</span>
                                         </div>
@@ -63,10 +63,10 @@ export const NewAnalysisForm = ({
                                     </span>
                                 </div>
                                 <div className="absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-hover/mini:opacity-100 transition-all group-hover/mini:translate-x-1 duration-300">
-                                    <ChevronRight size={20} className="text-primary" />
+                                    <ChevronRight size={20} className="text-bittersweet-shimmer" />
                                 </div>
                                 {/* Decorative highlight */}
-                                <div className="absolute inset-0 border-2 border-primary/0 group-hover/mini:border-primary/50 rounded-xl transition-colors pointer-events-none" />
+                                <div className="absolute inset-0 border-2 border-bittersweet-shimmer/0 group-hover/mini:border-bittersweet-shimmer/20 rounded-xl transition-colors pointer-events-none" />
                             </button>
 
                             {/* Selection Summary (Informational) */}
@@ -87,8 +87,7 @@ export const NewAnalysisForm = ({
                                 </div>
                             </div>
                         </div>
-
-                        <div className="flex justify-end w-full pt-6 border-t border-white/5">
+                        <div className="flex justify-center w-full pt-6 border-t border-white/5">
                             <button
                                 onClick={() => onSubmit(excludedEntryIds)}
                                 disabled={isSubmitting}
@@ -103,7 +102,6 @@ export const NewAnalysisForm = ({
                                     <>
                                         <Zap size={18} />
                                         <span className="whitespace-nowrap">Generate analysis</span>
-                                        <ChevronRight size={18} className="opacity-50 -ml-1" />
                                     </>
                                 )}
                             </button>
