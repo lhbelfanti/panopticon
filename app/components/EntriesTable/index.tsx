@@ -393,29 +393,32 @@ const EntriesTable = (props: EntriesTableProps) => {
               <thead>
                 <tr className={tableHeaderRowClasses}>
                   {isExcludeMode && (
-                    <th className="py-3 px-4 whitespace-nowrap text-left">
-                      <div className="flex items-center gap-2">
-                        <button
-                          onClick={() => {
-                            const allIdsOnPage = data.entries.map(e => e.id);
-                            const areAllExcluded = allIdsOnPage.every(id => excludedIds.has(id));
+                    <th className="py-3 px-4 whitespace-nowrap text-left w-1">
+                      <div className="flex flex-col gap-1 items-start">
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => {
+                              const allIdsOnPage = data.entries.map(e => e.id);
+                              const areAllExcluded = allIdsOnPage.every(id => excludedIds.has(id));
 
-                            const newExcluded = new Set(excludedIds);
-                            if (areAllExcluded) {
-                              // Deselect All on current page
-                              allIdsOnPage.forEach(id => newExcluded.delete(id));
-                            } else {
-                              // Select All on current page
-                              allIdsOnPage.forEach(id => newExcluded.add(id));
-                            }
-                            setExcludedIds(newExcluded);
-                          }}
-                          className="hover:text-primary transition-colors flex items-center justify-center p-1 rounded hover:bg-white/5"
-                          title={data.entries.every(e => excludedIds.has(e.id)) ? "Deselect page" : "Select page"}
-                        >
-                          {data.entries.every(e => excludedIds.has(e.id)) ? <Square size={16} className="text-light-gray-50 opacity-40" /> : <CheckSquare size={16} className="text-primary" />}
-                        </button>
-                        <span>Selected entries</span>
+                              const newExcluded = new Set(excludedIds);
+                              if (areAllExcluded) {
+                                // Deselect All on current page (means they are included in analysis)
+                                allIdsOnPage.forEach(id => newExcluded.delete(id));
+                              } else {
+                                // Select All on current page (means they are excluded)
+                                allIdsOnPage.forEach(id => newExcluded.add(id));
+                              }
+                              setExcludedIds(newExcluded);
+                            }}
+                            className="hover:text-primary transition-colors flex items-center justify-center p-1 rounded hover:bg-white/5"
+                            title={data.entries.every(e => excludedIds.has(e.id)) ? "Deselect page" : "Select page"}
+                          >
+                            {data.entries.every(e => excludedIds.has(e.id)) ? <Square size={16} className="text-light-gray-50 opacity-40" /> : <CheckSquare size={16} className="text-primary" />}
+                          </button>
+                          <span className="text-xs text-light-gray-50 font-normal">Select / unselect all the entries of the current page</span>
+                        </div>
+                        <span className="font-bold ml-1">Selected</span>
                       </div>
                     </th>
                   )}
@@ -423,9 +426,11 @@ const EntriesTable = (props: EntriesTableProps) => {
                   <th className="py-3 px-4 text-left">{t("projects.entries.tableText")}</th>
                   <th className="py-3 px-4 w-1 whitespace-nowrap text-left">{t("projects.entries.tableVerdict")}</th>
                   <th className="py-3 px-4 w-1 whitespace-nowrap text-left">{t("projects.entries.tableScore")}</th>
-                  <th className="py-3 px-4 w-1 whitespace-nowrap text-left">
-                    {t("projects.entries.tableActions")}
-                  </th>
+                  {(!isExclusionOnly) && (
+                    <th className="py-3 px-4 w-1 whitespace-nowrap text-left">
+                      {t("projects.entries.tableActions")}
+                    </th>
+                  )}
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/5">
@@ -459,7 +464,7 @@ const EntriesTable = (props: EntriesTableProps) => {
                             setExcludedIds(newExcluded);
                           }}
                         >
-                          <div className="flex items-center justify-center">
+                          <div className="flex items-center justify-start">
                             {!excludedIds.has(entry.id) ? (
                               <CheckSquare size={18} className="text-primary" />
                             ) : (
@@ -489,37 +494,39 @@ const EntriesTable = (props: EntriesTableProps) => {
                           ? (entry.score * 100).toFixed(1) + "%"
                           : "-"}
                       </td>
-                      <td
-                        className="py-2 px-4 text-left whitespace-nowrap"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        <div className="flex items-center justify-start gap-3">
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setEntryToView(entry);
-                            }}
-                            title="View full entry"
-                            className="p-1.5 rounded-full hover:bg-blue-500/20 hover:scale-105 text-light-gray-50 hover:text-blue-400 transition-all"
-                          >
-                            <Eye size={16} />
-                          </button>
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setEntryToDelete(entry.id);
-                            }}
-                            disabled={isDeleting}
-                            title={t("projects.entries.deleteEntry")}
-                            className="group p-1.5 rounded-full hover:bg-bittersweet-shimmer hover:scale-105 text-light-gray-50 hover:text-white-1 transition-all disabled:opacity-50 disabled:hover:scale-100 disabled:hover:bg-transparent"
-                          >
-                            <Trash2
-                              size={16}
-                              className="group-hover:text-white-1"
-                            />
-                          </button>
-                        </div>
-                      </td>
+                      {(!isExclusionOnly) && (
+                        <td
+                          className="py-2 px-4 text-left whitespace-nowrap"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <div className="flex items-center justify-start gap-3">
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setEntryToView(entry);
+                              }}
+                              title="View full entry"
+                              className="p-1.5 rounded-full hover:bg-blue-500/20 hover:scale-105 text-light-gray-50 hover:text-blue-400 transition-all"
+                            >
+                              <Eye size={16} />
+                            </button>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setEntryToDelete(entry.id);
+                              }}
+                              disabled={isDeleting}
+                              title={t("projects.entries.deleteEntry")}
+                              className="group p-1.5 rounded-full hover:bg-bittersweet-shimmer hover:scale-105 text-light-gray-50 hover:text-white-1 transition-all disabled:opacity-50 disabled:hover:scale-100 disabled:hover:bg-transparent"
+                            >
+                              <Trash2
+                                size={16}
+                                className="group-hover:text-white-1"
+                              />
+                            </button>
+                          </div>
+                        </td>
+                      )}
                     </tr>
                   ))
                 )}
@@ -529,14 +536,14 @@ const EntriesTable = (props: EntriesTableProps) => {
         </div>
 
         {/* Footer Toolbar: Count, Pagination, Predict Button */}
-        <div className="px-6 py-6 border-t border-white/5 bg-black/10 flex items-center justify-between">
+        <div className="px-6 py-6 border-t border-white/5 bg-black/10 flex items-center justify-between relative">
           {/* Entry Count */}
-          <div className="text-sm text-light-gray-70 font-bold tracking-wide w-1/4">
+          <div className="text-sm text-light-gray-70 font-bold tracking-wide absolute left-6">
             {t("projects.entries.datasetEntries")}: <span className="text-white-1 text-xl ml-1">{data.total}</span>
           </div>
 
-          {/* Complex Pagination */}
-          <div className="flex gap-2 items-center justify-center w-2/4">
+          {/* Complex Pagination - Centered */}
+          <div className="flex gap-2 items-center justify-center w-full">
             <Form method="get" className="inline">
               <input type="hidden" name="filterCol" value={filterCol} />
               <input type="hidden" name="filterVal" value={filterVal} />
