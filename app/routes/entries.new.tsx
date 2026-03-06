@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import {
     data,
     redirect,
@@ -7,6 +7,7 @@ import {
     useNavigation,
     Link,
     useSubmit,
+    useSearchParams,
 } from "react-router";
 import { useTranslation } from "react-i18next";
 import { ArrowLeft, PlusCircle, TableProperties, CheckCircle2, CopyPlus } from "lucide-react";
@@ -58,12 +59,28 @@ export default function GlobalEntriesNewPage() {
     const { t } = useTranslation();
     const navigation = useNavigation();
     const submit = useSubmit();
+    const [searchParams] = useSearchParams();
 
     // Form Selection State
     const [selectedProjectId, setSelectedProjectId] = useState<number | "">("");
     const [selectedSubprojects, setSelectedSubprojects] = useState<string[]>([]);
     const [selectedPlatform, setSelectedPlatform] = useState<string>("twitter"); // Defaulting to first mock
     const [activeTab, setActiveTab] = useState<"single" | "bulk">("single");
+
+    // Handle initial projectId from query params
+    useEffect(() => {
+        const projectIdParam = searchParams.get("projectId");
+        if (projectIdParam) {
+            const pid = parseInt(projectIdParam);
+            if (!isNaN(pid)) {
+                setSelectedProjectId(pid);
+                const project = projects.find(p => p.id === pid);
+                if (project) {
+                    setSelectedSubprojects(project.subprojects.map(sp => sp.model));
+                }
+            }
+        }
+    }, [searchParams, projects]);
 
     const isSubmitting = navigation.state === "submitting";
 

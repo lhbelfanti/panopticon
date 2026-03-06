@@ -34,7 +34,7 @@ vi.mock("react-i18next", () => ({
     }),
 }));
 
-const renderWithRouter = (ui: React.ReactElement, loaderData: any) => {
+const renderWithRouter = (ui: React.ReactElement, loaderData: any, initialEntries = ["/entries/new"]) => {
     const routes = [
         {
             path: "/entries/new",
@@ -44,7 +44,7 @@ const renderWithRouter = (ui: React.ReactElement, loaderData: any) => {
     ];
 
     const router = createMemoryRouter(routes, {
-        initialEntries: ["/entries/new"],
+        initialEntries: initialEntries,
     });
 
     return render(<RouterProvider router={router} />);
@@ -195,7 +195,22 @@ describe("GlobalEntriesNewPage", () => {
         const file = new File([csvContent], "test.csv", { type: "text/csv" });
         fireEvent.change(input, { target: { files: [file] } });
 
-        const confirmBtn = await screen.findByRole("button", { name: "entries.new.confirmUpload" });
+        const confirmBtn = await screen.findByRole("button", { name: "projects.entries.new.confirmUpload" });
         fireEvent.click(confirmBtn);
+    });
+
+    it("pre-selects project and subprojects from query params", async () => {
+        renderWithRouter(<GlobalEntriesNewPage />, mockLoaderData, ["/entries/new?projectId=1"]);
+
+        // Wait for state updates
+        await waitFor(() => {
+            const projectSelect = screen.getByLabelText("projects.entries.new.targetConfiguration.targetProject") as HTMLSelectElement;
+            expect(projectSelect.value).toBe("1");
+        });
+
+        await waitFor(() => {
+            expect(screen.getByText("projects.models.model_a")).toBeInTheDocument();
+            expect(screen.getByText("projects.models.model_b")).toBeInTheDocument();
+        });
     });
 });
