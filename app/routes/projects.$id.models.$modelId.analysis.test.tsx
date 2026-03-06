@@ -89,6 +89,7 @@ vi.mock("react-router", async (importOriginal) => {
         }),
         useNavigation: () => ({ state: "idle", formData: null }),
         useLocation: () => ({ state: null }),
+        useActionData: () => undefined,
         useSubmit: () => mockSubmit,
         Link: ({ to, children, className }: any) => <a href={to} className={className}>{children}</a>,
     };

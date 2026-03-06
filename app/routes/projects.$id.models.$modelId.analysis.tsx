@@ -5,6 +5,7 @@ import {
     useLocation,
     useNavigation,
     useSubmit,
+    useActionData
 } from "react-router";
 import { useTranslation } from "react-i18next";
 import {
@@ -86,6 +87,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 
 const AnalysisPage = () => {
     const { project, modelId, history, entriesData, filterCol, filterVal, filterOp, filterBias } = useLoaderData<typeof loader>();
+    const actionData = useActionData<typeof action>();
     const { t } = useTranslation();
     const location = useLocation();
     const submit = useSubmit();
@@ -126,12 +128,12 @@ const AnalysisPage = () => {
 
     const isSubmitting = nav.formData?.get("intent") === "trigger_analysis";
 
-    // Auto-switch to history if a submission completes
+    // Auto-switch to history if a submission completes successfully
     useEffect(() => {
-        if (nav.state === "idle" && !isSubmitting && nav.formData) {
+        if (actionData?.success && nav.state === "idle" && !isSubmitting) {
             setActiveTab("history");
         }
-    }, [nav.state, isSubmitting, nav.formData]);
+    }, [actionData, nav.state, isSubmitting]);
 
     useEffect(() => {
         setLocalHistory(history);
