@@ -23,6 +23,7 @@ import {
   CheckSquare,
   Square
 } from "lucide-react";
+import { Breadcrumb, type BreadcrumbItem } from "~/components/Breadcrumb";
 
 import type {
   Entry,
@@ -153,21 +154,19 @@ const EntriesTable = (props: EntriesTableProps) => {
           </Link>
 
           <div>
-            <h1 className="text-3xl font-extrabold text-white-1 mb-1 tracking-tight flex items-center gap-3">
-              {/* Title should be clickable, go to project screen, hover yellow, text-white-1 */}
-              <Link
-                to={`/projects/${project.id}`}
-                className="text-white-1 hover:text-yellow-400 transition-colors flex items-center gap-2"
-              >
-                <Folder size={28} className="text-primary" />
-                {project.name}
-              </Link>
-              <span className="opacity-50">/</span>
-              <span className="text-primary flex items-center gap-2">
-                <Box size={28} />
-                {t(`projects.models.${modelId}`)}
-              </span>
-            </h1>
+            <Breadcrumb
+              items={[
+                {
+                  label: project.name,
+                  to: `/projects/${project.id}`,
+                  icon: <Folder size={28} className="text-primary" />
+                },
+                {
+                  label: t(`projects.models.${modelId}`),
+                  icon: <Box size={28} className="text-primary" />
+                }
+              ]}
+            />
             <p className="text-light-gray-70 text-sm mt-5">{t("projects.entries.desc")}</p>
           </div>
         </div>

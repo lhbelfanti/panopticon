@@ -1,5 +1,11 @@
 ## Current Position
-- **Current Phase:** 5 (Containerization)
+- **Current Phase:**
+    - [x] Fix accessibility to new analysis screen <!-- id: 18 -->
+    - [x] Reposition analysis tabs (New/History) to centered content area <!-- id: 19 -->
+    - [x] Refine analysis button UI (integrated status, text size, single line) <!-- id: 20 -->
+    - [x] Apply sentence-case capitalization across all analysis text <!-- id: 21 -->
+    - [x] Make history actions always visible <!-- id: 22 -->
+    - [x] Verify all analysis tests pass <!-- id: 23 -->
 - **Status:** Phase 4 (Analysis & History) fully verified and tested. Ready to start Phase 5.
 
 ## Next Steps
