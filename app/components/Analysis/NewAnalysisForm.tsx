@@ -34,44 +34,50 @@ export const NewAnalysisForm = ({
                         </p>
                     </div>
 
-                    <div className="flex gap-4 items-stretch h-36">
-                        {/* Selection Summary */}
-                        <div className="flex-1 bg-background-dark/50 border border-white/5 rounded-xl p-6 flex flex-col justify-between items-start">
-                            <div className="flex items-center gap-2 text-xs uppercase font-bold text-light-gray-50 tracking-widest leading-none">
-                                <Layers size={14} className="text-primary" />
-                                Current selection
+                    <div className="flex gap-4 items-stretch min-h-[144px] bg-background-dark/30 p-2 rounded-2xl border border-white/5">
+                        {/* Exclusions Summary Trigger (Primary Action) */}
+                        <button
+                            onClick={onOpenExclusions}
+                            className="flex-1 bg-surface-dark border border-white/10 hover:border-primary/50 hover:bg-white/5 rounded-xl p-6 flex flex-col justify-between items-start relative group/mini overflow-hidden transition-all text-left shadow-lg"
+                        >
+                            <div className="flex items-center gap-2 text-xs uppercase font-bold text-light-gray-50 tracking-widest leading-none group-hover/mini:text-primary transition-colors mb-4">
+                                <XSquare size={16} className="text-bittersweet-shimmer group-hover/mini:text-primary transition-colors" />
+                                Exclusions
                             </div>
-                            <div className="flex flex-col gap-1">
-                                <span className="text-4xl font-extrabold text-white-1 leading-none tabular-nums">
-                                    {excludedEntryIds.length > 0 ? "*" : "All"}
+                            <div className="flex flex-col gap-1 w-full">
+                                <span className="text-2xl font-extrabold text-white-1 leading-none group-hover/mini:text-primary transition-colors">
+                                    {excludedEntryIds.length > 0 ? "Refine list" : "Manage"}
                                 </span>
-                                <span className="text-xs font-semibold text-light-gray-70 leading-none">
-                                    {excludedEntryIds.length > 0 ? `${excludedEntryIds.length} entries excluded` : "Full subproject data"}
+                                <span className="text-xs font-semibold text-light-gray-70 leading-relaxed mt-1">
+                                    {excludedEntryIds.length > 0
+                                        ? `${excludedEntryIds.length} entries currently excluded. Click to modify.`
+                                        : "No exclusions applied. Click to select entries to ignore."}
+                                </span>
+                            </div>
+                            <div className="absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-hover/mini:opacity-100 transition-all group-hover/mini:translate-x-1 duration-300">
+                                <ChevronRight size={20} className="text-primary" />
+                            </div>
+                            {/* Decorative highlight */}
+                            <div className="absolute inset-0 border-2 border-primary/0 group-hover/mini:border-primary/50 rounded-xl transition-colors pointer-events-none" />
+                        </button>
+
+                        {/* Selection Summary (Informational) */}
+                        <div className="flex-1 bg-transparent p-6 flex flex-col justify-between items-start">
+                            <div className="flex items-center gap-2 text-xs uppercase font-bold text-light-gray-60 tracking-widest leading-none mb-4">
+                                <Layers size={14} className="text-primary/70" />
+                                Dataset for analysis
+                            </div>
+                            <div className="flex flex-col gap-1 w-full relative z-10">
+                                <span className="text-3xl font-extrabold text-white-1 leading-none tabular-nums opacity-90">
+                                    {excludedEntryIds.length > 0 ? "Filtered" : "Complete"}
+                                </span>
+                                <span className="text-xs font-semibold text-light-gray-60 leading-relaxed mt-1">
+                                    {excludedEntryIds.length > 0
+                                        ? "Analysis will run on the selected subset of entries."
+                                        : "Analysis will run on all available entries in the subproject."}
                                 </span>
                             </div>
                         </div>
-
-                        {/* Exclusions Summary Trigger */}
-                        <button
-                            onClick={onOpenExclusions}
-                            className="flex-1 bg-background-dark/50 border border-white/5 hover:border-primary/50 hover:bg-white/5 rounded-xl p-6 flex flex-col justify-between items-start relative group/mini overflow-hidden transition-all text-left"
-                        >
-                            <div className="flex items-center gap-2 text-xs uppercase font-bold text-light-gray-50 tracking-widest leading-none group-hover/mini:text-primary transition-colors">
-                                <XSquare size={14} className="text-bittersweet-shimmer group-hover/mini:text-primary transition-colors" />
-                                Exclusions
-                            </div>
-                            <div className="flex flex-col gap-1 max-w-[140px] truncate">
-                                <span className="text-white-1 text-sm font-bold truncate group-hover/mini:text-primary transition-colors">
-                                    {excludedEntryIds.length > 0 ? "Refine list" : "None applied"}
-                                </span>
-                                <span className="text-[10px] text-light-gray-70 uppercase tracking-widest leading-none font-medium">
-                                    {excludedEntryIds.length > 0 ? "Click to manage" : "Standard baseline"}
-                                </span>
-                            </div>
-                            <div className="absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover/mini:opacity-100 transition-opacity">
-                                <ChevronRight size={16} className="text-primary" />
-                            </div>
-                        </button>
                     </div>
 
                     <div className="flex items-center justify-between pt-6 border-t border-white/5">

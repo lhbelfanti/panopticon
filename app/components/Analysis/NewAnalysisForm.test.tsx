@@ -33,28 +33,28 @@ describe("NewAnalysisForm", () => {
         expect(screen.getByText("Generate subproject analysis")).toBeInTheDocument();
     });
 
-    it("shows 'All' and 'Full subproject data' when no entries are excluded", () => {
+    it("shows 'Complete' and info text when no entries are excluded in Dataset selection", () => {
         renderForm({ excludedEntryIds: [] });
-        expect(screen.getByText("All")).toBeInTheDocument();
-        expect(screen.getByText("Full subproject data")).toBeInTheDocument();
+        expect(screen.getByText("Complete")).toBeInTheDocument();
+        expect(screen.getByText("Analysis will run on all available entries in the subproject.")).toBeInTheDocument();
     });
 
-    it("shows exclusion count when entries are excluded", () => {
+    it("shows 'Filtered' text when entries are excluded in Dataset selection", () => {
         renderForm({ excludedEntryIds: ["e1", "e2", "e3"] });
-        expect(screen.getByText("*")).toBeInTheDocument();
-        expect(screen.getByText("3 entries excluded")).toBeInTheDocument();
+        expect(screen.getByText("Filtered")).toBeInTheDocument();
+        expect(screen.getByText("Analysis will run on the selected subset of entries.")).toBeInTheDocument();
     });
 
-    it("shows 'None applied' for exclusions when no exclusions", () => {
+    it("shows 'Manage' for exclusions when no exclusions", () => {
         renderForm({ excludedEntryIds: [] });
-        expect(screen.getByText("None applied")).toBeInTheDocument();
-        expect(screen.getByText("Standard baseline")).toBeInTheDocument();
+        expect(screen.getByText("Manage")).toBeInTheDocument();
+        expect(screen.getByText("No exclusions applied. Click to select entries to ignore.")).toBeInTheDocument();
     });
 
     it("shows 'Refine list' for exclusions when entries are excluded", () => {
         renderForm({ excludedEntryIds: ["e1"] });
         expect(screen.getByText("Refine list")).toBeInTheDocument();
-        expect(screen.getByText("Click to manage")).toBeInTheDocument();
+        expect(screen.getByText("1 entries currently excluded. Click to modify.")).toBeInTheDocument();
     });
 
     it("calls onOpenExclusions when the Exclusions card is clicked", async () => {
