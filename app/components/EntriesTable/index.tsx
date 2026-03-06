@@ -182,6 +182,10 @@ const EntriesTable = (props: EntriesTableProps) => {
             </div>
             <div>
               <h3 className="text-white-1 font-bold text-sm">Exclude entries</h3>
+              <p className="text-light-gray-60 text-xs mt-0.5">
+                Select entries for the next analysis run. Unchecked entries will be excluded.
+                <span className="ml-2 text-primary">({data.total - excludedIds.size} / {data.total} Included)</span>
+              </p>
             </div>
           </div>
           <div className="flex items-center gap-3">

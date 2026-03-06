@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, act } from "@testing-library/react";
+import { render, screen, fireEvent, act, waitFor } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { MemoryRouter } from "react-router";
 
@@ -158,7 +158,7 @@ describe("AnalysisPage Route Component", () => {
         expect(formArg.get("intent")).toBe("trigger_analysis");
     });
 
-    it("opens and closes the exclusion modal", () => {
+    it("opens and closes the exclusion modal", async () => {
         renderPage();
 
         // Modal should not be visible initially
@@ -166,7 +166,11 @@ describe("AnalysisPage Route Component", () => {
 
         // Open modal
         fireEvent.click(screen.getByTestId("open-exclusions-btn"));
-        expect(screen.getByTestId("entries-table-modal")).toBeInTheDocument();
+
+        // Wait for smooth scroll timeout
+        await waitFor(() => {
+            expect(screen.getByTestId("entries-table-modal")).toBeInTheDocument();
+        });
         expect(screen.getByText(/Refine exclusions/i)).toBeInTheDocument();
 
         // Close modal via 'Apply & close'
@@ -174,11 +178,16 @@ describe("AnalysisPage Route Component", () => {
         expect(screen.queryByTestId("entries-table-modal")).not.toBeInTheDocument();
     });
 
-    it("updates excluded count when state changes in the modal", () => {
+    it("updates excluded count when state changes in the modal", async () => {
         renderPage();
 
         // Open modal
         fireEvent.click(screen.getByTestId("open-exclusions-btn"));
+
+        // Wait for smooth scroll timeout
+        await waitFor(() => {
+            expect(screen.getByTestId("toggle-id-1")).toBeInTheDocument();
+        });
 
         // Toggle entry 1 in modal
         fireEvent.click(screen.getByTestId("toggle-id-1"));

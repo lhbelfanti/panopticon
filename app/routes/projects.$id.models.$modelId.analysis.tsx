@@ -99,22 +99,24 @@ const AnalysisPage = () => {
     const [selectedRun, setSelectedRun] = useState<AnalysisRun | null>(null);
 
     // Exclusion Modal State
+    // Exclusion Modal State
     const [showExclusionModal, setShowExclusionModal] = useState(false);
     const [excludedEntryIds, setExcludedEntryIds] = useState<string[]>(passedExcludedIds);
 
-    // Scroll to top and lock body scroll when exclusion modal opens
-    useEffect(() => {
-        if (showExclusionModal) {
-            window.scrollTo({ top: 0, behavior: "smooth" });
-            document.body.style.overflow = "hidden";
-        } else {
-            document.body.style.overflow = "unset";
-        }
+    const handleOpenExclusions = () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
 
-        return () => {
-            document.body.style.overflow = "unset";
-        };
-    }, [showExclusionModal]);
+        // Wait for smooth scroll to finish before opening the modal and locking scroll
+        setTimeout(() => {
+            document.body.style.overflow = "hidden";
+            setShowExclusionModal(true);
+        }, 400);
+    };
+
+    const handleCloseExclusions = () => {
+        document.body.style.overflow = "unset";
+        setShowExclusionModal(false);
+    };
 
     useEffect(() => {
         if (passedExcludedIds.length > 0) {
@@ -211,7 +213,7 @@ const AnalysisPage = () => {
                     excludedEntryIds={excludedEntryIds}
                     isSubmitting={isSubmitting}
                     onSubmit={handleGenerate}
-                    onOpenExclusions={() => setShowExclusionModal(true)}
+                    onOpenExclusions={handleOpenExclusions}
                 />
             ) : (
                 <div className="max-w-6xl mx-auto py-6">
@@ -242,12 +244,9 @@ const AnalysisPage = () => {
                                         </div>
                                         Refine exclusions
                                     </h2>
-                                    <p className="text-light-gray-60 text-xs mt-1">
-                                        Select entries to ignore in this analysis. {excludedEntryIds.length} entries currently excluded.
-                                    </p>
                                 </div>
                                 <button
-                                    onClick={() => setShowExclusionModal(false)}
+                                    onClick={handleCloseExclusions}
                                     className="p-3 rounded-xl bg-white/5 text-light-gray-70 hover:text-white-1 hover:bg-white/10 transition-all"
                                 >
                                     <X size={24} />
@@ -273,7 +272,7 @@ const AnalysisPage = () => {
                             {/* Modal Footer */}
                             <div className="p-6 border-t border-white/5 bg-black/20 flex justify-end shrink-0">
                                 <button
-                                    onClick={() => setShowExclusionModal(false)}
+                                    onClick={handleCloseExclusions}
                                     className="bg-primary hover:bg-primary/90 text-background-dark px-8 py-3 rounded-xl font-bold transition-all hover:scale-105 active:scale-95 shadow-xl shadow-primary/20"
                                 >
                                     Apply & close
