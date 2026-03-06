@@ -385,41 +385,43 @@ const EntriesTable = (props: EntriesTableProps) => {
         <div className="overflow-x-auto relative flex-1">
           <div
             className={
-              "transition-opacity duration-200 " +
+              "flex flex-col flex-1 transition-opacity duration-200 " +
               (nav.state === "loading" ? "opacity-30" : "opacity-100")
             }
           >
+            {isExcludeMode && data.entries.length > 0 && (
+              <div className="bg-white/5 border-b border-white/5 px-4 py-3 flex items-center justify-start">
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => {
+                      const allIdsOnPage = data.entries.map(e => e.id);
+                      const areAllExcluded = allIdsOnPage.every(id => excludedIds.has(id));
+
+                      const newExcluded = new Set(excludedIds);
+                      if (areAllExcluded) {
+                        // Deselect All on current page (means they are included in analysis)
+                        allIdsOnPage.forEach(id => newExcluded.delete(id));
+                      } else {
+                        // Select All on current page (means they are excluded)
+                        allIdsOnPage.forEach(id => newExcluded.add(id));
+                      }
+                      setExcludedIds(newExcluded);
+                    }}
+                    className="hover:text-primary transition-colors flex items-center justify-center p-1 rounded hover:bg-white/5"
+                    title={data.entries.every(e => excludedIds.has(e.id)) ? "Deselect page" : "Select page"}
+                  >
+                    {data.entries.every(e => excludedIds.has(e.id)) ? <CheckSquare size={16} className="text-primary" /> : <Square size={16} className="text-light-gray-50 opacity-40" />}
+                  </button>
+                  <span className="text-sm font-bold text-white-1">Select all</span>
+                </div>
+              </div>
+            )}
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className={tableHeaderRowClasses}>
                   {isExcludeMode && (
                     <th className="py-3 px-4 whitespace-nowrap text-left w-1">
-                      <div className="flex flex-col gap-1 items-start">
-                        <div className="flex items-center gap-2">
-                          <button
-                            onClick={() => {
-                              const allIdsOnPage = data.entries.map(e => e.id);
-                              const areAllExcluded = allIdsOnPage.every(id => excludedIds.has(id));
-
-                              const newExcluded = new Set(excludedIds);
-                              if (areAllExcluded) {
-                                // Deselect All on current page (means they are included in analysis)
-                                allIdsOnPage.forEach(id => newExcluded.delete(id));
-                              } else {
-                                // Select All on current page (means they are excluded)
-                                allIdsOnPage.forEach(id => newExcluded.add(id));
-                              }
-                              setExcludedIds(newExcluded);
-                            }}
-                            className="hover:text-primary transition-colors flex items-center justify-center p-1 rounded hover:bg-white/5"
-                            title={data.entries.every(e => excludedIds.has(e.id)) ? "Deselect page" : "Select page"}
-                          >
-                            {data.entries.every(e => excludedIds.has(e.id)) ? <Square size={16} className="text-light-gray-50 opacity-40" /> : <CheckSquare size={16} className="text-primary" />}
-                          </button>
-                          <span className="text-xs text-light-gray-50 font-normal">Select / unselect all the entries of the current page</span>
-                        </div>
-                        <span className="font-bold ml-1">Selected</span>
-                      </div>
+                      <span className="font-bold">Selected</span>
                     </th>
                   )}
                   <th className="py-3 px-4 w-1 whitespace-nowrap text-left">{t("projects.entries.tableId")}</th>
