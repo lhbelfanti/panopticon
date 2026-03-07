@@ -82,6 +82,38 @@ export const deleteProject = async (id: number): Promise<boolean> => {
   return projects.length < initialLen;
 };
 
+export const updateProject = async (
+  id: number,
+  data: Partial<CreateProjectDTO>,
+): Promise<Project | null> => {
+  await delay(800);
+  const projectIndex = projects.findIndex((p) => p.id === id);
+  if (projectIndex === -1) return null;
+
+  const project = projects[projectIndex];
+
+  // Update name and description if provided
+  if (data.name) project.name = data.name;
+  if (data.description !== undefined) project.description = data.description;
+
+  // Handle adding new models
+  if (data.models) {
+    const newModels = data.models.filter(m => !project.models.includes(m));
+    if (newModels.length > 0) {
+      project.models = [...project.models, ...newModels];
+      const newSubprojects = newModels.map(model => ({
+        id: parseInt(`${id}${Math.floor(Math.random() * 100)}`),
+        model,
+        createdAt: new Date().toISOString(),
+      }));
+      project.subprojects = [...project.subprojects, ...newSubprojects];
+    }
+  }
+
+  projects[projectIndex] = project;
+  return project;
+};
+
 export const BEHAVIOR_CONFIGS: BehaviorConfig[] = [
   {
     id: "illicit_drugs",
