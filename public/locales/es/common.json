@@ -76,7 +76,13 @@
         },
         "recentActivity": {
             "title": "Actividad reciente",
-            "noActivity": "No hay actividad reciente."
+            "noActivity": "No hay actividad reciente.",
+            "messages": {
+                "project_created": "El proyecto '{{name}}' ha sido creado",
+                "csv_uploaded": "Subiste el archivo '{{name}}' ({{count}} entradas)",
+                "tweets_added": "Se agregaron {{count}} entradas a '{{name}}'",
+                "predictions_made": "Se completaron {{count}} predicciones con '{{model}}'"
+            }
         }
     },
     "relativeTime": {
