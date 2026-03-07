@@ -86,14 +86,12 @@ describe("ProjectViewPage Route", () => {
         expect(screen.getByText("projects.view.subprojectsTitle")).toBeInTheDocument();
     });
 
-    it("opens delete project modal", async () => {
-        const user = userEvent.setup();
+    it("renders settings project link", async () => {
         renderPage();
 
-        const deleteBtn = screen.getByTitle("projects.view.deleteProject");
-        await user.click(deleteBtn);
-
-        expect(screen.getByText('projects.view.deleteProjectDesc {"name":"Test Project"}')).toBeInTheDocument();
+        const settingsBtn = screen.getByTitle("projects.view.settings");
+        expect(settingsBtn).toBeInTheDocument();
+        expect(settingsBtn).toHaveAttribute("href", "/projects/proj-123/settings");
     });
 });
 
@@ -168,22 +166,14 @@ describe("ProjectViewPage Route Meta & Edge Cases", () => {
             .rejects.toThrow();
     });
 
-    it("handles closing the delete modal", async () => {
-        const user = userEvent.setup();
+    it("renders settings button correctly", async () => {
         render(
             <MemoryRouter>
                 <ProjectViewPage />
             </MemoryRouter>
         );
 
-        // Open modal
-        const deleteBtn = screen.getByTitle("projects.view.deleteProject");
-        await user.click(deleteBtn);
-        expect(screen.getByTestId("modal")).toBeInTheDocument();
-
-        // Close modal
-        const closeBtn = screen.getByTestId("close-modal");
-        await user.click(closeBtn);
-        expect(screen.queryByTestId("modal")).not.toBeInTheDocument();
+        const settingsBtn = screen.getByTitle("projects.view.settings");
+        expect(settingsBtn).toBeInTheDocument();
     });
 });
