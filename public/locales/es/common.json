@@ -141,8 +141,24 @@
             "emptyModels": "No hay modelos CL configurados para este proyecto.",
             "openSubproject": "Explore subproject \u2192",
             "deleteProject": "Eliminar proyecto",
+            "settings": "Configuración",
             "deleteProjectDesc": "¿Estás seguro de que deseas eliminar el proyecto \"{{name}}\"? Esta acción no se puede deshacer y eliminará permanentemente todas las entradas y subproyectos asociados.",
             "deleteProjectConfirm": "Eliminar proyecto"
+        },
+        "edit": {
+            "title": "Editar proyecto",
+            "submit": "Guardar cambios",
+            "saving": "Guardando..."
+        },
+        "settings": {
+            "title": "Configuración del proyecto",
+            "description": "Información y configuración para el proyecto \"{{name}}\"",
+            "backToProject": "Volver al proyecto",
+            "generalTitle": "Configuración general",
+            "dangerZoneTitle": "Zona de peligro",
+            "deleteTitle": "Eliminar este proyecto",
+            "deleteWarning": "Una vez que elimines un proyecto, no hay vuelta atrás. Todos los subproyectos y entradas asociados serán eliminados. Por favor, asegúrate.",
+            "deleteButton": "Eliminar proyecto"
         },
         "entries": {
             "title": "Entradas analizadas",

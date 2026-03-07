@@ -141,8 +141,24 @@
             "emptyModels": "No ML models were configured for this project.",
             "openSubproject": "Open predictions \u2192",
             "deleteProject": "Delete project",
+            "settings": "Settings",
             "deleteProjectDesc": "Are you sure you want to delete the project \"{{name}}\"? This action cannot be undone and will permanently delete all associated entries and subprojects.",
             "deleteProjectConfirm": "Delete project"
+        },
+        "edit": {
+            "title": "Edit project",
+            "submit": "Save changes",
+            "saving": "Saving..."
+        },
+        "settings": {
+            "title": "Project settings",
+            "description": "Information and configuration for project \"{{name}}\"",
+            "backToProject": "Back to project",
+            "generalTitle": "General configuration",
+            "dangerZoneTitle": "Danger zone",
+            "deleteTitle": "Delete this project",
+            "deleteWarning": "Once you delete a project, there is no going back. All associated subprojects and entries will be removed. Please be certain.",
+            "deleteButton": "Delete project"
         },
         "entries": {
             "title": "Analyzed entries",
