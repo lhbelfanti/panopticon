@@ -140,13 +140,6 @@ const ProjectViewPage = () => {
                 className="group-hover:text-white-1 transition-colors"
               />
             </Link>
-            <Link
-              to={`/entries/new?projectId=${project.id}`}
-              className="flex items-center gap-2 px-5 py-2.5 bg-primary hover:bg-primary/90 text-background-dark font-bold rounded-lg transition-all hover:-translate-y-0.5 shadow-lg shadow-primary/20"
-            >
-              <PlusCircle size={18} />
-              {t("sidebar.newEntry")}
-            </Link>
           </div>
         </div>
 
@@ -202,6 +195,17 @@ const ProjectViewPage = () => {
           isDestructive={true}
           hiddenInputs={{ intent: "delete_project" }}
         />
+      </div>
+
+      {/* Floating Action Button (FAB) for New Entry */}
+      <div className="fixed bottom-8 right-8 z-40 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-300">
+        <Link
+          to={`/entries/new?projectId=${project.id}`}
+          className="flex items-center gap-2 px-6 py-4 bg-primary hover:bg-primary/90 text-background-dark font-bold rounded-full transition-all hover:-translate-y-1 hover:scale-105 shadow-2xl shadow-primary/30 group"
+        >
+          <PlusCircle size={22} className="group-hover:rotate-90 transition-transform duration-300" />
+          <span className="text-base">{t("sidebar.newEntry")}</span>
+        </Link>
       </div>
     </div>
   );
