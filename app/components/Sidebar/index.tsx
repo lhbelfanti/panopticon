@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 
 import { Logo } from "~/components/Logo";
 import ConfirmationModal from "~/components/ConfirmationModal";
+import packageJson from "../../../package.json";
 import { NavItem } from "./NavItem";
 
 import {
@@ -130,7 +131,7 @@ export const Sidebar = (props: SidebarProps) => {
         </nav>
 
         {/* Footer / User Settings */}
-        <div className="mt-auto border-t border-white/5 p-4 bg-black/20">
+        <div className="mt-auto border-t border-white/5 p-4 bg-black/20 flex flex-col gap-2">
           <div
             className={cn(
               "flex items-center",
@@ -173,6 +174,13 @@ export const Sidebar = (props: SidebarProps) => {
               </button>
             )}
           </div>
+          {!collapsed && (
+            <div className="flex justify-start pr-2">
+              <span className="text-[10px] text-light-gray-70 opacity-40 uppercase tracking-tighter">
+                Version: {packageJson.version}
+              </span>
+            </div>
+          )}
         </div>
       </aside>
 
