@@ -5,7 +5,10 @@ import { RecentActivity } from "./index";
 vi.mock("react-i18next", () => ({
     Trans: ({ i18nKey, children }: any) => children || i18nKey,
     useTranslation: () => ({
-        t: (key: string, options: any) => options ? `${key} count:${options.count}` : key,
+        t: (key: string, options: any) => {
+            if (options?.defaultValue) return options.defaultValue;
+            return options ? `${key} count:${options.count}` : key;
+        },
     }),
 }));
 
@@ -31,12 +34,14 @@ describe("RecentActivity", () => {
                 id: "1",
                 type: "project_created",
                 description: "Created new project X",
+                metadata: { name: "X" },
                 timestamp: "2024-01-02T11:55:00Z", // 5 mins ago
             },
             {
                 id: "2",
                 type: "predictions_made",
                 description: "Predictions complete for Y",
+                metadata: { model: "Y" },
                 timestamp: "2024-01-01T12:00:00Z", // 1 day ago
             }
         ];
