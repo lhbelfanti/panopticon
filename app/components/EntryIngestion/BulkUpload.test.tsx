@@ -19,8 +19,8 @@ describe("BulkUpload", () => {
 
     it("renders the dropzone correctly", () => {
         render(<BulkUpload onUpload={onUploadMock} />);
-        expect(screen.getByText("entries.new.dropzoneTitle")).toBeInTheDocument();
-        expect(screen.getByText("entries.new.selectFile")).toBeInTheDocument();
+        expect(screen.getByText("projects.entries.new.dropzoneTitle")).toBeInTheDocument();
+        expect(screen.getByText("projects.entries.new.selectFile")).toBeInTheDocument();
     });
 
     it("shows error for invalid file type", async () => {
@@ -31,7 +31,7 @@ describe("BulkUpload", () => {
         fireEvent.change(input, { target: { files: [file] } });
 
         await waitFor(() => {
-            expect(screen.getByText("entries.new.errorInvalidCsv")).toBeInTheDocument();
+            expect(screen.getByText("projects.entries.new.errorInvalidCsv")).toBeInTheDocument();
         });
     });
 
@@ -44,7 +44,7 @@ describe("BulkUpload", () => {
 
         await waitFor(() => {
             expect(screen.getByText("test.csv")).toBeInTheDocument();
-            expect(screen.getByRole("button", { name: "entries.new.confirmUpload" })).toBeInTheDocument();
+            expect(screen.getByRole("button", { name: "projects.entries.new.confirmUpload" })).toBeInTheDocument();
         });
     });
 
@@ -56,7 +56,7 @@ describe("BulkUpload", () => {
         const file = new File([csvContent], "test.csv", { type: "text/csv" });
         fireEvent.change(input, { target: { files: [file] } });
 
-        const confirmBtn = await screen.findByRole("button", { name: "entries.new.confirmUpload" });
+        const confirmBtn = await screen.findByRole("button", { name: "projects.entries.new.confirmUpload" });
         fireEvent.click(confirmBtn);
 
         await waitFor(() => {
@@ -75,7 +75,7 @@ describe("BulkUpload", () => {
         const file = new File([csvContent], "test.csv", { type: "text/csv" });
         fireEvent.change(input, { target: { files: [file] } });
 
-        const confirmBtn = await screen.findByRole("button", { name: "entries.new.confirmUpload" });
+        const confirmBtn = await screen.findByRole("button", { name: "projects.entries.new.confirmUpload" });
         fireEvent.click(confirmBtn);
 
         await waitFor(() => {
@@ -107,7 +107,7 @@ describe("BulkUpload", () => {
         fireEvent.drop(dropzone!, { dataTransfer });
 
         await waitFor(() => {
-            expect(screen.getByText("entries.new.errorInvalidCsv")).toBeInTheDocument();
+            expect(screen.getByText("projects.entries.new.errorInvalidCsv")).toBeInTheDocument();
         });
     });
 
@@ -157,7 +157,7 @@ describe("BulkUpload", () => {
 
     it("triggers generateTemplate generic", () => {
         render(<BulkUpload onUpload={onUploadMock} socialMediaType="generic" />);
-        const downloadBtn = screen.getByText("Download Template");
+        const downloadBtn = screen.getByText("projects.entries.new.bulkUpload.downloadTemplate");
 
         // Mock link click
         const appendChildSpy = vi.spyOn(document.body, "appendChild");
@@ -174,7 +174,7 @@ describe("BulkUpload", () => {
 
     it("triggers generateTemplate twitter", () => {
         render(<BulkUpload onUpload={onUploadMock} socialMediaType="twitter" />);
-        const downloadBtn = screen.getByText("Download Template");
+        const downloadBtn = screen.getByText("projects.entries.new.bulkUpload.downloadTemplate");
 
         const appendChildSpy = vi.spyOn(document.body, "appendChild");
         const removeChildSpy = vi.spyOn(document.body, "removeChild");
@@ -196,7 +196,7 @@ describe("BulkUpload", () => {
         const file = new File([csvContent], "test.csv", { type: "text/csv" });
         fireEvent.change(input, { target: { files: [file] } });
 
-        const confirmBtn = await screen.findByRole("button", { name: "entries.new.confirmUpload" });
+        const confirmBtn = await screen.findByRole("button", { name: "projects.entries.new.confirmUpload" });
         fireEvent.click(confirmBtn);
 
         await waitFor(() => {
@@ -212,7 +212,7 @@ describe("BulkUpload", () => {
         const file = new File([csvContent], "test.csv", { type: "text/csv" });
         fireEvent.change(input, { target: { files: [file] } });
 
-        const confirmBtn = await screen.findByRole("button", { name: "entries.new.confirmUpload" });
+        const confirmBtn = await screen.findByRole("button", { name: "projects.entries.new.confirmUpload" });
         fireEvent.click(confirmBtn);
 
         await waitFor(() => {

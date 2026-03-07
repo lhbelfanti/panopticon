@@ -160,4 +160,94 @@ describe("NewProjectForm", () => {
         renderForm({ isSubmitting: true });
         expect(screen.getByRole("button", { name: "projects.new.creating" })).toBeDisabled();
     });
+
+    it("renders edit mode correctly and handles selection locking", async () => {
+        renderForm({
+            mode: "edit",
+            initialData: {
+                name: "Initial Project",
+                description: "Initial Description",
+                behaviors: ["spam"],
+                models: ["bert_spanish"]
+            }
+        });
+
+        expect(screen.getByDisplayValue("Initial Project")).toBeInTheDocument();
+        expect(screen.getByDisplayValue("Initial Description")).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "projects.edit.submit" })).toBeInTheDocument();
+
+        const checkboxes = screen.getAllByRole("checkbox") as HTMLInputElement[];
+        const spamCheckbox = checkboxes.find(c => c.value === "spam");
+        const toxicityCheckbox = checkboxes.find(c => c.value === "toxicity");
+
+        // Initial behavior should be checked and disabled (locked)
+        expect(spamCheckbox).toBeChecked();
+        expect(spamCheckbox).toBeDisabled();
+
+        // Toxicity behavior should be disabled because it's incompatible with bert_spanish
+        expect(toxicityCheckbox).not.toBeChecked();
+        expect(toxicityCheckbox).toBeDisabled();
+        expect(screen.getByText("projects.new.incompatibleWithModels")).toBeInTheDocument();
+
+        // Initially selected model should be checked and disabled
+        const bertCheckbox = checkboxes.find(c => c.value === "bert_spanish");
+        expect(bertCheckbox).toBeChecked();
+        expect(bertCheckbox).toBeDisabled();
+    });
+
+    it("disables submit button in edit mode if no model intersection", async () => {
+        const user = userEvent.setup();
+        renderForm({
+            mode: "edit",
+            initialData: {
+                behaviors: [],
+                models: []
+            },
+            // Add two behaviors that don't share models
+            behaviorConfigs: [
+                {
+                    id: "b1",
+                    enabled: true,
+                    availableModels: ["bert_spanish"],
+                    iconName: "Circle"
+                },
+                {
+                    id: "b2",
+                    enabled: true,
+                    availableModels: ["roberta_english"],
+                    iconName: "Circle"
+                }
+            ]
+        });
+
+        const checkboxes = screen.getAllByRole("checkbox") as HTMLInputElement[];
+        const b1Checkbox = checkboxes.find(c => c.value === "b1");
+        const b2Checkbox = checkboxes.find(c => c.value === "b2");
+
+        if (b1Checkbox) await user.click(b1Checkbox);
+        if (b2Checkbox) await user.click(b2Checkbox);
+
+        // Submit button should be disabled because intersection is now empty
+        expect(screen.getByRole("button", { name: "projects.edit.submit" })).toBeDisabled();
+        expect(screen.getByText("projects.new.noModelsIntersection")).toBeInTheDocument();
+    });
+
+    it("disables behaviors in edit mode if they are incompatible with existing models", async () => {
+        renderForm({
+            mode: "edit",
+            initialData: {
+                behaviors: ["spam"],
+                models: ["bert_spanish"]
+            },
+            // toxicity supports roberta_english and llama3, NOT bert_spanish
+            // So toxicity should be incompatible with bert_spanish in mockBehaviors
+        });
+
+        const checkboxes = screen.getAllByRole("checkbox") as HTMLInputElement[];
+        const toxicityCheckbox = checkboxes.find(c => c.value === "toxicity");
+
+        expect(toxicityCheckbox).toBeDisabled();
+        // The text is rendered via notAvailableText prop
+        expect(screen.getByText("projects.new.incompatibleWithModels")).toBeInTheDocument();
+    });
 });
