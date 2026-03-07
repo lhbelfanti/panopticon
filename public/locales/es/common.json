@@ -180,6 +180,8 @@
             "deleteEntryDesc": "Est\u00e1 seguro de que desea eliminar esta entrada? Esta acci\u00f3n no se puede deshacer.",
             "exportCsv": "Exportar CSV",
             "datasetEntries": "Entradas del dataset",
+            "predictPending": "Predecir pendientes",
+            "predicting": "Prediciendo...",
             "new": {
                 "title": "Agregar entradas",
                 "subtitle": "Importar datos al proyecto \"{{name}}\" para su análisis.",

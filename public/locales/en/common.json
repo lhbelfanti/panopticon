@@ -182,6 +182,8 @@
             "analysis": "Analysis",
             "openAnalysis": "Open analysis \u2192",
             "datasetEntries": "Dataset entries",
+            "predictPending": "Predict Pending",
+            "predicting": "Predicting...",
             "new": {
                 "title": "Add entries",
                 "subtitle": "Import data to project \"{{name}}\" for analysis.",
