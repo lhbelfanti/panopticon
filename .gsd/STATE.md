@@ -10,7 +10,8 @@
     - [x] Implement dynamic, translated recent activity messages <!-- id: 25 -->
     - [x] Implement Project Settings (Edit, New Models, Danger Zone) <!-- id: 26 -->
     - [x] Reorganize project view (FAB for New Entry) <!-- id: 27 -->
-- **Status:** Phase 4 (Analysis & History) fully verified and tested. Phase 5 Project Management features started with Project Settings and UI reorganization. Miscellaneous UI refinements complete.
+    - [x] Enforce model intersection validation on Edit Project <!-- id: 28 -->
+- **Status:** Phase 4 (Analysis & History) fully verified and tested. Phase 5 Project Management features complete (Project Settings, UI reorganization, validation refinement). Miscellaneous UI refinements and test coverage complete.
 
 ## Next Steps
 1. Initialize Phase 5 Containerization.
