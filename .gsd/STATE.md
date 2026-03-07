@@ -6,10 +6,12 @@
     - [x] Apply sentence-case capitalization across all analysis text <!-- id: 21 -->
     - [x] Make history actions always visible <!-- id: 22 -->
     - [x] Verify all analysis tests pass <!-- id: 23 -->
-- **Status:** Phase 4 (Analysis & History) fully verified and tested. Ready to start Phase 5.
+    - [x] Move version number to sidebar footer <!-- id: 24 -->
+    - [x] Implement dynamic, translated recent activity messages <!-- id: 25 -->
+- **Status:** Phase 4 (Analysis & History) fully verified and tested. Ready to start Phase 5. Miscellaneous UI refinements complete.
 
 ## Next Steps
 1. Initialize Phase 5 Containerization.
 2. Create Dockerfile and docker-compose.yml.
 
-**Status**: Active (resumed 2026-03-04 09:47)
+**Status**: Active (resumed 2026-03-07 08:13)

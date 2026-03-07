@@ -15,5 +15,6 @@ export interface RecentActivity {
   id: number;
   type: RecentActivityType;
   description: string;
+  metadata?: Record<string, string | number>;
   timestamp: string;
 }

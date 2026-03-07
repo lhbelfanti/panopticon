@@ -4,6 +4,7 @@ export interface ActivityItem {
   description: string;
   timestamp: string;
   status?: string;
+  metadata?: Record<string, string | number>;
 }
 
 export interface RecentActivityProps {

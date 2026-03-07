@@ -51,7 +51,10 @@ export const RecentActivity = (props: RecentActivityProps) => {
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-white-1 text-sm truncate">
-                  {activity.description}
+                  {t(`dashboard.recentActivity.messages.${activity.type}`, {
+                    ...activity.metadata,
+                    defaultValue: activity.description,
+                  }) as string}
                 </p>
                 <p className="text-xs text-light-gray-70 mt-0.5">
                   {getTimeAgo(activity.timestamp)}
