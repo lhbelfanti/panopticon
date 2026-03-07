@@ -16,7 +16,7 @@ import ConfirmationModal from "~/components/ConfirmationModal";
 import SubprojectCard from "~/components/SubprojectCard";
 import { AdverseBehaviorLabel } from "~/components/AdverseBehaviorLabel";
 
-import { Folder, PlusCircle, Trash2, ArrowLeft } from "lucide-react";
+import { Folder, PlusCircle, Trash2, ArrowLeft, Settings } from "lucide-react";
 import * as LucideIcons from "lucide-react";
 import { Trans, useTranslation } from "react-i18next";
 
@@ -131,24 +131,22 @@ const ProjectViewPage = () => {
 
           <div className="flex items-center gap-3">
             <Link
+              to={`/projects/${project.id}/settings`}
+              className="group flex-shrink-0 text-light-gray-70 transition-all p-2.5 rounded-full hover:bg-white/5 hover:scale-105"
+              title={t("projects.view.settings")}
+            >
+              <Settings
+                size={20}
+                className="group-hover:text-white-1 transition-colors"
+              />
+            </Link>
+            <Link
               to={`/entries/new?projectId=${project.id}`}
               className="flex items-center gap-2 px-5 py-2.5 bg-primary hover:bg-primary/90 text-background-dark font-bold rounded-lg transition-all hover:-translate-y-0.5 shadow-lg shadow-primary/20"
             >
               <PlusCircle size={18} />
               {t("sidebar.newEntry")}
             </Link>
-            <button
-              type="button"
-              onClick={() => setShowDeleteModal(true)}
-              disabled={isDeleting}
-              className="group flex-shrink-0 text-bittersweet-shimmer transition-all p-2.5 rounded-full hover:bg-bittersweet-shimmer hover:scale-105 disabled:opacity-50 disabled:hover:scale-100 disabled:hover:bg-transparent"
-              title={t("projects.view.deleteProject")}
-            >
-              <Trash2
-                size={20}
-                className="group-hover:text-white-1 transition-colors"
-              />
-            </button>
           </div>
         </div>
 
