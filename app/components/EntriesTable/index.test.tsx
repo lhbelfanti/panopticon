@@ -160,7 +160,7 @@ describe("EntriesTable", () => {
         const user = userEvent.setup();
         renderTable();
 
-        const predictBtn = screen.getByRole("button", { name: /Predict Pending/i });
+        const predictBtn = screen.getByRole("button", { name: "projects.entries.predictPending" });
         await user.click(predictBtn);
 
         expect(mockSubmit).toHaveBeenCalled();
