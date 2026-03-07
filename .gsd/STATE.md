@@ -8,9 +8,13 @@
     - [x] Verify all analysis tests pass <!-- id: 23 -->
     - [x] Move version number to sidebar footer <!-- id: 24 -->
     - [x] Implement dynamic, translated recent activity messages <!-- id: 25 -->
-    - [x] Implement Project Settings (Edit, New Models, Danger Zone) <!-- id: 26 -->
-    - [x] Reorganize project view (FAB for New Entry) <!-- id: 27 -->
-    - [x] Enforce model intersection validation on Edit Project <!-- id: 28 -->
+    - [x] Phase 5: Project Management - Project Settings, UI reorganization, and validation refinement
+    - [x] Implement Project Settings (Edit Project)
+    - [x] Move New Entry button to FAB
+    - [x] Enforce model availability/intersection validation
+    - [x] Enforce behavior compatibility in edit mode
+    - [x] Relocate Predict button to table footer
+    - [ ] Phase 6: Analysis Experience Improvements <!-- id: 19 -->
 - **Status:** Phase 4 (Analysis & History) fully verified and tested. Phase 5 Project Management features complete (Project Settings, UI reorganization, validation refinement). Miscellaneous UI refinements and test coverage complete.
 
 ## Next Steps
