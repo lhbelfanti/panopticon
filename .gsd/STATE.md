@@ -8,7 +8,8 @@
     - [x] Verify all analysis tests pass <!-- id: 23 -->
     - [x] Move version number to sidebar footer <!-- id: 24 -->
     - [x] Implement dynamic, translated recent activity messages <!-- id: 25 -->
-- **Status:** Phase 4 (Analysis & History) fully verified and tested. Ready to start Phase 5. Miscellaneous UI refinements complete.
+    - [x] Implement Project Settings (Edit, New Models, Danger Zone) <!-- id: 26 -->
+- **Status:** Phase 4 (Analysis & History) fully verified and tested. Phase 5 Project Management features started with Project Settings. Miscellaneous UI refinements complete.
 
 ## Next Steps
 1. Initialize Phase 5 Containerization.
