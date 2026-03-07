@@ -18,13 +18,18 @@ const modelsList = [
 ];
 
 export const NewProjectForm = (props: NewProjectFormProps) => {
-  const { actionData, isSubmitting, behaviorConfigs } = props;
+  const { actionData, isSubmitting, behaviorConfigs, mode = "create", initialData } = props;
   const { t } = useTranslation();
 
+  const isEdit = mode === "edit";
+
   // Track selected behaviors to compute available models (intersection)
-  const [selectedBehaviors, setSelectedBehaviors] = useState<string[]>([]);
+  const [selectedBehaviors, setSelectedBehaviors] = useState<string[]>(
+    initialData?.behaviors || []
+  );
 
   const handleBehaviorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (isEdit) return; // Behaviors are locked in edit mode
     const val = e.target.value;
     if (e.target.checked) {
       setSelectedBehaviors((prev) => [...prev, val]);
@@ -59,7 +64,8 @@ export const NewProjectForm = (props: NewProjectFormProps) => {
     "w-full bg-sidebar-dark border border-white/10 rounded-lg p-3.5 text-white-1 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all placeholder:opacity-30 shadow-inner";
 
   return (
-    <Form method="post" className="p-8 lg:p-10 flex flex-col gap-8">
+    <Form method="post" className="p-8 lg:p-10 flex flex-col gap-8" id="project-form">
+      {mode === "edit" && <input type="hidden" name="intent" value="update_project" />}
       {actionData?.error && (
         <div className="p-4 bg-red-900/30 border border-red-500/50 text-red-200 rounded-lg text-sm font-medium">
           {actionData.error}
@@ -80,6 +86,7 @@ export const NewProjectForm = (props: NewProjectFormProps) => {
             name="name"
             id="name"
             required
+            defaultValue={initialData?.name}
             className={inputClassName}
             placeholder={t("projects.new.namePlaceholder")}
           />
@@ -96,6 +103,7 @@ export const NewProjectForm = (props: NewProjectFormProps) => {
             name="description"
             id="description"
             rows={3}
+            defaultValue={initialData?.description}
             className={`${inputClassName} resize-none custom-scrollbar`}
             placeholder={t("projects.new.descriptionPlaceholder")}
           />
@@ -119,16 +127,18 @@ export const NewProjectForm = (props: NewProjectFormProps) => {
             const IconComponent =
               (LucideIcons as any)[config.iconName] || LucideIcons.Circle;
             const isEnabled = config.enabled;
+            const isSelected = selectedBehaviors.includes(config.id);
 
             return (
               <CustomCheckbox
                 key={config.id}
                 name="behaviors"
                 value={config.id}
-                disabled={!isEnabled}
+                checked={isSelected}
+                disabled={!isEnabled || isEdit}
                 onChange={handleBehaviorChange}
                 notAvailableText={t("common.notAvailable")}
-                wrapperClassName="p-4 bg-background-dark/50 pl-3 pr-4"
+                wrapperClassName={`p-4 bg-background-dark/50 pl-3 pr-4 ${isEdit ? "opacity-60 cursor-not-allowed" : ""}`}
                 icon={
                   <div
                     className={`p-1.5 rounded-md flex-shrink-0 ${config.bgClass} ${config.colorClass}`}
@@ -166,15 +176,20 @@ export const NewProjectForm = (props: NewProjectFormProps) => {
               {t("projects.new.selectBehaviorFirst")}
             </div>
           )}
-          {availableModels.map((m) => (
-            <CustomCheckbox
-              key={m}
-              name="models"
-              value={m}
-              wrapperClassName="p-4 bg-background-dark/50"
-              label={t(`projects.models.${m}`)}
-            />
-          ))}
+          {availableModels.map((m) => {
+            const isInitiallySelected = initialData?.models.includes(m);
+            return (
+              <CustomCheckbox
+                key={m}
+                name="models"
+                value={m}
+                checked={isInitiallySelected || undefined}
+                disabled={isInitiallySelected}
+                wrapperClassName={`p-4 bg-background-dark/50 ${isInitiallySelected ? "opacity-60 cursor-not-allowed" : ""}`}
+                label={t(`projects.models.${m}`)}
+              />
+            );
+          })}
         </div>
       </div>
 
@@ -182,16 +197,16 @@ export const NewProjectForm = (props: NewProjectFormProps) => {
       <div className="pt-4 mt-2">
         <button
           type="submit"
-          disabled={isSubmitting || availableModels.length === 0}
+          disabled={isSubmitting || (availableModels.length === 0 && !isEdit)}
           className="w-full sm:w-auto px-8 py-3.5 bg-primary hover:bg-primary/90 text-background-dark font-bold rounded-lg transition-all hover:-translate-y-0.5 shadow-lg shadow-primary/20 flex items-center justify-center gap-2 disabled:opacity-50 disabled:hover:translate-y-0 disabled:shadow-none float-right"
         >
           {isSubmitting ? (
             <>
               <div className="w-5 h-5 border-2 border-background-dark/30 border-t-background-dark rounded-full animate-spin" />
-              <span>{t("projects.new.creating")}</span>
+              <span>{isEdit ? t("projects.edit.saving") : t("projects.new.creating")}</span>
             </>
           ) : (
-            <span>{t("projects.new.submit")}</span>
+            <span>{isEdit ? t("projects.edit.submit") : t("projects.new.submit")}</span>
           )}
         </button>
       </div>
