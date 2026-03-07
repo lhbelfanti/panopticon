@@ -29,10 +29,9 @@ export const NewAnalysisForm = ({
                     {/* Left Column: Form Configuration */}
                     <div className="col-span-1 lg:col-span-2 flex flex-col gap-8">
                         <div className="flex flex-col gap-2">
-                            <h2 className="text-3xl font-extrabold text-white-1 tracking-tight">Generate subproject analysis</h2>
+                            <h2 className="text-3xl font-extrabold text-white-1 tracking-tight">{t("projects.analysis.newForm.title")}</h2>
                             <p className="text-light-gray-70 text-base">
-                                Configure how you want to derive high-level metrics and insights for this model.
-                                You can apply entry exclusions directly from this screen.
+                                {t("projects.analysis.newForm.description")}
                             </p>
                         </div>
 
@@ -40,26 +39,26 @@ export const NewAnalysisForm = ({
                             {/* Exclusions Summary Trigger (Primary Action) */}
                             <button
                                 onClick={onOpenExclusions}
-                                className="flex-1 bg-surface-dark border-2 border-bittersweet-shimmer/30 hover:border-bittersweet-shimmer hover:bg-white/5 rounded-xl p-6 flex flex-col justify-between items-start relative group/mini overflow-hidden transition-all text-left shadow-lg"
+                                className="flex-1 bg-surface-dark border-2 border-bittersweet-shimmer/30 hover:border-bittersweet-shimmer hover:bg-white/5 rounded-xl p-6 flex flex-col justify-between items-start relative group/mini overflow-hidden transition-all text-left shadow-lg cursor-pointer"
                             >
                                 <div className="flex items-center gap-2 text-xs uppercase font-bold text-light-gray-50 tracking-widest leading-none group-hover/mini:text-bittersweet-shimmer transition-colors mb-4">
                                     <XSquare size={16} className="text-bittersweet-shimmer" />
-                                    Exclusions
+                                    {t("projects.analysis.newForm.exclusionsTitle")}
                                 </div>
                                 <div className="flex flex-col gap-1 w-full mt-2">
                                     <div className="flex items-center gap-3">
                                         <span className="text-2xl font-extrabold text-white-1 leading-none group-hover/mini:text-bittersweet-shimmer transition-colors">
-                                            {excludedEntryIds.length > 0 ? "Refine list" : "Manage"}
+                                            {excludedEntryIds.length > 0 ? t("projects.analysis.newForm.refineList") : t("projects.analysis.newForm.manage")}
                                         </span>
                                         <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-bittersweet-shimmer/10 border border-bittersweet-shimmer/30 text-[10px] font-bold uppercase tracking-widest text-bittersweet-shimmer group-hover/mini:bg-bittersweet-shimmer group-hover/mini:text-background-dark group-hover/mini:border-bittersweet-shimmer transition-all shadow-sm">
                                             <Plus size={12} strokeWidth={3} />
-                                            <span>Add exclusions</span>
+                                            <span>{t("projects.analysis.newForm.addExclusions")}</span>
                                         </div>
                                     </div>
                                     <span className="text-xs font-semibold text-light-gray-70 leading-relaxed mt-1">
                                         {excludedEntryIds.length > 0
-                                            ? `${excludedEntryIds.length} entries currently excluded. Click to modify.`
-                                            : "No exclusions applied. Click to select entries to ignore."}
+                                            ? t("projects.analysis.newForm.entriesExcluded", { count: excludedEntryIds.length })
+                                            : t("projects.analysis.newForm.noExclusions")}
                                     </span>
                                 </div>
                                 <div className="absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-hover/mini:opacity-100 transition-all group-hover/mini:translate-x-1 duration-300">
@@ -73,16 +72,16 @@ export const NewAnalysisForm = ({
                             <div className="flex-1 bg-transparent p-6 flex flex-col justify-between items-start">
                                 <div className="flex items-center gap-2 text-xs uppercase font-bold text-light-gray-60 tracking-widest leading-none mb-4">
                                     <Layers size={14} className="text-primary/70" />
-                                    Dataset for analysis
+                                    {t("projects.analysis.newForm.datasetTitle")}
                                 </div>
                                 <div className="flex flex-col gap-1 w-full relative z-10">
                                     <span className="text-3xl font-extrabold text-white-1 leading-none tabular-nums opacity-90">
-                                        {excludedEntryIds.length > 0 ? "Filtered" : "Complete"}
+                                        {excludedEntryIds.length > 0 ? t("projects.analysis.newForm.filtered") : t("projects.analysis.newForm.complete")}
                                     </span>
                                     <span className="text-xs font-semibold text-light-gray-60 leading-relaxed mt-1">
                                         {excludedEntryIds.length > 0
-                                            ? "Analysis will run on the selected subset of entries."
-                                            : "Analysis will run on all available entries in the subproject."}
+                                            ? t("projects.analysis.newForm.filteredDesc")
+                                            : t("projects.analysis.newForm.completeDesc")}
                                     </span>
                                 </div>
                             </div>
@@ -96,12 +95,12 @@ export const NewAnalysisForm = ({
                                 {isSubmitting ? (
                                     <>
                                         <Layers className="animate-pulse" size={18} />
-                                        <span>Starting analysis...</span>
+                                        <span>{t("projects.analysis.newForm.starting")}</span>
                                     </>
                                 ) : (
                                     <>
                                         <Zap size={18} />
-                                        <span className="whitespace-nowrap">Generate analysis</span>
+                                        <span className="whitespace-nowrap">{t("projects.analysis.newForm.generate")}</span>
                                     </>
                                 )}
                             </button>
@@ -115,26 +114,26 @@ export const NewAnalysisForm = ({
                                 <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-primary shrink-0">
                                     <AlertCircle size={20} />
                                 </div>
-                                <h4 className="text-white-1 font-bold text-sm tracking-tight uppercase tracking-widest">Analysis guide</h4>
+                                <h4 className="text-white-1 font-bold text-sm tracking-tight uppercase tracking-widest">{t("projects.analysis.newForm.guideTitle")}</h4>
                             </div>
 
                             <div className="flex flex-col gap-8 pl-1">
                                 <div className="flex flex-col gap-2">
                                     <div className="flex items-center gap-2 text-primary">
                                         <Filter size={16} />
-                                        <h5 className="text-white-1 font-bold text-xs uppercase tracking-widest">Exclude sensitive data</h5>
+                                        <h5 className="text-white-1 font-bold text-xs uppercase tracking-widest">{t("projects.analysis.newForm.guideExcludeTitle")}</h5>
                                     </div>
                                     <p className="text-light-gray-70 text-sm leading-relaxed">
-                                        Use the entries table filters to identify outlier data points or test cases you want to ignore to ensure your charts accurately reflect true performance.
+                                        {t("projects.analysis.newForm.guideExcludeDesc")}
                                     </p>
                                 </div>
                                 <div className="flex flex-col gap-2">
                                     <div className="flex items-center gap-2 text-primary">
                                         <Layers size={16} />
-                                        <h5 className="text-white-1 font-bold text-xs uppercase tracking-widest">Traceable history</h5>
+                                        <h5 className="text-white-1 font-bold text-xs uppercase tracking-widest">{t("projects.analysis.newForm.guideHistoryTitle")}</h5>
                                     </div>
                                     <p className="text-light-gray-70 text-sm leading-relaxed">
-                                        Every analysis is saved. You can always come back and re-download the PDF report or view the visual insights as they were when they were generated.
+                                        {t("projects.analysis.newForm.guideHistoryDesc")}
                                     </p>
                                 </div>
                             </div>

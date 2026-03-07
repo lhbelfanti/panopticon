@@ -26,3 +26,13 @@ body {
     color-scheme: dark;
   }
 }
+
+/* Global rule to ensure all clickable elements use a hand cursor (pointer) */
+button,
+a,
+[role="button"],
+input[type="submit"],
+input[type="button"],
+input[type="reset"] {
+  cursor: pointer;
+}

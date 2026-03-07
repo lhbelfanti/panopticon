@@ -159,7 +159,7 @@ const AnalysisPage = () => {
                     className="flex items-center gap-2 text-primary hover:text-white-1 transition-colors text-sm font-semibold max-w-max"
                 >
                     <ArrowLeft size={16} />
-                    Back to subproject
+                    {t("projects.analysis.backToSubproject")}
                 </Link>
 
                 <div className="flex justify-between items-end">
@@ -177,7 +177,7 @@ const AnalysisPage = () => {
                                     icon: <Box size={28} className="text-primary" />
                                 },
                                 {
-                                    label: "Analysis",
+                                    label: t("projects.analysis.title"),
                                     icon: <BarChart3 size={28} className="text-primary" />
                                 }
                             ]}
@@ -197,7 +197,7 @@ const AnalysisPage = () => {
                             }`}
                     >
                         <Zap size={16} />
-                        New analysis
+                        {t("projects.analysis.tabs.new")}
                     </button>
                     <button
                         onClick={() => setActiveTab("history")}
@@ -207,7 +207,7 @@ const AnalysisPage = () => {
                             }`}
                     >
                         <History size={16} />
-                        History
+                        {t("projects.analysis.tabs.history")}
                     </button>
                 </div>
             </div>
@@ -248,7 +248,7 @@ const AnalysisPage = () => {
                                         <div className="w-10 h-10 rounded-xl bg-bittersweet-shimmer/10 flex items-center justify-center text-bittersweet-shimmer">
                                             <XSquare size={20} />
                                         </div>
-                                        Refine exclusions
+                                        {t("projects.analysis.exclusions.refineTitle")}
                                     </h2>
                                 </div>
                                 <button
@@ -279,9 +279,9 @@ const AnalysisPage = () => {
                             <div className="p-6 border-t border-white/5 bg-black/20 flex justify-end shrink-0">
                                 <button
                                     onClick={handleCloseExclusions}
-                                    className="bg-primary hover:bg-primary/90 text-background-dark px-8 py-3 rounded-xl font-bold transition-all hover:scale-105 active:scale-95 shadow-xl shadow-primary/20"
+                                    className="bg-primary hover:bg-primary/90 text-background-dark px-8 py-3 rounded-xl font-bold transition-all hover:scale-105 active:scale-95 shadow-xl shadow-primary/20 cursor-pointer"
                                 >
-                                    Apply & close
+                                    {t("projects.analysis.exclusions.applyAndClose")}
                                 </button>
                             </div>
                         </div>

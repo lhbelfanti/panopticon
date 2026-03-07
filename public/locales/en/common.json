@@ -104,6 +104,55 @@
         "analyzed": "analyzed"
     },
     "projects": {
+        "analysis": {
+            "title": "Analysis",
+            "backToSubproject": "Back to subproject",
+            "tabs": {
+                "new": "New analysis",
+                "history": "History"
+            },
+            "exclusions": {
+                "refineTitle": "Refine exclusions",
+                "applyAndClose": "Apply & close"
+            },
+            "newForm": {
+                "title": "Generate subproject analysis",
+                "description": "Configure how you want to derive high-level metrics and insights for this model. You can apply entry exclusions directly from this screen.",
+                "exclusionsTitle": "Exclusions",
+                "refineList": "Refine list",
+                "manage": "Manage",
+                "addExclusions": "Add exclusions",
+                "entriesExcluded": "{{count}} entries currently excluded. Click to modify.",
+                "noExclusions": "No exclusions applied. Click to select entries to ignore.",
+                "datasetTitle": "Dataset for analysis",
+                "filtered": "Filtered",
+                "complete": "Complete",
+                "filteredDesc": "Analysis will run on the selected subset of entries.",
+                "completeDesc": "Analysis will run on all available entries in the subproject.",
+                "starting": "Starting analysis...",
+                "generate": "Generate analysis",
+                "guideTitle": "Analysis guide",
+                "guideExcludeTitle": "Exclude sensitive data",
+                "guideExcludeDesc": "Use the entries table filters to identify outlier data points or test cases you want to ignore to ensure your charts accurately reflect true performance.",
+                "guideHistoryTitle": "Traceable history",
+                "guideHistoryDesc": "Every analysis is saved. You can always come back and re-download the PDF report or view the visual insights as they were when they were generated."
+            },
+            "historyTable": {
+                "title": "Recent analysis history",
+                "refresh": "Refresh history",
+                "columns": {
+                    "idAndTimestamp": "ID & timestamp",
+                    "status": "Status",
+                    "exclusions": "Exclusions",
+                    "actions": "Actions"
+                },
+                "noHistory": "No history found for this subproject.",
+                "entriesExcluded": "Entries excluded",
+                "viewReport": "View report",
+                "pdf": "PDF",
+                "info": "Analysis history is kept per subproject. You can generate multiple reports with different exclusion criteria to compare results. Analysis runs typically take a few seconds to process."
+            }
+        },
         "new": {
             "title": "New project",
             "subtitle": "Create a new text analysis environment.",

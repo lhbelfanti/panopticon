@@ -54,15 +54,15 @@ describe("AnalysisHistoryTable", () => {
 
     it("renders table headers correctly", () => {
         renderTable();
-        expect(screen.getByText("ID & timestamp")).toBeInTheDocument();
-        expect(screen.getByText("Status")).toBeInTheDocument();
-        expect(screen.getByText("Exclusions")).toBeInTheDocument();
-        expect(screen.getByText("Actions")).toBeInTheDocument();
+        expect(screen.getByText("projects.analysis.historyTable.columns.idAndTimestamp")).toBeInTheDocument();
+        expect(screen.getByText("projects.analysis.historyTable.columns.status")).toBeInTheDocument();
+        expect(screen.getByText("projects.analysis.historyTable.columns.exclusions")).toBeInTheDocument();
+        expect(screen.getByText("projects.analysis.historyTable.columns.actions")).toBeInTheDocument();
     });
 
     it("shows empty state when history is empty", () => {
         renderTable();
-        expect(screen.getByText("No history found for this subproject.")).toBeInTheDocument();
+        expect(screen.getByText("projects.analysis.historyTable.noHistory")).toBeInTheDocument();
     });
 
     it("renders a completed run with View Report and PDF buttons", async () => {
@@ -74,8 +74,8 @@ describe("AnalysisHistoryTable", () => {
 
         const row = screen.getByText("completed").closest("tr");
 
-        expect(screen.getByText("View report")).toBeInTheDocument();
-        expect(screen.getByText("PDF")).toBeInTheDocument();
+        expect(screen.getByText("projects.analysis.historyTable.viewReport")).toBeInTheDocument();
+        expect(screen.getByText("projects.analysis.historyTable.pdf")).toBeInTheDocument();
     });
 
     it("renders a processing run with spinner and no action buttons", async () => {
@@ -87,8 +87,8 @@ describe("AnalysisHistoryTable", () => {
 
         const row = screen.getByText("processing").closest("tr");
 
-        expect(screen.queryByText("View report")).not.toBeInTheDocument();
-        expect(screen.queryByText("PDF")).not.toBeInTheDocument();
+        expect(screen.queryByText("projects.analysis.historyTable.viewReport")).not.toBeInTheDocument();
+        expect(screen.queryByText("projects.analysis.historyTable.pdf")).not.toBeInTheDocument();
     });
 
     it("renders a failed run with error icon and no action buttons", async () => {
@@ -100,8 +100,8 @@ describe("AnalysisHistoryTable", () => {
 
         const row = screen.getByText("failed").closest("tr");
 
-        expect(screen.queryByText("View report")).not.toBeInTheDocument();
-        expect(screen.queryByText("PDF")).not.toBeInTheDocument();
+        expect(screen.queryByText("projects.analysis.historyTable.viewReport")).not.toBeInTheDocument();
+        expect(screen.queryByText("projects.analysis.historyTable.pdf")).not.toBeInTheDocument();
     });
 
     it("calls onViewReport when View Report is clicked", async () => {
@@ -109,7 +109,7 @@ describe("AnalysisHistoryTable", () => {
         const run = makRun({ status: "completed" });
         renderTable({ history: [run] });
 
-        const viewBtn = screen.getByText("View report");
+        const viewBtn = screen.getByText("projects.analysis.historyTable.viewReport");
         await user.click(viewBtn);
 
         expect(onViewReportMock).toHaveBeenCalledWith(run);
@@ -120,7 +120,7 @@ describe("AnalysisHistoryTable", () => {
         const run = makRun({ status: "completed" });
         renderTable({ history: [run] });
 
-        const pdfBtn = screen.getByText("PDF");
+        const pdfBtn = screen.getByText("projects.analysis.historyTable.pdf");
         await user.click(pdfBtn);
 
         expect(onDownloadPDFMock).toHaveBeenCalledWith(run.id);
@@ -130,13 +130,13 @@ describe("AnalysisHistoryTable", () => {
         const user = userEvent.setup();
         renderTable();
 
-        await user.click(screen.getByText("Refresh history"));
+        await user.click(screen.getByText("projects.analysis.historyTable.refresh"));
         expect(onRefreshMock).toHaveBeenCalled();
     });
 
     it("refresh button is disabled when isRefreshing is true", () => {
         renderTable({ isRefreshing: true });
-        const btn = screen.getByText("Refresh history").closest("button");
+        const btn = screen.getByText("projects.analysis.historyTable.refresh").closest("button");
         expect(btn).toBeDisabled();
     });
 
@@ -148,7 +148,7 @@ describe("AnalysisHistoryTable", () => {
         renderTable({ history: [run] });
 
         expect(screen.getByText("3")).toBeInTheDocument();
-        expect(screen.getByText("Entries excluded")).toBeInTheDocument();
+        expect(screen.getByText("projects.analysis.historyTable.entriesExcluded")).toBeInTheDocument();
     });
 
     it("renders multiple runs in order", () => {

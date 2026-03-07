@@ -104,13 +104,61 @@
         "analyzed": "analizado"
     },
     "projects": {
+        "analysis": {
+            "title": "Análisis",
+            "backToSubproject": "Volver al subproyecto",
+            "tabs": {
+                "new": "Nuevo análisis",
+                "history": "Historial"
+            },
+            "exclusions": {
+                "refineTitle": "Refinar exclusiones",
+                "applyAndClose": "Aplicar y cerrar"
+            },
+            "newForm": {
+                "title": "Generar análisis del subproyecto",
+                "description": "Configura cómo quieres derivar las métricas de alto nivel y los insights para este modelo. Puedes aplicar exclusiones de entradas directamente desde esta pantalla.",
+                "exclusionsTitle": "Exclusiones",
+                "refineList": "Refinar lista",
+                "manage": "Administrar",
+                "addExclusions": "Agregar exclusiones",
+                "entriesExcluded": "{{count}} entradas actualmente excluidas. Clic para modificar.",
+                "noExclusions": "Ninguna exclusión aplicada. Clic para seleccionar entradas a ignorar.",
+                "datasetTitle": "Dataset para el análisis",
+                "filtered": "Filtrado",
+                "complete": "Completo",
+                "filteredDesc": "El análisis se ejecutará en el subconjunto de entradas seleccionado.",
+                "completeDesc": "El análisis se ejecutará en todas las entradas disponibles del subproyecto.",
+                "starting": "Iniciando análisis...",
+                "generate": "Generar análisis",
+                "guideTitle": "Guía de análisis",
+                "guideExcludeTitle": "Excluir datos atípicos",
+                "guideExcludeDesc": "Utiliza los filtros de la tabla de entradas para identificar datos atípicos o casos de prueba que quieras ignorar para asegurar que tus gráficos reflejen el verdadero rendimiento.",
+                "guideHistoryTitle": "Historial rastreable",
+                "guideHistoryDesc": "Cada análisis se guarda. Siempre puedes volver y volver a descargar el informe en PDF o ver los insights visuales tal como estaban cuando se generaron."
+            },
+            "historyTable": {
+                "title": "Historial de análisis recientes",
+                "refresh": "Actualizar historial",
+                "columns": {
+                    "idAndTimestamp": "ID y fecha",
+                    "status": "Estado",
+                    "exclusions": "Exclusiones",
+                    "actions": "Acciones"
+                },
+                "noHistory": "No se encontró historial para este subproyecto.",
+                "entriesExcluded": "Entradas excluidas",
+                "viewReport": "Ver informe",
+                "pdf": "PDF",
+                "info": "El historial de análisis se mantiene por subproyecto. Puedes generar múltiples informes con diferentes criterios de exclusión para comparar resultados. Los análisis normalmente tardan unos segundos en procesarse."
+            }
+        },
         "new": {
             "title": "Nuevo proyecto",
             "subtitle": "Crea un nuevo entorno de análisis de texto.",
             "name": "Nombre del proyecto",
             "namePlaceholder": "ej. Cohorte consumo de drogas (Argentina 2026)",
             "description": "Descripción (Opcional)",
-            "descriptionPlaceholder": "Breve descripción de los objetivos del análisis...",
             "behaviorsTitle": "Comportamientos a detectar",
             "behaviorsDesc": "Selecciona los <1>Comportamientos Humanos Adversos</1> que te gustaría detectar en el dataset",
             "modelsTitle": "Modelos",

@@ -30,31 +30,31 @@ describe("NewAnalysisForm", () => {
 
     it("renders the form title", () => {
         renderForm();
-        expect(screen.getByText("Generate subproject analysis")).toBeInTheDocument();
+        expect(screen.getByText("projects.analysis.newForm.title")).toBeInTheDocument();
     });
 
     it("shows 'Complete' and info text when no entries are excluded in Dataset selection", () => {
         renderForm({ excludedEntryIds: [] });
-        expect(screen.getByText("Complete")).toBeInTheDocument();
-        expect(screen.getByText("Analysis will run on all available entries in the subproject.")).toBeInTheDocument();
+        expect(screen.getByText("projects.analysis.newForm.complete")).toBeInTheDocument();
+        expect(screen.getByText("projects.analysis.newForm.completeDesc")).toBeInTheDocument();
     });
 
     it("shows 'Filtered' text when entries are excluded in Dataset selection", () => {
         renderForm({ excludedEntryIds: ["e1", "e2", "e3"] });
-        expect(screen.getByText("Filtered")).toBeInTheDocument();
-        expect(screen.getByText("Analysis will run on the selected subset of entries.")).toBeInTheDocument();
+        expect(screen.getByText("projects.analysis.newForm.filtered")).toBeInTheDocument();
+        expect(screen.getByText("projects.analysis.newForm.filteredDesc")).toBeInTheDocument();
     });
 
     it("shows 'Manage' for exclusions when no exclusions", () => {
         renderForm({ excludedEntryIds: [] });
-        expect(screen.getByText("Manage")).toBeInTheDocument();
-        expect(screen.getByText("No exclusions applied. Click to select entries to ignore.")).toBeInTheDocument();
+        expect(screen.getByText("projects.analysis.newForm.manage")).toBeInTheDocument();
+        expect(screen.getByText("projects.analysis.newForm.noExclusions")).toBeInTheDocument();
     });
 
     it("shows 'Refine list' for exclusions when entries are excluded", () => {
         renderForm({ excludedEntryIds: ["e1"] });
-        expect(screen.getByText("Refine list")).toBeInTheDocument();
-        expect(screen.getByText("1 entries currently excluded. Click to modify.")).toBeInTheDocument();
+        expect(screen.getByText("projects.analysis.newForm.refineList")).toBeInTheDocument();
+        expect(screen.getByText("projects.analysis.newForm.entriesExcluded")).toBeInTheDocument();
     });
 
     it("calls onOpenExclusions when the Exclusions card is clicked", async () => {
@@ -62,7 +62,7 @@ describe("NewAnalysisForm", () => {
         const user = userEvent.setup();
         renderForm({ onOpenExclusions });
 
-        const exclusionsCard = screen.getByRole("button", { name: /exclusions/i });
+        const exclusionsCard = screen.getByRole("button", { name: /projects\.analysis\.newForm\.manage/i });
         await user.click(exclusionsCard);
 
         expect(onOpenExclusions).toHaveBeenCalled();
@@ -70,24 +70,24 @@ describe("NewAnalysisForm", () => {
 
     it("renders 'Generate Analysis' button when not submitting", () => {
         renderForm();
-        expect(screen.getByRole("button", { name: /generate analysis/i })).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: /projects\.analysis\.newForm\.generate/i })).toBeInTheDocument();
     });
 
     it("button is enabled when not submitting", () => {
         renderForm({ isSubmitting: false });
-        const btn = screen.getByRole("button", { name: /generate analysis/i });
+        const btn = screen.getByRole("button", { name: /projects\.analysis\.newForm\.generate/i });
         expect(btn).not.toBeDisabled();
     });
 
     it("button is disabled when isSubmitting is true", () => {
         renderForm({ isSubmitting: true });
-        const btn = screen.getByRole("button", { name: /starting analysis.../i });
+        const btn = screen.getByRole("button", { name: /projects\.analysis\.newForm\.starting/i });
         expect(btn).toBeDisabled();
     });
 
     it("shows 'Starting Analysis...' text when isSubmitting is true", () => {
         renderForm({ isSubmitting: true });
-        expect(screen.getByText("Starting analysis...")).toBeInTheDocument();
+        expect(screen.getByText("projects.analysis.newForm.starting")).toBeInTheDocument();
     });
 
     it("calls onSubmit with excludedEntryIds when button is clicked", async () => {
@@ -95,7 +95,7 @@ describe("NewAnalysisForm", () => {
         const excludedEntryIds = ["e1", "e2"];
         renderForm({ excludedEntryIds });
 
-        const btn = screen.getByRole("button", { name: /generate analysis/i });
+        const btn = screen.getByRole("button", { name: /projects\.analysis\.newForm\.generate/i });
         await user.click(btn);
 
         expect(onSubmitMock).toHaveBeenCalledWith(excludedEntryIds);
@@ -105,7 +105,7 @@ describe("NewAnalysisForm", () => {
         const user = userEvent.setup();
         renderForm({ excludedEntryIds: [] });
 
-        await user.click(screen.getByRole("button", { name: /generate analysis/i }));
+        await user.click(screen.getByRole("button", { name: /projects\.analysis\.newForm\.generate/i }));
 
         expect(onSubmitMock).toHaveBeenCalledWith([]);
     });
@@ -113,7 +113,7 @@ describe("NewAnalysisForm", () => {
 
     it("renders hint cards for guidance", () => {
         renderForm();
-        expect(screen.getByText("Exclude sensitive data")).toBeInTheDocument();
-        expect(screen.getByText("Traceable history")).toBeInTheDocument();
+        expect(screen.getByText("projects.analysis.newForm.guideExcludeTitle")).toBeInTheDocument();
+        expect(screen.getByText("projects.analysis.newForm.guideHistoryTitle")).toBeInTheDocument();
     });
 });

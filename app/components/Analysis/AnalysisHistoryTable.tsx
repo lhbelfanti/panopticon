@@ -48,7 +48,7 @@ export const AnalysisHistoryTable = ({
             <div className="flex justify-between items-center px-2">
                 <div className="flex items-center gap-2">
                     <Clock size={20} className="text-primary" />
-                    <h3 className="text-lg font-bold text-white-1 uppercase tracking-tight">Recent analysis history</h3>
+                    <h3 className="text-lg font-bold text-white-1 uppercase tracking-tight">{t("projects.analysis.historyTable.title")}</h3>
                 </div>
                 <button
                     onClick={onRefresh}
@@ -56,7 +56,7 @@ export const AnalysisHistoryTable = ({
                     className="flex items-center gap-2 px-3 py-1.5 text-xs font-bold text-light-gray-60 hover:text-white-1 transition-colors bg-white/5 border border-white/5 rounded-lg hover:bg-white/10 disabled:opacity-50"
                 >
                     <RefreshCw size={14} className={isRefreshing ? "animate-spin" : ""} />
-                    Refresh history
+                    {t("projects.analysis.historyTable.refresh")}
                 </button>
             </div>
 
@@ -64,17 +64,17 @@ export const AnalysisHistoryTable = ({
                 <table className="w-full text-left border-collapse">
                     <thead className="bg-black/20 border-b border-white/5">
                         <tr className="text-[0.65rem] font-bold text-light-gray-70 uppercase tracking-widest leading-none">
-                            <th className="py-4 px-6">ID & timestamp</th>
-                            <th className="py-4 px-6 text-center">Status</th>
-                            <th className="py-4 px-6 text-center">Exclusions</th>
-                            <th className="py-4 px-6 text-right">Actions</th>
+                            <th className="py-4 px-6">{t("projects.analysis.historyTable.columns.idAndTimestamp")}</th>
+                            <th className="py-4 px-6 text-center">{t("projects.analysis.historyTable.columns.status")}</th>
+                            <th className="py-4 px-6 text-center">{t("projects.analysis.historyTable.columns.exclusions")}</th>
+                            <th className="py-4 px-6 text-right">{t("projects.analysis.historyTable.columns.actions")}</th>
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-white/5">
                         {history.length === 0 ? (
                             <tr>
                                 <td colSpan={4} className="py-12 text-center text-light-gray-50 italic">
-                                    No history found for this subproject.
+                                    {t("projects.analysis.historyTable.noHistory")}
                                 </td>
                             </tr>
                         ) : (
@@ -101,7 +101,7 @@ export const AnalysisHistoryTable = ({
                                             <span className="text-sm font-bold text-white-1">
                                                 {run.parameters.excludedEntryIds.length}
                                             </span>
-                                            <span className="text-[10px] text-light-gray-70 uppercase font-medium">Entries excluded</span>
+                                            <span className="text-[10px] text-light-gray-70 uppercase font-medium">{t("projects.analysis.historyTable.entriesExcluded")}</span>
                                         </div>
                                     </td>
                                     <td className="py-4 px-6 text-right">
@@ -113,7 +113,7 @@ export const AnalysisHistoryTable = ({
                                                         className="text-xs font-bold text-light-gray-60 hover:text-primary flex items-center gap-1.5 transition-colors cursor-pointer"
                                                     >
                                                         <FileBarChart size={14} />
-                                                        View report
+                                                        {t("projects.analysis.historyTable.viewReport")}
                                                     </button>
                                                     <div className="w-px h-3 bg-white/10" />
                                                     <button
@@ -121,7 +121,7 @@ export const AnalysisHistoryTable = ({
                                                         className="text-xs font-bold text-light-gray-60 hover:text-primary flex items-center gap-1.5 transition-colors cursor-pointer"
                                                     >
                                                         <Download size={14} />
-                                                        PDF
+                                                        {t("projects.analysis.historyTable.pdf")}
                                                     </button>
                                                 </>
                                             )}
@@ -137,7 +137,7 @@ export const AnalysisHistoryTable = ({
             <div className="bg-blue-400/5 border border-blue-400/10 p-4 rounded-xl flex gap-3 items-start">
                 <Info size={18} className="text-blue-400 shrink-0 mt-0.5" />
                 <p className="text-[11px] leading-relaxed text-blue-200/60 uppercase tracking-widest font-medium">
-                    Analysis history is kept per subproject. You can generate multiple reports with different exclusion criteria to compare results. Analysis runs typically take a few seconds to process.
+                    {t("projects.analysis.historyTable.info")}
                 </p>
             </div>
         </div>
