@@ -628,78 +628,76 @@ const EntriesTable = (props: EntriesTableProps) => {
               </button>
             </Form>
           </div>
-        </div>
 
-        {/* Predict Pending Button */}
-        {!isExclusionOnly && data.entries.some((e) => e.verdict === "Pending") && (
-          <div className="flex justify-end mt-4">
-            <button
-              type="button"
-              onClick={handlePredictPending}
-              disabled={isPredicting}
-              className={predictButtonClasses}
-            >
-              <Zap size={20} className={isPredicting ? "animate-pulse" : ""} />
-              {isPredicting ? "Predicting..." : "Predict Pending"}
-            </button>
+          {/* Predict Pending Button - Absolute Right */}
+          <div className="absolute right-6">
+            {!isExclusionOnly && data.entries.some((e) => e.verdict === "Pending") && (
+              <button
+                type="button"
+                onClick={handlePredictPending}
+                disabled={isPredicting}
+                className="flex items-center gap-2 px-4 py-2 text-sm font-bold text-background-dark bg-yellow-400 hover:bg-yellow-500 rounded-lg transition-all disabled:opacity-50 hover:scale-105 hover:shadow-lg shadow-yellow-500/20"
+              >
+                <Zap size={16} className={isPredicting ? "animate-pulse" : ""} />
+                {isPredicting ? t("projects.entries.predicting") : t("projects.entries.predictPending")}
+              </button>
+            )}
           </div>
-        )}
+        </div>
       </div>
 
       {/* View Full Entry Modal */}
-      {
-        entryToView && (
+      {entryToView && (
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in duration-200"
+          onClick={() => setEntryToView(null)}
+        >
           <div
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in duration-200"
-            onClick={() => setEntryToView(null)}
+            className="bg-surface-dark w-full max-w-2xl rounded-2xl border border-white/10 shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200 flex flex-col"
+            onClick={(e) => e.stopPropagation()}
           >
-            <div
-              className="bg-surface-dark w-full max-w-2xl rounded-2xl border border-white/10 shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200 flex flex-col"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="p-4 border-b border-white/5 flex items-center justify-between bg-black/20">
-                <h3 className="text-sm font-bold text-white-1 uppercase tracking-widest flex items-center gap-2">
-                  <FileText size={16} className="text-primary" />
-                  View Full Entry
-                </h3>
-                <button
-                  onClick={() => setEntryToView(null)}
-                  className="p-1.5 rounded-lg text-light-gray-70 hover:text-white-1 hover:bg-white/10 transition-colors"
-                >
-                  <X size={18} />
-                </button>
+            <div className="p-4 border-b border-white/5 flex items-center justify-between bg-black/20">
+              <h3 className="text-sm font-bold text-white-1 uppercase tracking-widest flex items-center gap-2">
+                <FileText size={16} className="text-primary" />
+                View Full Entry
+              </h3>
+              <button
+                onClick={() => setEntryToView(null)}
+                className="p-1.5 rounded-lg text-light-gray-70 hover:text-white-1 hover:bg-white/10 transition-colors"
+              >
+                <X size={18} />
+              </button>
+            </div>
+            <div className="p-6">
+              <div className="bg-background-dark border border-white/5 rounded-xl p-4 max-h-[60vh] overflow-y-auto w-full text-light-gray-80 text-sm whitespace-pre-wrap font-mono leading-relaxed">
+                {entryToView.text}
               </div>
-              <div className="p-6">
-                <div className="bg-background-dark border border-white/5 rounded-xl p-4 max-h-[60vh] overflow-y-auto w-full text-light-gray-80 text-sm whitespace-pre-wrap font-mono leading-relaxed">
-                  {entryToView.text}
-                </div>
-                <div className="flex gap-4 mt-6 items-center">
-                  <span className="text-xs text-light-gray-70 uppercase tracking-widest font-bold">
-                    Verdict:
-                  </span>
-                  <span
-                    className={`px-2 py-0.5 text-xs font-bold rounded-full border ${getVerdictStyle(entryToView.verdict)}`}
-                  >
-                    {entryToView.verdict}
-                  </span>
+              <div className="flex gap-4 mt-6 items-center">
+                <span className="text-xs text-light-gray-70 uppercase tracking-widest font-bold">
+                  Verdict:
+                </span>
+                <span
+                  className={`px-2 py-0.5 text-xs font-bold rounded-full border ${getVerdictStyle(entryToView.verdict)}`}
+                >
+                  {entryToView.verdict}
+                </span>
 
-                  {entryToView.score !== undefined && (
-                    <>
-                      <div className="w-px h-4 bg-white/10 mx-2" />
-                      <span className="text-xs text-light-gray-70 uppercase tracking-widest font-bold">
-                        Score:
-                      </span>
-                      <span className="text-xs text-light-gray-80 font-mono">
-                        {(entryToView.score * 100).toFixed(2)}%
-                      </span>
-                    </>
-                  )}
-                </div>
+                {entryToView.score !== undefined && (
+                  <>
+                    <div className="w-px h-4 bg-white/10 mx-2" />
+                    <span className="text-xs text-light-gray-70 uppercase tracking-widest font-bold">
+                      Score:
+                    </span>
+                    <span className="text-xs text-light-gray-80 font-mono">
+                      {(entryToView.score * 100).toFixed(2)}%
+                    </span>
+                  </>
+                )}
               </div>
             </div>
           </div>
-        )
-      }
+        </div>
+      )}
 
       {/* Entry Deletion Modal */}
       <ConfirmationModal
@@ -717,7 +715,7 @@ const EntriesTable = (props: EntriesTableProps) => {
         isDestructive={true}
         hiddenInputs={{ intent: "delete_entry", entryId: entryToDelete || "" }}
       />
-    </div >
+    </div>
   );
 };
 
