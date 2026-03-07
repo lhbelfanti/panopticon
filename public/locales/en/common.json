@@ -117,6 +117,7 @@
             "modelsDesc": "A new subproject will be generated for each selected model. Note: Models are dynamically filtered to only show those compatible with all selected <1>Adverse Human Behaviours</1>.",
             "noModelsIntersection": "No models available for the selected combination of behaviors.",
             "selectBehaviorFirst": "Select at least one behavior to view available models.",
+            "incompatibleWithModels": "Incompatible with current models",
             "submit": "Create project",
             "creating": "Creating..."
         },

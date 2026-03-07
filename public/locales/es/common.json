@@ -117,6 +117,7 @@
             "modelsDesc": "Se generará un subproyecto por cada modelo seleccionado. Nota: Los modelos se filtran dinámicamente para mostrar sólo los compatibles con todos los <1>Comportamientos Humanos Adversos</1> seleccionados.",
             "noModelsIntersection": "No hay modelos disponibles para la combinación de comportamientos seleccionada.",
             "selectBehaviorFirst": "Seleccione al menos un comportamiento para ver los modelos disponibles.",
+            "incompatibleWithModels": "Incompatible con los modelos actuales",
             "submit": "Crear proyecto",
             "creating": "Creando..."
         },
