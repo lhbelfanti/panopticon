@@ -96,6 +96,14 @@ export const updateProject = async (
   if (data.name) project.name = data.name;
   if (data.description !== undefined) project.description = data.description;
 
+  // Handle adding new behaviors
+  if (data.behaviors) {
+    const newBehaviors = data.behaviors.filter(b => !project.behaviors.includes(b));
+    if (newBehaviors.length > 0) {
+      project.behaviors = [...project.behaviors, ...newBehaviors];
+    }
+  }
+
   // Handle adding new models
   if (data.models) {
     const newModels = data.models.filter(m => !project.models.includes(m));

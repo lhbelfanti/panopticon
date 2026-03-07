@@ -21,7 +21,7 @@ import { Folder, ArrowLeft, Trash2, Settings } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
-import type { MLModel } from "~/services/api/projects/types";
+import type { MLModel, TargetBehavior } from "~/services/api/projects/types";
 
 export const meta = () => {
     return [
@@ -45,6 +45,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     if (intent === "update_project") {
         const name = formData.get("name") as string;
         const description = formData.get("description") as string;
+        const behaviors = formData.getAll("behaviors") as string[];
         const models = formData.getAll("models") as MLModel[];
 
         if (!name?.trim()) {
@@ -55,6 +56,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
             await updateProject(projectId, {
                 name,
                 description,
+                behaviors: behaviors as TargetBehavior[],
                 models,
             });
             return redirect(`/projects/${projectId}`);

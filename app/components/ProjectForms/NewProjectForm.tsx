@@ -29,8 +29,14 @@ export const NewProjectForm = (props: NewProjectFormProps) => {
   );
 
   const handleBehaviorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (isEdit) return; // Behaviors are locked in edit mode
     const val = e.target.value;
+    const isInitiallySelected = initialData?.behaviors.includes(val as any);
+
+    // In edit mode, we don't allow unchecking initially selected behaviors
+    if (isEdit && isInitiallySelected && !e.target.checked) {
+      return;
+    }
+
     if (e.target.checked) {
       setSelectedBehaviors((prev) => [...prev, val]);
     } else {
@@ -128,6 +134,25 @@ export const NewProjectForm = (props: NewProjectFormProps) => {
               (LucideIcons as any)[config.iconName] || LucideIcons.Circle;
             const isEnabled = config.enabled;
             const isSelected = selectedBehaviors.includes(config.id);
+            const isInitiallySelected = initialData?.behaviors.includes(config.id);
+            const isCompatibleWithModels =
+              !isEdit ||
+              !initialData ||
+              initialData.models.every((m) =>
+                config.availableModels.includes(m as any),
+              );
+
+            const isDisabled =
+              !isEnabled ||
+              (isEdit && isInitiallySelected) ||
+              (!isCompatibleWithModels && !isSelected);
+
+            let notAvailableText = undefined;
+            if (!isEnabled) {
+              notAvailableText = t("common.notAvailable");
+            } else if (!isCompatibleWithModels && !isSelected) {
+              notAvailableText = t("projects.new.incompatibleWithModels");
+            }
 
             return (
               <CustomCheckbox
@@ -135,10 +160,10 @@ export const NewProjectForm = (props: NewProjectFormProps) => {
                 name="behaviors"
                 value={config.id}
                 checked={isSelected}
-                disabled={!isEnabled || isEdit}
+                disabled={isDisabled}
                 onChange={handleBehaviorChange}
-                notAvailableText={t("common.notAvailable")}
-                wrapperClassName={`p-4 bg-background-dark/50 pl-3 pr-4 ${isEdit ? "opacity-60 cursor-not-allowed" : ""}`}
+                notAvailableText={notAvailableText}
+                wrapperClassName={`p-4 bg-background-dark/50 pl-3 pr-4 ${isDisabled ? "opacity-60 cursor-not-allowed" : ""}`}
                 icon={
                   <div
                     className={`p-1.5 rounded-md flex-shrink-0 ${config.bgClass} ${config.colorClass}`}
@@ -197,7 +222,7 @@ export const NewProjectForm = (props: NewProjectFormProps) => {
       <div className="pt-4 mt-2">
         <button
           type="submit"
-          disabled={isSubmitting || (availableModels.length === 0 && !isEdit)}
+          disabled={isSubmitting || availableModels.length === 0}
           className="w-full sm:w-auto px-8 py-3.5 bg-primary hover:bg-primary/90 text-background-dark font-bold rounded-lg transition-all hover:-translate-y-0.5 shadow-lg shadow-primary/20 flex items-center justify-center gap-2 disabled:opacity-50 disabled:hover:translate-y-0 disabled:shadow-none float-right"
         >
           {isSubmitting ? (
