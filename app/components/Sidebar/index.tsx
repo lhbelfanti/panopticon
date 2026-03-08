@@ -56,7 +56,7 @@ export const Sidebar = (props: SidebarProps) => {
 
         {/* Header / Logo Component */}
         <div className="flex flex-col items-center justify-center p-6 pt-14 border-b border-white/5 min-h-[10rem] relative overflow-hidden">
-          <Link to="/" className="group flex flex-col items-center justify-center transition-transform hover:scale-105">
+          <Link to="/" className="group w-full flex flex-col items-center justify-center transition-transform hover:scale-105">
             <Logo
               collapsed={collapsed}
               logoClassName={collapsed ? "w-10" : "w-30"}
