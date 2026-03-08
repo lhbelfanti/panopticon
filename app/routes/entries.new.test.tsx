@@ -213,4 +213,21 @@ describe("GlobalEntriesNewPage", () => {
             expect(screen.getByText("projects.models.model_b")).toBeInTheDocument();
         });
     });
+
+    it("unselects project when handleProjectChange receives empty value", async () => {
+        renderWithRouter(<GlobalEntriesNewPage />, mockLoaderData);
+
+        const projectSelect = await screen.findByLabelText("projects.entries.new.targetConfiguration.targetProject");
+        fireEvent.change(projectSelect, { target: { value: "1" } });
+
+        await waitFor(() => expect(screen.getByText("projects.models.model_a")).toBeInTheDocument());
+
+        fireEvent.change(projectSelect, { target: { value: "" } });
+
+        await waitFor(() => expect(screen.queryByText("projects.models.model_a")).not.toBeInTheDocument());
+    });
+
+
+
+
 });

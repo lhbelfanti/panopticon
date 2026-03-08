@@ -116,4 +116,72 @@ describe("ProjectSettingsPage", () => {
 
         updateProjectSpy.mockRestore();
     });
+
+    it("action handles delete_project intent", async () => {
+        const { action } = await import("./projects.$id.settings");
+        const formData = new FormData();
+        formData.set("intent", "delete_project");
+
+        const result = await action({ request: new Request("http://localhost", { method: "POST", body: formData }), params: { id: "1" } } as any) as Response;
+        expect(result.status).toBe(302);
+        expect(result.headers.get("Location")).toBe("/");
+    });
+
+    it("action throws 404 if id is missing", async () => {
+        const { action } = await import("./projects.$id.settings");
+        const formData = new FormData();
+        await expect(action({ request: new Request("http://localhost", { method: "POST", body: formData }), params: {} } as any)).rejects.toThrow();
+    });
+
+    it("action returns null for unknown intent", async () => {
+        const { action } = await import("./projects.$id.settings");
+        const formData = new FormData();
+        formData.set("intent", "unknown_intent");
+        const result = await action({ request: new Request("http://localhost", { method: "POST", body: formData }), params: { id: "1" } } as any);
+        expect(result).toBeNull();
+    });
+
+    it("loader returns project and behaviors configs", async () => {
+        const { loader } = await import("./projects.$id.settings");
+        const projectsServer = await import("~/services/api/projects/index.server");
+        const getProjectSpy = vi.spyOn(projectsServer, "getProjectById").mockResolvedValueOnce({ id: 1, name: "Test Project" } as any);
+        const getBehaviorsSpy = vi.spyOn(projectsServer, "getBehaviorsConfig").mockResolvedValueOnce([{ id: "hate_speech" }] as any);
+
+        const result = await loader({ params: { id: "1" }, request: new Request("http://localhost") } as any);
+        expect(result).toEqual({ project: { id: 1, name: "Test Project" }, behaviorConfigs: [{ id: "hate_speech" }] });
+
+        getProjectSpy.mockRestore();
+        getBehaviorsSpy.mockRestore();
+    });
+
+    it("loader throws 404 if id is missing", async () => {
+        const { loader } = await import("./projects.$id.settings");
+        await expect(loader({ params: {}, request: new Request("http://localhost") } as any)).rejects.toThrow();
+    });
+
+    it("loader throws 404 if project is not found", async () => {
+        const { loader } = await import("./projects.$id.settings");
+        const projectsServer = await import("~/services/api/projects/index.server");
+        const getProjectSpy = vi.spyOn(projectsServer, "getProjectById").mockResolvedValueOnce(null as any);
+
+        await expect(loader({ params: { id: "99" }, request: new Request("http://localhost") } as any)).rejects.toThrow();
+        getProjectSpy.mockRestore();
+    });
+
+    it("opens the delete confirmation modal when danger zone button is clicked", async () => {
+        const userEvent = (await import("@testing-library/user-event")).default;
+        const user = userEvent.setup();
+
+        render(
+            <MemoryRouter initialEntries={["/projects/1/settings"]}>
+                <ProjectSettingsPage />
+            </MemoryRouter>
+        );
+
+        const deleteBtn = screen.getByText("projects.settings.deleteButton");
+        await user.click(deleteBtn);
+
+        expect(screen.getByTestId("modal")).toBeInTheDocument();
+        expect(screen.getByText("projects.view.deleteProject")).toBeInTheDocument();
+    });
 });

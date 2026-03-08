@@ -340,4 +340,70 @@ describe("EntriesTable", () => {
 
         vi.useRealTimers();
     });
+
+    it("handles exclude mode individual row selection", async () => {
+        const user = userEvent.setup();
+        const onExcludedIdsChange = vi.fn();
+        const excludedIds = new Set<string>();
+
+        renderTable({ isExclusionOnly: true, excludedIds, onExcludedIdsChange });
+
+        // Find the checkboxes (lucide icons). Since the row is clickable, let's just click the cell containing the square icon.
+        // In exclude mode, the text text-primary is used for CheckSquare when NOT excluded (meaning it IS selected).
+        // Clicking it should add to excludedIds.
+        const firstRowCheckbox = screen.getAllByRole("row")[1].querySelector("td:first-child");
+        if (firstRowCheckbox) {
+            await user.click(firstRowCheckbox);
+        }
+
+        expect(onExcludedIdsChange).toHaveBeenCalled();
+        const newSet = onExcludedIdsChange.mock.calls[0][0];
+        expect(newSet.has("entry_1")).toBe(true);
+    });
+
+    it("handles exclude mode select all / deselect all", async () => {
+        const user = userEvent.setup();
+        const onExcludedIdsChange = vi.fn();
+        const excludedIds = new Set<string>();
+
+        renderTable({ isExclusionOnly: true, excludedIds, onExcludedIdsChange });
+
+        // Find the "Select all" button (it has title "Deselect page" because both entries are checked initially)
+        const selectAllBtn = screen.getByTitle("Deselect page");
+        if (selectAllBtn) {
+            await user.click(selectAllBtn);
+        }
+
+        expect(onExcludedIdsChange).toHaveBeenCalled();
+        const newSet = onExcludedIdsChange.mock.calls[0][0];
+        // Since it was "Deselect page" (all initially selected), clicking it should exclude all on page
+        expect(newSet.has("entry_1")).toBe(true);
+        expect(newSet.has("entry_2")).toBe(true);
+    });
+
+    it("opens view modal when Eye icon is clicked", async () => {
+        const user = userEvent.setup();
+        renderTable();
+
+        const viewBtns = screen.getAllByTitle("View full entry");
+        if (viewBtns.length > 0) {
+            await user.click(viewBtns[0]);
+        }
+
+        expect(screen.getByText("View Full Entry")).toBeInTheDocument();
+    });
+
+    it("handles reset selection in exclude mode banner (if not exclusion only but in exclude mode? Wait, banner only shows if isExcludeMode)", async () => {
+        const user = userEvent.setup();
+        const onExcludedIdsChange = vi.fn();
+        // Provide exclude mode but not exclusion only so banner shows
+        renderTable({ isExclusionOnly: true, excludedIds: new Set(["entry_1"]), onExcludedIdsChange });
+
+        const resetBtn = screen.getByText("Reset selection");
+        await user.click(resetBtn);
+
+        expect(onExcludedIdsChange).toHaveBeenCalled();
+        const newSet = onExcludedIdsChange.mock.calls[0][0];
+        expect(newSet.size).toBe(0);
+    });
 });
