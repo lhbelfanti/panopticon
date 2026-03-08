@@ -47,7 +47,7 @@ describe("Export Route Loader", () => {
         const lines = text.split("\n");
 
         // Header
-        expect(lines[0]).toBe("ID,Text,Verdict,Score,CreatedAt");
+        expect(lines[0]).toBe("id,text,verdict,score,created_at");
 
         // Data rows
         // It should escape double quotes with double-double quotes and enclose in double quotes
