@@ -101,7 +101,9 @@
         "done": "uploaded",
         "processing": "processing",
         "created": "created",
-        "analyzed": "analyzed"
+        "analyzed": "analyzed",
+        "completed": "completed",
+        "failed": "failed"
     },
     "projects": {
         "analysis": {
@@ -151,6 +153,54 @@
                 "viewReport": "View report",
                 "pdf": "PDF",
                 "info": "Analysis history is kept per subproject. You can generate multiple reports with different exclusion criteria to compare results. Analysis runs typically take a few seconds to process."
+            },
+            "reportModal": {
+                "processing": {
+                    "title": "Analysis processing",
+                    "desc": "Please wait while we generate the insights and metrics for this run."
+                },
+                "close": "Close",
+                "title": "Analysis report",
+                "totalAnalyzed": "Total analyzed",
+                "outOfAvailable": "out of {{total}} available",
+                "excluded": "Excluded from dataset",
+                "excludedDesc": "Based on selection criteria",
+                "confidence": "Overall confidence",
+                "median": "Median: {{value}}%",
+                "summary": "Executive summary",
+                "behaviorChart": {
+                    "title": "Behavior distribution",
+                    "desc": "Frequency of detected adverse behaviors across the analyzed dataset."
+                },
+                "confidenceChart": {
+                    "title": "Confidence distribution",
+                    "desc": "Breakdown of model confidence scores across all predictions.",
+                    "score": "Score {{range}}"
+                },
+                "insights": {
+                    "topBehavior": "{{behavior}} represents the most frequent category in this dataset.",
+                    "confidenceHigh": "Confidence levels are generally high (>80%) for this model.",
+                    "confidenceMedium": "Confidence levels are moderate for this model.",
+                    "confidenceLow": "Confidence levels are generally low (<50%) for this model.",
+                    "verdictsPositive": "Detected behaviors are more concentrated in the 'Positive' verdict category.",
+                    "verdictsNegative": "Detected behaviors are more concentrated in the 'Negative' verdict category."
+                }
+            },
+            "pdf": {
+                "generatedOn": "Generated on:",
+                "runId": "Run ID:",
+                "projectContext": "PROJECT CONTEXT",
+                "project": "Project:",
+                "subproject": "Subproject:",
+                "behaviorTrends": "Behavior Detection Trends",
+                "investigationConclusion": "Investigation Conclusion",
+                "datasetBreakdown": "Dataset Breakdown",
+                "table": {
+                    "behavior": "Behavior",
+                    "count": "Count",
+                    "percentage": "Percentage"
+                },
+                "footer": "Panopticon Intelligence - Subproject Analysis Report - Page {{page}} of {{total}}"
             }
         },
         "new": {
@@ -228,6 +278,12 @@
             "deleteEntry": "Delete entry",
             "deleteEntryDesc": "Are you sure you want to delete this entry? This action cannot be undone.",
             "exportCsv": "Export CSV",
+            "viewFullEntry": "View full entry",
+            "metadataReply": "Is a reply",
+            "metadataQuote": "Has quote",
+            "metadataQuoteIsReply": "Quote is a reply",
+            "verdict": "Verdict",
+            "score": "Score",
             "analysis": "Analysis",
             "openAnalysis": "Open analysis \u2192",
             "datasetEntries": "Dataset entries",

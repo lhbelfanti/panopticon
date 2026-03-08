@@ -101,7 +101,9 @@
         "done": "subido",
         "processing": "procesando",
         "created": "creado",
-        "analyzed": "analizado"
+        "analyzed": "analizado",
+        "completed": "completado",
+        "failed": "fallido"
     },
     "projects": {
         "analysis": {
@@ -151,6 +153,54 @@
                 "viewReport": "Ver informe",
                 "pdf": "PDF",
                 "info": "El historial de análisis se mantiene por subproyecto. Puedes generar múltiples informes con diferentes criterios de exclusión para comparar resultados. Los análisis normalmente tardan unos segundos en procesarse."
+            },
+            "reportModal": {
+                "processing": {
+                    "title": "Procesando análisis",
+                    "desc": "Por favor, espera mientras generamos los insights y métricas para esta ejecución."
+                },
+                "close": "Cerrar",
+                "title": "Reporte de análisis",
+                "totalAnalyzed": "Total analizado",
+                "outOfAvailable": "de {{total}} disponibles",
+                "excluded": "Excluidas del dataset",
+                "excludedDesc": "Basado en criterios de selección",
+                "confidence": "Confianza general",
+                "median": "Mediana: {{value}}%",
+                "summary": "Resumen ejecutivo",
+                "behaviorChart": {
+                    "title": "Distribución de comportamientos",
+                    "desc": "Frecuencia de comportamientos adversos detectados en el dataset analizado."
+                },
+                "confidenceChart": {
+                    "title": "Distribución de confianza",
+                    "desc": "Desglose de puntajes de confianza del modelo en todas las predicciones.",
+                    "score": "Puntaje {{range}}"
+                },
+                "insights": {
+                    "topBehavior": "{{behavior}} representa la categoría más frecuente en este dataset.",
+                    "confidenceHigh": "Los niveles de confianza son generalmente altos (>80%) para este modelo.",
+                    "confidenceMedium": "Los niveles de confianza son moderados para este modelo.",
+                    "confidenceLow": "Los niveles de confianza son generalmente bajos (<50%) para este modelo.",
+                    "verdictsPositive": "Los comportamientos detectados están más concentrados en la categoría de veredicto 'Positivo'.",
+                    "verdictsNegative": "Los comportamientos detectados están más concentrados en la categoría de veredicto 'Negativo'."
+                }
+            },
+            "pdf": {
+                "generatedOn": "Generado el:",
+                "runId": "ID de ejecución:",
+                "projectContext": "CONTEXTO DEL PROYECTO",
+                "project": "Proyecto:",
+                "subproject": "Subproyecto:",
+                "behaviorTrends": "Tendencias de detección de comportamiento",
+                "investigationConclusion": "Conclusión de la investigación",
+                "datasetBreakdown": "Desglose del dataset",
+                "table": {
+                    "behavior": "Comportamiento",
+                    "count": "Cantidad",
+                    "percentage": "Porcentaje"
+                },
+                "footer": "Panopticon Intelligence - Reporte de Análisis de Subproyecto - Página {{page}} de {{total}}"
             }
         },
         "new": {
@@ -227,6 +277,12 @@
             "deleteEntry": "Eliminar entrada",
             "deleteEntryDesc": "Est\u00e1 seguro de que desea eliminar esta entrada? Esta acci\u00f3n no se puede deshacer.",
             "exportCsv": "Exportar CSV",
+            "viewFullEntry": "Ver entrada completa",
+            "metadataReply": "Es una respuesta",
+            "metadataQuote": "Tiene cita",
+            "metadataQuoteIsReply": "La cita es una respuesta",
+            "verdict": "Veredicto",
+            "score": "Puntaje",
             "datasetEntries": "Entradas del dataset",
             "predictPending": "Predecir pendientes",
             "predicting": "Prediciendo...",
