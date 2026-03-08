@@ -1,5 +1,6 @@
 export interface SessionData {
   token: string;
+  userId?: string;
   hasTokenExpired: boolean;
 }
 
@@ -11,6 +12,7 @@ export interface LogInRequestBodyDTO {
 export interface LogInResponse {
   token: string;
   expiresAt: string;
+  userId?: string;
   headers?: any;
 }
 

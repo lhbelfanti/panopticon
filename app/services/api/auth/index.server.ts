@@ -25,12 +25,14 @@ export const login = async (
     Date.now() + 30 * 24 * 60 * 60 * 1000,
   ).toISOString(); // Expires in 30 days
   const token = `mock-jwt-token-${Date.now()}`;
+  const userId = `mock-user-${Date.now()}`;
 
-  const { headers } = await createAuthSession(token, expiresAt);
+  const { headers } = await createAuthSession(token, expiresAt, userId);
 
   return {
     token,
     expiresAt,
+    userId,
     headers,
   };
 };

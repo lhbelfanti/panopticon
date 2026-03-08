@@ -1,0 +1,120 @@
+
+> react-router-project-template@1.0.0 test:coverage
+> vitest run --coverage
+
+
+[1m[46m RUN [49m[22m [36mv4.0.18 [39m[90m/Users/lhbelfanti/workspace/github/panopticon[39m
+      [2mCoverage enabled with [22m[33mv8[39m
+
+ [32m✓[39m app/components/Sidebar/index.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 771[2mms[22m[39m
+ [32m✓[39m app/components/EntryIngestion/BulkUpload.test.tsx [2m([22m[2m13 tests[22m[2m)[22m[33m 882[2mms[22m[39m
+ [32m✓[39m app/components/LoginForms/RegisterForm.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 1046[2mms[22m[39m
+ [32m✓[39m app/components/ProjectForms/NewProjectForm.test.tsx [2m([22m[2m10 tests[22m[2m)[22m[33m 942[2mms[22m[39m
+     [33m[2m✓[22m[39m computes available models intersection and enables submit [33m 376[2mms[22m[39m
+ [32m✓[39m app/routes/projects.$id.models.$modelId.analysis.test.tsx [2m([22m[2m19 tests[22m[2m)[22m[33m 1373[2mms[22m[39m
+     [33m[2m✓[22m[39m opens and closes the exclusion modal [33m 460[2mms[22m[39m
+     [33m[2m✓[22m[39m updates excluded count when state changes in the modal [33m 454[2mms[22m[39m
+ [32m✓[39m app/routes/entries.new.test.tsx [2m([22m[2m12 tests[22m[2m)[22m[33m 901[2mms[22m[39m
+ [32m✓[39m app/components/LoginForms/ForgotPasswordForm.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[33m 318[2mms[22m[39m
+ [32m✓[39m app/components/EntriesTable/index.test.tsx [2m([22m[2m22 tests[22m[2m)[22m[33m 2671[2mms[22m[39m
+     [33m[2m✓[22m[39m opens view modal when entry text is clicked [33m 338[2mms[22m[39m
+     [33m[2m✓[22m[39m handles filter column switching and value typing [33m 420[2mms[22m[39m
+ [32m✓[39m app/components/Analysis/NewAnalysisForm.test.tsx [2m([22m[2m13 tests[22m[2m)[22m[33m 619[2mms[22m[39m
+ [32m✓[39m app/components/EntryIngestion/TweetCard.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[33m 550[2mms[22m[39m
+ [32m✓[39m app/components/EntryIngestion/EntryForm.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 346[2mms[22m[39m
+ [32m✓[39m app/components/Modals/AnalysisReportModal.test.tsx [2m([22m[2m14 tests[22m[2m)[22m[33m 659[2mms[22m[39m
+ [32m✓[39m app/components/Analysis/AnalysisHistoryTable.test.tsx [2m([22m[2m11 tests[22m[2m)[22m[33m 523[2mms[22m[39m
+ [32m✓[39m app/routes/projects.new.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 486[2mms[22m[39m
+     [33m[2m✓[22m[39m loader returns behavior configs [33m 301[2mms[22m[39m
+ [32m✓[39m app/components/Sidebar/NavItem/index.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[32m 285[2mms[22m[39m
+ [32m✓[39m app/routes/login._index.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[33m 317[2mms[22m[39m
+ [32m✓[39m app/routes/projects.$id.settings.test.tsx [2m([22m[2m11 tests[22m[2m)[22m[33m 547[2mms[22m[39m
+ [32m✓[39m app/components/Modals/PredictionsHistoryModal.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[33m 334[2mms[22m[39m
+ [32m✓[39m app/components/Dashboard/RecentActivity/index.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[32m 130[2mms[22m[39m
+ [32m✓[39m app/components/LoginForms/LoginForm.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[32m 271[2mms[22m[39m
+ [32m✓[39m app/components/Logo/index.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[32m 168[2mms[22m[39m
+ [32m✓[39m app/routes/projects.$id._index.test.tsx [2m([22m[2m10 tests[22m[2m)[22m[32m 240[2mms[22m[39m
+ [32m✓[39m app/components/LanguageSwitcher/index.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 235[2mms[22m[39m
+ [32m✓[39m app/components/SubprojectCard/index.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 135[2mms[22m[39m
+ [32m✓[39m app/components/Button/index.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 121[2mms[22m[39m
+ [32m✓[39m app/components/Dashboard/QuickActions/index.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[32m 125[2mms[22m[39m
+ [32m✓[39m app/components/Dashboard/SummaryGrid/index.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[32m 250[2mms[22m[39m
+ [32m✓[39m app/routes/_index.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[32m 93[2mms[22m[39m
+ [32m✓[39m app/components/Breadcrumb/index.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 103[2mms[22m[39m
+ [32m✓[39m app/components/AdverseBehaviorLabel/index.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 107[2mms[22m[39m
+ [32m✓[39m app/routes/projects.$id.models.$modelId._index.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[32m 112[2mms[22m[39m
+ [32m✓[39m app/components/ConfirmationModal/index.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[32m 272[2mms[22m[39m
+ [32m✓[39m app/utils/pdfGenerator.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 47[2mms[22m[39m
+ [32m✓[39m app/components/Dashboard/RecentActivity/utils.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[32m 34[2mms[22m[39m
+ [32m✓[39m app/routes/projects.$id.models.$modelId.export.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m app/routes/projects.$id.models.$modelId.predictions.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m36 passed[39m[22m[90m (36)[39m
+[2m      Tests [22m [1m[32m259 passed[39m[22m[90m (259)[39m
+[2m   Start at [22m 14:15:28
+[2m   Duration [22m 15.54s[2m (transform 2.20s, setup 20.85s, import 15.17s, tests 16.03s, environment 30.95s)[22m
+
+[34m % [39m[2mCoverage report from [22m[33mv8[39m
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+All files          |   94.85 |    88.72 |   90.87 |   95.81 |                   
+ ...eBehaviorLabel |     100 |      100 |     100 |     100 |                   
+  index.tsx        |     100 |      100 |     100 |     100 |                   
+ ...nents/Analysis |     100 |      100 |     100 |     100 |                   
+  ...toryTable.tsx |     100 |      100 |     100 |     100 |                   
+  ...lysisForm.tsx |     100 |      100 |     100 |     100 |                   
+ ...nts/Breadcrumb |     100 |      100 |     100 |     100 |                   
+  index.tsx        |     100 |      100 |     100 |     100 |                   
+ components/Button |     100 |      100 |     100 |     100 |                   
+  index.tsx        |     100 |      100 |     100 |     100 |                   
+ ...firmationModal |     100 |      100 |     100 |     100 |                   
+  index.tsx        |     100 |      100 |     100 |     100 |                   
+ ...d/QuickActions |     100 |      100 |     100 |     100 |                   
+  index.tsx        |     100 |      100 |     100 |     100 |                   
+ ...RecentActivity |     100 |      100 |     100 |     100 |                   
+  index.tsx        |     100 |      100 |     100 |     100 |                   
+  utils.tsx        |     100 |      100 |     100 |     100 |                   
+ ...rd/SummaryGrid |     100 |      100 |     100 |     100 |                   
+  index.tsx        |     100 |      100 |     100 |     100 |                   
+ ...s/EntriesTable |   88.28 |    83.19 |   78.94 |   89.21 |                   
+  index.tsx        |   88.28 |    83.19 |   78.94 |   89.21 | ...71,423,479,763 
+ ...EntryIngestion |   93.67 |    90.59 |   91.66 |    95.3 |                   
+  BulkUpload.tsx   |   92.24 |    88.73 |      85 |   94.39 | ...75-176,270,318 
+  EntryForm.tsx    |   93.75 |       75 |     100 |   93.75 | 32                
+  TweetCard.tsx    |     100 |    97.36 |     100 |     100 | 102               
+ ...nguageSwitcher |   95.23 |     87.5 |     100 |      95 |                   
+  index.tsx        |   95.23 |     87.5 |     100 |      95 | 27                
+ ...nts/LoginForms |     100 |      100 |     100 |     100 |                   
+  ...swordForm.tsx |     100 |      100 |     100 |     100 |                   
+  LoginForm.tsx    |     100 |      100 |     100 |     100 |                   
+  RegisterForm.tsx |     100 |      100 |     100 |     100 |                   
+ components/Logo   |     100 |      100 |     100 |     100 |                   
+  index.tsx        |     100 |      100 |     100 |     100 |                   
+ components/Modals |     100 |    84.09 |     100 |     100 |                   
+  ...portModal.tsx |     100 |       70 |     100 |     100 | 53-156,160        
+  ...toryModal.tsx |     100 |    95.83 |     100 |     100 | 67                
+ ...s/ProjectForms |   95.83 |    89.65 |     100 |   97.61 |                   
+  ...ojectForm.tsx |   95.83 |    89.65 |     100 |   97.61 | 37                
+ ...onents/Sidebar |     100 |      100 |     100 |     100 |                   
+  index.tsx        |     100 |      100 |     100 |     100 |                   
+ ...idebar/NavItem |     100 |    96.66 |     100 |     100 |                   
+  index.tsx        |     100 |    96.66 |     100 |     100 | 69                
+ ...SubprojectCard |     100 |      100 |     100 |     100 |                   
+  index.tsx        |     100 |      100 |     100 |     100 |                   
+ components/ui     |     100 |    95.65 |     100 |     100 |                   
+  ...mCheckbox.tsx |     100 |    95.65 |     100 |     100 | 22                
+ routes            |   92.62 |    86.74 |   85.13 |   94.06 |                   
+  _index.tsx       |     100 |      100 |     100 |     100 |                   
+  entries.new.tsx  |   91.57 |    84.78 |   95.83 |   90.69 | ...20,130,138-139 
+  login._index.tsx |     100 |      100 |     100 |     100 |                   
+  ...id._index.tsx |   91.66 |       75 |    87.5 |   96.77 | 181               
+  ...Id._index.tsx |   91.42 |    84.61 |      75 |     100 | 19,40,45-46       
+  ....analysis.tsx |    88.6 |    85.36 |   73.68 |   90.41 | ...35,229-233,294 
+  ...Id.export.tsx |     100 |      100 |     100 |     100 |                   
+  ...redictions.ts |     100 |      100 |     100 |     100 |                   
+  ....settings.tsx |   93.18 |     87.5 |   66.66 |   92.68 | 27,62,170         
+  projects.new.tsx |   96.42 |      100 |      75 |   96.42 | 23                
+ utils             |   98.65 |       45 |     100 |   98.61 |                   
+  pdfGenerator.ts  |   98.65 |       45 |     100 |   98.61 | 51-52             
+-------------------|---------|----------|---------|---------|-------------------

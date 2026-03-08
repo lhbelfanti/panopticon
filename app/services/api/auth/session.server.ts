@@ -17,10 +17,13 @@ const sessionStorage = createCookieSessionStorage({
   },
 });
 
-export const createAuthSession = async (token: string, expiresAt: string) => {
+export const createAuthSession = async (token: string, expiresAt: string, userId?: string) => {
   const session = await sessionStorage.getSession();
   session.set("token", token);
   session.set("expiresAt", expiresAt);
+  if (userId) {
+    session.set("userId", userId);
+  }
 
   return {
     headers: {
@@ -42,12 +45,13 @@ export const getDataFromSession = async (
 
   const token: string = session.get("token");
   const expiresAt: string = session.get("expiresAt");
+  const userId: string | undefined = session.get("userId");
   const dateNow = Date.now();
   const expiresAtDate = new Date(expiresAt);
   const hasTokenExpired: boolean =
     expiresAtDate.getTime() - dateNow < SESSION_REFRESH_THRESHOLD_MS;
 
-  return { token, hasTokenExpired };
+  return { token, userId, hasTokenExpired };
 };
 
 export const destroyAuthSession = async (request: Request) => {

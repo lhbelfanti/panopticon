@@ -57,17 +57,36 @@ describe("Dashboard Index Route", () => {
 
 import { loader } from "./_index";
 import { getDashboardSummary, getRecentActivities } from "~/services/api/dashboard/index.server";
+import { isAuthenticated } from "~/services/api/auth/session.server";
 
 vi.mock("~/services/api/dashboard/index.server", () => ({
     getDashboardSummary: vi.fn(async () => ({})),
     getRecentActivities: vi.fn(async () => []),
 }));
 
+vi.mock("~/services/api/auth/session.server", () => ({
+    isAuthenticated: vi.fn(async () => true),
+}));
+
 describe("Dashboard Index Route Functions", () => {
-    it("loader returns dashboard data", async () => {
-        const result = await loader();
+    it("loader returns dashboard data when authenticated", async () => {
+        vi.mocked(isAuthenticated).mockResolvedValueOnce(true);
+        const request = new Request("http://localhost/");
+        const result = await loader({ request } as any);
         expect(result).toHaveProperty("summary");
         expect(result).toHaveProperty("recentActivities");
+    });
+
+    it("loader redirects to login when not authenticated", async () => {
+        vi.mocked(isAuthenticated).mockResolvedValueOnce(false);
+        const request = new Request("http://localhost/");
+        try {
+            await loader({ request } as any);
+            expect.fail("should have thrown redirect");
+        } catch (error: any) {
+            expect(error.status).toBe(302);
+            expect(error.headers.get("Location")).toBe("/login");
+        }
     });
 });
 

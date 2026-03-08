@@ -11,7 +11,10 @@ import { RecentActivity } from "~/components/Dashboard/RecentActivity";
 import { SummaryGrid } from "~/components/Dashboard/SummaryGrid";
 import { AdverseBehaviorLabel } from "~/components/AdverseBehaviorLabel";
 
+import { isAuthenticated } from "~/services/api/auth/session.server";
+
 import type { MetaFunction } from "react-router";
+import { redirect } from "react-router";
 
 export const meta: MetaFunction = () => {
   return [
@@ -23,7 +26,12 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-export const loader = async () => {
+export const loader = async ({ request }: { request: Request }) => {
+  const isAuth = await isAuthenticated(request);
+  if (!isAuth) {
+    throw redirect("/login");
+  }
+
   const [summary, recentActivities] = await Promise.all([
     getDashboardSummary(),
     getRecentActivities(),
