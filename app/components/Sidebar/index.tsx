@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Logo } from "~/components/Logo";
 import ConfirmationModal from "~/components/ConfirmationModal";
 import packageJson from "../../../package.json";
+import { Link } from "react-router";
 import { NavItem } from "./NavItem";
 
 import {
@@ -55,12 +56,14 @@ export const Sidebar = (props: SidebarProps) => {
 
         {/* Header / Logo Component */}
         <div className="flex flex-col items-center justify-center p-6 pt-14 border-b border-white/5 min-h-[10rem] relative overflow-hidden">
-          <Logo
-            collapsed={collapsed}
-            logoClassName={collapsed ? "w-10" : "w-30"}
-            backgroundClassName="text-3xl top-1/2 -translate-y-1/2"
-            textClassName="text-sm mt-3"
-          />
+          <Link to="/" className="group flex flex-col items-center justify-center transition-transform hover:scale-105">
+            <Logo
+              collapsed={collapsed}
+              logoClassName={collapsed ? "w-10" : "w-30"}
+              backgroundClassName="text-3xl top-1/2 -translate-y-1/2"
+              textClassName="text-sm mt-3"
+            />
+          </Link>
         </div>
 
         {/* Navigation Links */}
