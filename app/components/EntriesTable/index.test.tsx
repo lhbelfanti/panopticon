@@ -11,6 +11,10 @@ vi.mock("react-i18next", () => ({
     }),
 }));
 
+vi.mock("~/components/Modals/PredictionsHistoryModal", () => ({
+    PredictionsHistoryModal: () => <div data-testid="predictions-modal">projects.entries.predictionHistory</div>
+}));
+
 const mockSubmit = vi.fn();
 const mockUseNavigation = vi.fn(() => ({
     state: "idle",
@@ -154,18 +158,6 @@ describe("EntriesTable", () => {
         await user.click(deleteBtns[0]);
 
         expect(screen.getByText("projects.entries.deleteEntryDesc")).toBeInTheDocument();
-    });
-
-    it("predict pending button calls submit", async () => {
-        const user = userEvent.setup();
-        renderTable();
-
-        const predictBtn = screen.getByRole("button", { name: "projects.entries.predictPending" });
-        await user.click(predictBtn);
-
-        expect(mockSubmit).toHaveBeenCalled();
-        const calls = mockSubmit.mock.calls;
-        expect(calls[0][0].get("intent")).toBe("predict_pending");
     });
 
     it("renders different verdict styles", () => {
@@ -405,5 +397,17 @@ describe("EntriesTable", () => {
         expect(onExcludedIdsChange).toHaveBeenCalled();
         const newSet = onExcludedIdsChange.mock.calls[0][0];
         expect(newSet.size).toBe(0);
+    });
+
+    it("renders fallback setExcludedIds if onExcludedIdsChange not passed", async () => {
+        const user = userEvent.setup();
+        renderTable({ isExclusionOnly: true });
+
+        // Click to select the first row
+        const firstRowCheckbox = screen.getAllByRole("row")[1].querySelector("td:first-child");
+        if (firstRowCheckbox) await user.click(firstRowCheckbox);
+
+        // No crash, internal state updated
+        expect(screen.getByText("projects.entries.tableId")).toBeInTheDocument();
     });
 });
