@@ -112,13 +112,13 @@ describe("AnalysisPage Route Component", () => {
 
     it("renders the page heading", () => {
         renderPage();
-        expect(screen.getByText("Analysis")).toBeInTheDocument();
+        expect(screen.getByText("projects.analysis.title")).toBeInTheDocument();
     });
 
     it("renders 'New analysis' and 'History' tab buttons", () => {
         renderPage();
-        expect(screen.getByText("New analysis")).toBeInTheDocument();
-        expect(screen.getByText("History")).toBeInTheDocument();
+        expect(screen.getByText("projects.analysis.tabs.new")).toBeInTheDocument();
+        expect(screen.getByText("projects.analysis.tabs.history")).toBeInTheDocument();
     });
 
     it("defaults to showing NewAnalysisForm on the 'new' tab", () => {
@@ -129,15 +129,15 @@ describe("AnalysisPage Route Component", () => {
 
     it("shows AnalysisHistoryTable when History tab is clicked", () => {
         renderPage();
-        fireEvent.click(screen.getByText("History"));
+        fireEvent.click(screen.getByText("projects.analysis.tabs.history"));
         expect(screen.getByTestId("history-table")).toBeInTheDocument();
         expect(screen.queryByTestId("new-analysis-form")).not.toBeInTheDocument();
     });
 
     it("returns to New Analysis tab when 'New analysis' is clicked", () => {
         renderPage();
-        fireEvent.click(screen.getByText("History"));
-        fireEvent.click(screen.getByText("New analysis"));
+        fireEvent.click(screen.getByText("projects.analysis.tabs.history"));
+        fireEvent.click(screen.getByText("projects.analysis.tabs.new"));
         expect(screen.getByTestId("new-analysis-form")).toBeInTheDocument();
     });
 
@@ -148,7 +148,7 @@ describe("AnalysisPage Route Component", () => {
 
     it("renders Back to subproject link", () => {
         renderPage();
-        expect(screen.getByText("Back to subproject")).toBeInTheDocument();
+        expect(screen.getByText("projects.analysis.backToSubproject")).toBeInTheDocument();
     });
 
     it("calls submit with trigger_analysis intent when form submits", () => {
@@ -172,10 +172,10 @@ describe("AnalysisPage Route Component", () => {
         await waitFor(() => {
             expect(screen.getByTestId("entries-table-modal")).toBeInTheDocument();
         });
-        expect(screen.getByText(/Refine exclusions/i)).toBeInTheDocument();
+        expect(screen.getByText(/projects\.analysis\.exclusions\.refineTitle/i)).toBeInTheDocument();
 
         // Close modal via 'Apply & close'
-        fireEvent.click(screen.getByText(/Apply & close/i));
+        fireEvent.click(screen.getByText(/projects\.analysis\.exclusions\.applyAndClose/i));
         expect(screen.queryByTestId("entries-table-modal")).not.toBeInTheDocument();
     });
 
@@ -194,7 +194,7 @@ describe("AnalysisPage Route Component", () => {
         fireEvent.click(screen.getByTestId("toggle-id-1"));
 
         // Close modal
-        fireEvent.click(screen.getByText(/Apply & close/i));
+        fireEvent.click(screen.getByText(/projects\.analysis\.exclusions\.applyAndClose/i));
 
         // Count should be 1
         expect(screen.getByTestId("excluded-count")).toHaveTextContent("1");
