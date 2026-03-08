@@ -3,6 +3,7 @@ import { Form, Link, useNavigation, useSubmit } from "react-router";
 import { useTranslation } from "react-i18next";
 
 import ConfirmationModal from "~/components/ConfirmationModal";
+import { TweetCard } from "~/components/EntryIngestion/TweetCard";
 
 import {
   ArrowLeft,
@@ -361,13 +362,15 @@ const EntriesTable = (props: EntriesTableProps) => {
           </Form>
 
           <div className="flex items-center gap-3">
-            <Link
-              to={`/projects/${project.id}/models/${modelId}/analysis`}
-              className="flex items-center gap-2 px-4 py-2 text-sm font-bold text-white-1 bg-surface-dark border border-white/10 hover:border-primary/50 rounded-lg transition-colors whitespace-nowrap"
-            >
-              <Zap size={16} className="text-primary" />
-              {t("projects.entries.analysis")}
-            </Link>
+            {!isExclusionOnly && (
+              <Link
+                to={`/projects/${project.id}/models/${modelId}/analysis`}
+                className="flex items-center gap-2 px-4 py-2 text-sm font-bold text-white-1 bg-surface-dark border border-white/10 hover:border-primary/50 rounded-lg transition-colors whitespace-nowrap"
+              >
+                <Zap size={16} className="text-primary" />
+                {t("projects.entries.analysis")}
+              </Link>
+            )}
 
             <a
               href={`/projects/${project.id}/models/${modelId}/export?filterCol=${filterCol}&filterVal=${encodeURIComponent(filterVal)}&filterOp=${encodeURIComponent(filterOp)}&filterBias=${filterBias}`}
@@ -479,10 +482,29 @@ const EntriesTable = (props: EntriesTableProps) => {
                         {entry.id.split("_")[1] || entry.id}
                       </td>
                       <td
-                        className="py-2 px-4 text-sm text-white-1 truncate max-w-sm text-left leading-relaxed"
+                        className="py-2 px-4 text-sm text-white-1 max-w-sm text-left leading-relaxed"
                         title={entry.text}
                       >
-                        {entry.text}
+                        <div className="truncate">{entry.text}</div>
+                        {entry.metadata && (entry.metadata.isReply || entry.metadata.hasQuote || entry.metadata.isQuoteAReply) && (
+                          <div className="flex flex-wrap gap-1.5 mt-1.5">
+                            {entry.metadata.isReply && (
+                              <span className="px-1.5 py-0.5 text-[0.6rem] font-bold tracking-wider rounded bg-primary/10 text-primary uppercase">
+                                {t("projects.entries.metadataReply", "Is a reply")}
+                              </span>
+                            )}
+                            {entry.metadata.hasQuote && (
+                              <span className="px-1.5 py-0.5 text-[0.6rem] font-bold tracking-wider rounded bg-yellow-500/10 text-yellow-500 uppercase">
+                                {t("projects.entries.metadataQuote", "Has quote")}
+                              </span>
+                            )}
+                            {entry.metadata.isQuoteAReply && (
+                              <span className="px-1.5 py-0.5 text-[0.6rem] font-bold tracking-wider rounded bg-blue-500/10 text-blue-400 uppercase">
+                                {t("projects.entries.metadataQuoteIsReply", "Quote is a reply")}
+                              </span>
+                            )}
+                          </div>
+                        )}
                       </td>
                       <td className="py-2 px-4 whitespace-nowrap text-left">
                         <span
@@ -659,7 +681,7 @@ const EntriesTable = (props: EntriesTableProps) => {
             <div className="p-4 border-b border-white/5 flex items-center justify-between bg-black/20">
               <h3 className="text-sm font-bold text-white-1 uppercase tracking-widest flex items-center gap-2">
                 <FileText size={16} className="text-primary" />
-                View Full Entry
+                {t("projects.entries.viewFullEntry")}
               </h3>
               <button
                 onClick={() => setEntryToView(null)}
@@ -668,13 +690,22 @@ const EntriesTable = (props: EntriesTableProps) => {
                 <X size={18} />
               </button>
             </div>
-            <div className="p-6">
-              <div className="bg-background-dark border border-white/5 rounded-xl p-4 max-h-[60vh] overflow-y-auto w-full text-light-gray-80 text-sm whitespace-pre-wrap font-mono leading-relaxed">
-                {entryToView.text}
-              </div>
-              <div className="flex gap-4 mt-6 items-center">
+            <div className="p-6 max-h-[70vh] overflow-y-auto w-full custom-scrollbar">
+              <TweetCard
+                mode="readOnly"
+                initialData={{
+                  text: entryToView.text,
+                  metadata: entryToView.metadata || {
+                    isReply: false,
+                    hasQuote: false,
+                    isQuoteAReply: false,
+                    quotedText: ""
+                  }
+                }}
+              />
+              <div className="flex justify-center gap-4 mt-8 items-center bg-background-dark/50 border border-white/5 py-3 px-6 rounded-full w-max mx-auto shadow-inner">
                 <span className="text-xs text-light-gray-70 uppercase tracking-widest font-bold">
-                  Verdict:
+                  {t("projects.entries.verdict")}:
                 </span>
                 <span
                   className={`px-2 py-0.5 text-xs font-bold rounded-full border ${getVerdictStyle(entryToView.verdict)}`}
@@ -686,9 +717,9 @@ const EntriesTable = (props: EntriesTableProps) => {
                   <>
                     <div className="w-px h-4 bg-white/10 mx-2" />
                     <span className="text-xs text-light-gray-70 uppercase tracking-widest font-bold">
-                      Score:
+                      {t("projects.entries.score")}:
                     </span>
-                    <span className="text-xs text-light-gray-80 font-mono">
+                    <span className="text-sm font-bold text-white-1 font-mono">
                       {(entryToView.score * 100).toFixed(2)}%
                     </span>
                   </>
