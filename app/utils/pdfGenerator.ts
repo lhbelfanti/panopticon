@@ -5,7 +5,7 @@ import type { AnalysisRun } from "~/services/api/analysis/types";
 /**
  * Asynchronously generates and triggers a download for a PDF report of an analysis run.
  */
-export const generateAnalysisPDF = async (run: AnalysisRun, projectName: string) => {
+export const generateAnalysisPDF = async (run: AnalysisRun, projectName: string, t: (key: string, options?: any) => string) => {
     if (!run.result) {
         console.error("Cannot generate generate PDF for incomplete run.");
         return;
@@ -73,13 +73,13 @@ export const generateAnalysisPDF = async (run: AnalysisRun, projectName: string)
 
     doc.setFontSize(28);
     doc.setTextColor(textWhite);
-    doc.text("Analysis Report", margin, margin + 12);
+    doc.text(t('projects.analysis.reportModal.title'), margin, margin + 12);
 
     doc.setFont("helvetica", "normal");
     doc.setFontSize(10);
     doc.setTextColor(textGray);
-    doc.text(`Generated on: ${new Date(run.timestamp).toLocaleString()}`, margin, margin + 22);
-    doc.text(`Run ID: ${run.id.split('_')[1].toUpperCase()}`, margin, margin + 28);
+    doc.text(`${t('projects.analysis.pdf.generatedOn')} ${new Date(run.timestamp).toLocaleString()}`, margin, margin + 22);
+    doc.text(`${t('projects.analysis.pdf.runId')} ${run.id.split('_')[1].toUpperCase()}`, margin, margin + 28);
 
     // -- Project Context Card --
     let cursorY = margin + 45;
@@ -89,13 +89,13 @@ export const generateAnalysisPDF = async (run: AnalysisRun, projectName: string)
     doc.setFontSize(10);
     doc.setFont("helvetica", "bold");
     doc.setTextColor(...primaryColor);
-    doc.text("PROJECT CONTEXT", margin + 8, cursorY + 10);
+    doc.text(t('projects.analysis.pdf.projectContext'), margin + 8, cursorY + 10);
 
     doc.setFont("helvetica", "normal");
     doc.setTextColor(textWhite);
     doc.setFontSize(11);
-    doc.text(`Project: ${projectName}`, margin + 8, cursorY + 20);
-    doc.text(`Subproject: ${run.subprojectId}`, margin + 8, cursorY + 27);
+    doc.text(`${t('projects.analysis.pdf.project')} ${projectName}`, margin + 8, cursorY + 20);
+    doc.text(`${t('projects.analysis.pdf.subproject')} ${run.subprojectId}`, margin + 8, cursorY + 27);
 
     // -- Key Metrics Cards --
     cursorY += 45;
@@ -119,16 +119,16 @@ export const generateAnalysisPDF = async (run: AnalysisRun, projectName: string)
         doc.text(subValue, x + 6, y + 32);
     };
 
-    drawMetricCard(margin, cursorY, "Total analyzed", result.analyzedEntries.toString(), `of ${result.totalEntries} available`, primaryColor);
-    drawMetricCard(margin + cardWidth + 5, cursorY, "Excluded", result.excludedEntries.toString(), "Selection criteria", bittersweetColor);
-    drawMetricCard(margin + (cardWidth + 5) * 2, cursorY, "Confidence", `${Math.round(result.confidenceMetrics.average * 100)}%`, `Median: ${Math.round(result.confidenceMetrics.median * 100)}%`, primaryColor);
+    drawMetricCard(margin, cursorY, t('projects.analysis.reportModal.totalAnalyzed'), result.analyzedEntries.toString(), t('projects.analysis.reportModal.outOfAvailable', { total: result.totalEntries }), primaryColor);
+    drawMetricCard(margin + cardWidth + 5, cursorY, t('projects.analysis.reportModal.excluded'), result.excludedEntries.toString(), t('projects.analysis.reportModal.excludedDesc'), bittersweetColor);
+    drawMetricCard(margin + (cardWidth + 5) * 2, cursorY, t('projects.analysis.reportModal.confidence'), `${Math.round(result.confidenceMetrics.average * 100)}%`, t('projects.analysis.reportModal.median', { value: Math.round(result.confidenceMetrics.median * 100) }), primaryColor);
 
     // -- Behavior Distribution Chart (Graphical) --
     cursorY += 55;
     doc.setFont("helvetica", "bold");
     doc.setFontSize(14);
     doc.setTextColor(textWhite);
-    doc.text("Behavior Detection Trends", margin, cursorY);
+    doc.text(t('projects.analysis.pdf.behaviorTrends'), margin, cursorY);
 
     cursorY += 10;
     const chartHeight = 60;
@@ -153,7 +153,7 @@ export const generateAnalysisPDF = async (run: AnalysisRun, projectName: string)
         doc.text(b.count.toString(), x + (barWidth / 2), y - 3, { align: "center" });
 
         doc.setTextColor(textGray);
-        const label = b.behaviorId.split('_').pop()?.toUpperCase() || "";
+        const label = t(`projects.behaviors.${b.behaviorId}`);
         doc.text(label, x + (barWidth / 2), cursorY + chartHeight + 15, { align: "center" });
     });
 
@@ -170,7 +170,7 @@ export const generateAnalysisPDF = async (run: AnalysisRun, projectName: string)
     doc.setFont("helvetica", "bold");
     doc.setFontSize(14);
     doc.setTextColor(textWhite);
-    const summaryTitle = "Investigation Conclusion";
+    const summaryTitle = t('projects.analysis.pdf.investigationConclusion');
     doc.text(summaryTitle, margin, cursorY);
 
     const titleWidth = doc.getTextWidth(summaryTitle);
@@ -183,7 +183,20 @@ export const generateAnalysisPDF = async (run: AnalysisRun, projectName: string)
     doc.setFontSize(10);
     doc.setTextColor(textWhite);
 
-    const conclusionText = result.insights.join(" ");
+    const resolvedInsights: any = Array.isArray(result.insights)
+        ? { topBehaviorId: "unknown", confidenceTrend: "medium" as const, verdictConcentration: "mixed" as const, legacyText: result.insights.join(" ") }
+        : result.insights;
+
+    const conclusionText = resolvedInsights.legacyText ? resolvedInsights.legacyText : [
+        t('projects.analysis.reportModal.insights.topBehavior', { behavior: t(`projects.behaviors.${resolvedInsights.topBehaviorId}`) }),
+        resolvedInsights.confidenceTrend === 'high' ? t('projects.analysis.reportModal.insights.confidenceHigh') :
+            resolvedInsights.confidenceTrend === 'medium' ? t('projects.analysis.reportModal.insights.confidenceMedium') :
+                t('projects.analysis.reportModal.insights.confidenceLow'),
+        resolvedInsights.verdictConcentration !== 'mixed' ? (
+            resolvedInsights.verdictConcentration === 'positive' ? t('projects.analysis.reportModal.insights.verdictsPositive') :
+                t('projects.analysis.reportModal.insights.verdictsNegative')
+        ) : ''
+    ].filter(Boolean).join(" ");
     const splitConclusion = doc.splitTextToSize(conclusionText, chartWidth);
     doc.text(splitConclusion, margin, cursorY);
 
@@ -193,17 +206,21 @@ export const generateAnalysisPDF = async (run: AnalysisRun, projectName: string)
     doc.setFont("helvetica", "bold");
     doc.setFontSize(12);
     doc.setTextColor(textWhite);
-    doc.text("Dataset Breakdown", margin, cursorY);
+    doc.text(t('projects.analysis.pdf.datasetBreakdown'), margin, cursorY);
 
     const behaviorBody = result.behaviorDistribution.map(b => [
-        b.behaviorId.replace(/_/g, " ").toUpperCase(),
+        t(`projects.behaviors.${b.behaviorId}`),
         b.count.toString(),
         `${b.percentage}%`
     ]);
 
     autoTable(doc, {
         startY: cursorY + 6,
-        head: [['Behavior', 'Count', 'Percentage']],
+        head: [[
+            t('projects.analysis.pdf.table.behavior'),
+            t('projects.analysis.pdf.table.count'),
+            t('projects.analysis.pdf.table.percentage')
+        ]],
         body: behaviorBody,
         theme: 'plain',
         headStyles: { fillColor: backgroundColor, textColor: primaryColor, fontStyle: 'bold' },
@@ -220,7 +237,7 @@ export const generateAnalysisPDF = async (run: AnalysisRun, projectName: string)
         doc.setFontSize(8);
         doc.setTextColor(textGray);
         doc.text(
-            `Panopticon Intelligence - Subproject Analysis Report - Page ${i} of ${pageCount}`,
+            t('projects.analysis.pdf.footer', { page: i, total: pageCount }),
             pageWidth / 2,
             pageHeight - 10,
             { align: "center" }

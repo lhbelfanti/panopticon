@@ -24,7 +24,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     filterBias,
   });
 
-  const csvHeaders = ["ID", "Text", "Verdict", "Score", "CreatedAt"];
+  const csvHeaders = ["id", "text", "verdict", "score", "created_at"];
   const csvRows = data.entries.map((e) => {
     return [
       e.id,

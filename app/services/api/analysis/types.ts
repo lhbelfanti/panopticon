@@ -29,5 +29,9 @@ export interface AnalysisResult {
             count: number;
         }[];
     };
-    insights: string[]; // Narrative summaries
+    insights: {
+        topBehaviorId: string;
+        confidenceTrend: "high" | "medium" | "low";
+        verdictConcentration: "positive" | "negative" | "mixed";
+    };
 }

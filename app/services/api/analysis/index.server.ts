@@ -59,11 +59,11 @@ export const triggerProjectAnalysis = async (
                     { range: "0.8-1.0", count: 120 },
                 ],
             },
-            insights: [
-                "Hate speech represents the most frequent category in this dataset.",
-                "Confidence levels are generally high (>80%) for the BERT (Spanish) model.",
-                "Detected behaviors are more concentrated in the 'Positive' verdict category.",
-            ],
+            insights: {
+                topBehaviorId: "hate_speech",
+                confidenceTrend: "high",
+                verdictConcentration: "positive",
+            },
         };
 
         analysisStore.runs[runIndex] = {
