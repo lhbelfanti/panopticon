@@ -23,7 +23,8 @@ import {
   Zap,
   MousePointer2,
   CheckSquare,
-  Square
+  Square,
+  History
 } from "lucide-react";
 import { Breadcrumb, type BreadcrumbItem } from "~/components/Breadcrumb";
 
@@ -47,7 +48,6 @@ const EntriesTable = (props: EntriesTableProps) => {
     isExclusionOnly = false,
     excludedIds: externalExcludedIds,
     onExcludedIdsChange,
-    predictionRuns = [],
   } = props;
   const { t } = useTranslation();
   const submit = useSubmit();
@@ -366,6 +366,17 @@ const EntriesTable = (props: EntriesTableProps) => {
 
           <div className="flex items-center gap-3">
             {!isExclusionOnly && (
+              <button
+                type="button"
+                onClick={() => setIsHistoryModalOpen(true)}
+                className="flex items-center gap-2 px-4 py-2 text-sm font-bold text-light-gray-70 bg-surface-dark border border-white/10 hover:bg-white/5 rounded-lg transition-colors whitespace-nowrap"
+              >
+                <History size={16} />
+                {t("projects.entries.predictionHistory")}
+              </button>
+            )}
+
+            {!isExclusionOnly && (
               <Link
                 to={`/projects/${project.id}/models/${modelId}/analysis`}
                 className="flex items-center gap-2 px-4 py-2 text-sm font-bold text-white-1 bg-surface-dark border border-white/10 hover:border-primary/50 rounded-lg transition-colors whitespace-nowrap"
@@ -656,35 +667,16 @@ const EntriesTable = (props: EntriesTableProps) => {
 
           {/* Predict Pending Button - Absolute Right */}
           <div className="absolute right-6">
-            {!isExclusionOnly && (
-              predictionRuns.some(r => r.status === "Running") ? (
-                <button
-                  type="button"
-                  onClick={() => setIsHistoryModalOpen(true)}
-                  className="flex items-center gap-2 px-4 py-2 text-sm font-bold text-white-1 bg-blue-500 hover:bg-blue-600 rounded-lg transition-all shadow-lg hover:scale-105 shadow-blue-500/20"
-                >
-                  <Eye size={16} />
-                  {t("projects.entries.viewPredictions")}
-                </button>
-              ) : data.entries.some((e) => e.verdict === "Pending") ? (
-                <button
-                  type="button"
-                  onClick={handlePredictPending}
-                  disabled={isPredicting}
-                  className="flex items-center gap-2 px-4 py-2 text-sm font-bold text-background-dark bg-yellow-400 hover:bg-yellow-500 rounded-lg transition-all disabled:opacity-50 hover:scale-105 hover:shadow-lg shadow-yellow-500/20"
-                >
-                  <Zap size={16} className={isPredicting ? "animate-pulse" : ""} />
-                  {isPredicting ? t("projects.entries.predicting") : t("projects.entries.predictPending")}
-                </button>
-              ) : predictionRuns.length > 0 ? (
-                <button
-                  type="button"
-                  onClick={() => setIsHistoryModalOpen(true)}
-                  className="flex items-center gap-2 px-4 py-2 text-sm font-bold text-light-gray-70 bg-white/5 border border-white/10 hover:bg-white/10 rounded-lg transition-all"
-                >
-                  {t("projects.entries.predictionHistory")}
-                </button>
-              ) : null
+            {!isExclusionOnly && data.entries.some((e) => e.verdict === "Pending") && (
+              <button
+                type="button"
+                onClick={handlePredictPending}
+                disabled={isPredicting}
+                className="flex items-center gap-2 px-4 py-2 text-sm font-bold text-background-dark bg-yellow-400 hover:bg-yellow-500 rounded-lg transition-all disabled:opacity-50 hover:scale-105 hover:shadow-lg shadow-yellow-500/20"
+              >
+                <Zap size={16} className={isPredicting ? "animate-pulse" : ""} />
+                {isPredicting ? t("projects.entries.predicting") : t("projects.entries.predictPending")}
+              </button>
             )}
           </div>
         </div>
@@ -768,7 +760,7 @@ const EntriesTable = (props: EntriesTableProps) => {
         hiddenInputs={{ intent: "delete_entry", entryId: entryToDelete || "" }}
       />
       {isHistoryModalOpen && (
-        <PredictionsHistoryModal runs={predictionRuns} onClose={() => setIsHistoryModalOpen(false)} />
+        <PredictionsHistoryModal projectId={project.id} modelId={modelId} onClose={() => setIsHistoryModalOpen(false)} />
       )}
     </div>
   );

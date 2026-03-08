@@ -294,6 +294,9 @@
             "predictionNoRuns": "No prediction runs found.",
             "predictionProgress": "Progress",
             "predictionStatus": "Status",
+            "statusRunning": "Running",
+            "statusCompleted": "Completed",
+            "statusFailed": "Failed",
             "new": {
                 "title": "Add entries",
                 "subtitle": "Import data to project \"{{name}}\" for analysis.",

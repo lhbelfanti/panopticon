@@ -277,7 +277,6 @@
             "deleteEntry": "Eliminar entrada",
             "deleteEntryDesc": "Est\u00e1 seguro de que desea eliminar esta entrada? Esta acci\u00f3n no se puede deshacer.",
             "exportCsv": "Exportar CSV",
-            "viewFullEntry": "Ver entrada completa",
             "metadataReply": "Es una respuesta",
             "metadataQuote": "Tiene cita",
             "metadataQuoteIsReply": "La cita es una respuesta",
@@ -291,6 +290,9 @@
             "predictionNoRuns": "No se encontraron ejecuciones de predicción.",
             "predictionProgress": "Progreso",
             "predictionStatus": "Estado",
+            "statusRunning": "Ejecutando",
+            "statusCompleted": "Completado",
+            "statusFailed": "Fallido",
             "new": {
                 "title": "Agregar entradas",
                 "subtitle": "Importar datos al proyecto \"{{name}}\" para su análisis.",

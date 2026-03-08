@@ -4,7 +4,6 @@ import type {
   PaginatedEntries,
 } from "~/services/api/entries/types";
 import type { Project } from "~/services/api/projects/types";
-import type { PredictionRun } from "~/services/api/predictions/types";
 
 export interface EntriesTableProps {
   project: Project;
@@ -18,5 +17,4 @@ export interface EntriesTableProps {
   isExclusionOnly?: boolean;
   excludedIds?: Set<string>;
   onExcludedIdsChange?: (ids: Set<string>) => void;
-  predictionRuns?: PredictionRun[];
 }
