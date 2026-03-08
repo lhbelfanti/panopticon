@@ -92,7 +92,7 @@ export const AnalysisHistoryTable = ({
                                         <div className="flex items-center justify-center gap-2">
                                             {getStatusIcon(run.status)}
                                             <span className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded-full border ${getStatusBadge(run.status)}`}>
-                                                {run.status}
+                                                {t(`status.${run.status}`)}
                                             </span>
                                         </div>
                                     </td>
