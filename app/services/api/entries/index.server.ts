@@ -1,4 +1,5 @@
 import type { Entry, GetEntriesParams, PaginatedEntries } from "./types";
+import { predictionStore } from "../predictions/index.server";
 
 const mockTextPool = [
   "I feel like I have no options left...",
@@ -144,6 +145,56 @@ export const deleteEntry = async (
   return entriesStore[storeKey].length < initialLen;
 };
 
+const simulatePredictionProgress = (storeKey: string, runId: string, totalCount: number) => {
+  let processed = 0;
+  const interval = setInterval(() => {
+    processed += Math.max(1, Math.ceil(totalCount / 10));
+    if (processed > totalCount) processed = totalCount;
+
+    const runs = predictionStore[storeKey];
+    if (!runs) {
+      clearInterval(interval);
+      return;
+    }
+
+    const run = runs.find((r) => r.id === runId);
+    if (!run) {
+      clearInterval(interval);
+      return;
+    }
+
+    run.processedEntries = processed;
+
+    if (processed === totalCount) {
+      run.status = "Completed";
+      run.completedAt = new Date().toISOString();
+      clearInterval(interval);
+
+      // Resolve entries
+      let resolved = 0;
+      entriesStore[storeKey] = entriesStore[storeKey].map((e) => {
+        if (e.verdict === "In Progress" && resolved < totalCount) {
+          resolved++;
+          const randomVerdict = ["Positive", "Negative", "Error"][
+            Math.floor(Math.random() * 3)
+          ] as Entry["verdict"];
+          return {
+            ...e,
+            verdict: randomVerdict,
+            score:
+              randomVerdict === "Positive"
+                ? 0.85 + Math.random() * 0.14
+                : randomVerdict === "Negative"
+                  ? Math.random() * 0.4
+                  : undefined,
+          };
+        }
+        return e;
+      });
+    }
+  }, 1000);
+};
+
 export const predictPendingEntries = async (
   projectId: number,
   modelId: string,
@@ -164,6 +215,22 @@ export const predictPendingEntries = async (
     }
     return e;
   });
+
+  if (count > 0) {
+    if (!predictionStore[storeKey]) predictionStore[storeKey] = [];
+    const runId = `run_${Date.now()}`;
+    const run = {
+      id: runId,
+      projectId,
+      modelId,
+      totalEntries: count,
+      processedEntries: 0,
+      status: "Running" as const,
+      createdAt: new Date().toISOString(),
+    };
+    predictionStore[storeKey] = [run, ...predictionStore[storeKey]];
+    simulatePredictionProgress(storeKey, runId, count);
+  }
 
   return count;
 };

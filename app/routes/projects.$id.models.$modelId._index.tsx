@@ -1,4 +1,5 @@
-import { useLoaderData } from "react-router";
+import React from "react";
+import { useLoaderData, useRevalidator } from "react-router";
 
 import {
   deleteEntry,
@@ -6,6 +7,7 @@ import {
   predictPendingEntries,
 } from "~/services/api/entries/index.server";
 import { getProjectById } from "~/services/api/projects/index.server";
+import { getPredictionRuns } from "~/services/api/predictions/index.server";
 
 import EntriesTable from "~/components/EntriesTable";
 
@@ -60,12 +62,27 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     filterBias,
   });
 
-  return { project, modelId, data, filterCol, filterVal, filterOp, filterBias };
+  const predictionRuns = await getPredictionRuns(parseInt(id), modelId);
+
+  return { project, modelId, data, filterCol, filterVal, filterOp, filterBias, predictionRuns };
 };
 
 const SubprojectEntriesPage = () => {
-  const { project, modelId, data, filterCol, filterVal, filterOp, filterBias } =
+  const { project, modelId, data, filterCol, filterVal, filterOp, filterBias, predictionRuns } =
     useLoaderData<typeof loader>();
+  const revalidator = useRevalidator();
+
+  React.useEffect(() => {
+    const hasRunning = predictionRuns.some((r) => r.status === "Running");
+    if (hasRunning) {
+      const interval = setInterval(() => {
+        if (revalidator.state === "idle") {
+          revalidator.revalidate();
+        }
+      }, 2000);
+      return () => clearInterval(interval);
+    }
+  }, [predictionRuns, revalidator]);
 
   return (
     <EntriesTable
@@ -76,6 +93,7 @@ const SubprojectEntriesPage = () => {
       filterVal={filterVal}
       filterOp={filterOp}
       filterBias={filterBias}
+      predictionRuns={predictionRuns}
     />
   );
 };

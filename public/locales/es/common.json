@@ -286,6 +286,11 @@
             "datasetEntries": "Entradas del dataset",
             "predictPending": "Predecir pendientes",
             "predicting": "Prediciendo...",
+            "viewPredictions": "Ver predicciones",
+            "predictionHistory": "Historial de Predicciones",
+            "predictionNoRuns": "No se encontraron ejecuciones de predicción.",
+            "predictionProgress": "Progreso",
+            "predictionStatus": "Estado",
             "new": {
                 "title": "Agregar entradas",
                 "subtitle": "Importar datos al proyecto \"{{name}}\" para su análisis.",

@@ -1,4 +1,4 @@
-export type EntryVerdict = "Pending" | "Positive" | "Negative" | "Error";
+export type EntryVerdict = "Pending" | "In Progress" | "Positive" | "Negative" | "Error";
 export type SocialMediaType = "twitter"; // Extensible for future platforms
 
 export interface TwitterMetadata {
