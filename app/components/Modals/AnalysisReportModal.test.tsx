@@ -43,7 +43,11 @@ const makeCompletedRun = (overrides: Partial<AnalysisRun> = {}): AnalysisRun => 
             median: 0.85,
             distribution: [{ range: "0.8-1.0", count: 80 }],
         },
-        insights: ["Hate speech is the top category.", "High overall confidence."],
+        insights: {
+            topBehaviorId: "hate_speech",
+            confidenceTrend: "high",
+            verdictConcentration: "positive",
+        },
     },
     ...overrides,
 });
@@ -80,7 +84,7 @@ describe("AnalysisReportModal", () => {
     it("shows processing state for a processing run", () => {
         const run = makeCompletedRun({ status: "processing", result: undefined });
         render(<AnalysisReportModal isOpen={true} onClose={onCloseMock} run={run} />);
-        expect(screen.getByText("Analysis processing")).toBeInTheDocument();
+        expect(screen.getByText("projects.analysis.reportModal.processing.title")).toBeInTheDocument();
     });
 
     it("shows close button in processing state that calls onClose", async () => {
@@ -88,13 +92,13 @@ describe("AnalysisReportModal", () => {
         const run = makeCompletedRun({ status: "processing", result: undefined });
         render(<AnalysisReportModal isOpen={true} onClose={onCloseMock} run={run} />);
 
-        await user.click(screen.getByText("Close"));
+        await user.click(screen.getByText("projects.analysis.reportModal.close"));
         expect(onCloseMock).toHaveBeenCalled();
     });
 
     it("renders the full report for a completed run", () => {
         render(<AnalysisReportModal isOpen={true} onClose={onCloseMock} run={makeCompletedRun()} />);
-        expect(screen.getByText("Analysis report")).toBeInTheDocument();
+        expect(screen.getByText("projects.analysis.reportModal.title")).toBeInTheDocument();
     });
 
     it("displays analyzedEntries count", () => {
@@ -112,16 +116,17 @@ describe("AnalysisReportModal", () => {
         expect(screen.getByText("82%")).toBeInTheDocument(); // 0.82 * 100
     });
 
-    it("renders insights as list items", () => {
+    it("renders insights based on data keys", () => {
         render(<AnalysisReportModal isOpen={true} onClose={onCloseMock} run={makeCompletedRun()} />);
-        expect(screen.getByText("Hate speech is the top category.")).toBeInTheDocument();
-        expect(screen.getByText("High overall confidence.")).toBeInTheDocument();
+        expect(screen.getByText("projects.analysis.reportModal.insights.topBehavior")).toBeInTheDocument();
+        expect(screen.getByText("projects.analysis.reportModal.insights.confidenceHigh")).toBeInTheDocument();
+        expect(screen.getByText("projects.analysis.reportModal.insights.verdictsPositive")).toBeInTheDocument();
     });
 
     it("renders chart containers", () => {
         render(<AnalysisReportModal isOpen={true} onClose={onCloseMock} run={makeCompletedRun()} />);
-        expect(screen.getByText("Behavior distribution")).toBeInTheDocument();
-        expect(screen.getByText("Confidence distribution")).toBeInTheDocument();
+        expect(screen.getByText("projects.analysis.reportModal.behaviorChart.title")).toBeInTheDocument();
+        expect(screen.getByText("projects.analysis.reportModal.confidenceChart.title")).toBeInTheDocument();
         expect(screen.getAllByTestId("responsive-container").length).toBeGreaterThan(0);
     });
 
@@ -151,6 +156,6 @@ describe("AnalysisReportModal", () => {
 
     it("renders Executive Summary section heading", () => {
         render(<AnalysisReportModal isOpen={true} onClose={onCloseMock} run={makeCompletedRun()} />);
-        expect(screen.getByText("Executive summary")).toBeInTheDocument();
+        expect(screen.getByText("projects.analysis.reportModal.summary")).toBeInTheDocument();
     });
 });

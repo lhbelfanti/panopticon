@@ -27,7 +27,11 @@ const makRun = (overrides: Partial<AnalysisRun> = {}): AnalysisRun => ({
             median: 0.85,
             distribution: [{ range: "0.8-1.0", count: 80 }],
         },
-        insights: ["Insight 1"],
+        insights: {
+            topBehaviorId: "hate_speech",
+            confidenceTrend: "high",
+            verdictConcentration: "positive",
+        },
     },
     ...overrides,
 });
@@ -70,9 +74,9 @@ describe("AnalysisHistoryTable", () => {
         const run = makRun({ status: "completed" });
         renderTable({ history: [run] });
 
-        expect(screen.getByText("completed")).toBeInTheDocument();
+        expect(screen.getByText("status.completed")).toBeInTheDocument();
 
-        const row = screen.getByText("completed").closest("tr");
+        const row = screen.getByText("status.completed").closest("tr");
 
         expect(screen.getByText("projects.analysis.historyTable.viewReport")).toBeInTheDocument();
         expect(screen.getByText("projects.analysis.historyTable.pdf")).toBeInTheDocument();
@@ -83,9 +87,9 @@ describe("AnalysisHistoryTable", () => {
         const run = makRun({ status: "processing", result: undefined });
         renderTable({ history: [run] });
 
-        expect(screen.getByText("processing")).toBeInTheDocument();
+        expect(screen.getByText("status.processing")).toBeInTheDocument();
 
-        const row = screen.getByText("processing").closest("tr");
+        const row = screen.getByText("status.processing").closest("tr");
 
         expect(screen.queryByText("projects.analysis.historyTable.viewReport")).not.toBeInTheDocument();
         expect(screen.queryByText("projects.analysis.historyTable.pdf")).not.toBeInTheDocument();
@@ -96,9 +100,9 @@ describe("AnalysisHistoryTable", () => {
         const run = makRun({ status: "failed", result: undefined });
         renderTable({ history: [run] });
 
-        expect(screen.getByText("failed")).toBeInTheDocument();
+        expect(screen.getByText("status.failed")).toBeInTheDocument();
 
-        const row = screen.getByText("failed").closest("tr");
+        const row = screen.getByText("status.failed").closest("tr");
 
         expect(screen.queryByText("projects.analysis.historyTable.viewReport")).not.toBeInTheDocument();
         expect(screen.queryByText("projects.analysis.historyTable.pdf")).not.toBeInTheDocument();
@@ -156,7 +160,7 @@ describe("AnalysisHistoryTable", () => {
         const run2 = makRun({ id: "run_2000_2", status: "processing", result: undefined });
         renderTable({ history: [run1, run2] });
 
-        expect(screen.getByText("completed")).toBeInTheDocument();
-        expect(screen.getByText("processing")).toBeInTheDocument();
+        expect(screen.getByText("status.completed")).toBeInTheDocument();
+        expect(screen.getByText("status.processing")).toBeInTheDocument();
     });
 });

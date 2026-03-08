@@ -132,7 +132,7 @@ describe("EntriesTable", () => {
         await user.click(screen.getByText("This is a test entry"));
 
         // Modal should appear
-        expect(screen.getByText("View Full Entry")).toBeInTheDocument();
+        expect(screen.getByText("projects.entries.viewFullEntry")).toBeInTheDocument();
 
         // Check elements inside modal (there might be multiple verdicts now, one in table, one in modal)
         const verdicts = screen.getAllByText("Positive");
@@ -222,13 +222,13 @@ describe("EntriesTable", () => {
         const user = userEvent.setup();
         renderTable();
         await user.click(screen.getByText("This is a test entry"));
-        expect(screen.getByText("View Full Entry")).toBeInTheDocument();
+        expect(screen.getByText("projects.entries.viewFullEntry")).toBeInTheDocument();
 
         // The backdrop is the first div with fixed inset-0
-        const backdrop = screen.getByText("View Full Entry").parentElement?.parentElement?.parentElement;
+        const backdrop = screen.getByText("projects.entries.viewFullEntry").parentElement?.parentElement?.parentElement;
         if (backdrop) await user.click(backdrop);
 
-        expect(screen.queryByText("View Full Entry")).not.toBeInTheDocument();
+        expect(screen.queryByText("projects.entries.viewFullEntry")).not.toBeInTheDocument();
     });
 
     it("renders different pagination scenarios", () => {
@@ -390,7 +390,7 @@ describe("EntriesTable", () => {
             await user.click(viewBtns[0]);
         }
 
-        expect(screen.getByText("View Full Entry")).toBeInTheDocument();
+        expect(screen.getByText("projects.entries.viewFullEntry")).toBeInTheDocument();
     });
 
     it("handles reset selection in exclude mode banner (if not exclusion only but in exclude mode? Wait, banner only shows if isExcludeMode)", async () => {

@@ -90,7 +90,7 @@ describe("generateAnalysisPDF", () => {
         const run = makeCompletedRun();
         run.result = undefined;
 
-        await generateAnalysisPDF(run, "My Project");
+        await generateAnalysisPDF(run, "My Project", (k) => k);
 
         expect(mockSave).not.toHaveBeenCalled();
         expect(consoleSpy).toHaveBeenCalled();
@@ -99,7 +99,7 @@ describe("generateAnalysisPDF", () => {
 
     it("calls doc.save with the correct filename for a completed run", async () => {
         const run = makeCompletedRun();
-        await generateAnalysisPDF(run, "My Project");
+        await generateAnalysisPDF(run, "My Project", (k) => k);
 
         expect(mockSave).toHaveBeenCalledTimes(1);
         const filename = mockSave.mock.calls[0][0] as string;
@@ -109,7 +109,7 @@ describe("generateAnalysisPDF", () => {
 
     it("includes subprojectId in the filename", async () => {
         const run = makeCompletedRun();
-        await generateAnalysisPDF(run, "My Project");
+        await generateAnalysisPDF(run, "My Project", (k) => k);
 
         const filename = mockSave.mock.calls[0][0] as string;
         expect(filename).toContain("roberta");
@@ -117,15 +117,15 @@ describe("generateAnalysisPDF", () => {
 
     it("calls doc.text with the 'Analysis Report' heading", async () => {
         const run = makeCompletedRun();
-        await generateAnalysisPDF(run, "My Project");
+        await generateAnalysisPDF(run, "My Project", (k) => k);
 
         const textCalls = mockText.mock.calls.map((c: any[]) => c[0]);
-        expect(textCalls).toContain("Analysis Report");
+        expect(textCalls).toContain("projects.analysis.reportModal.title");
     });
 
     it("calls doc.text with the project name", async () => {
         const run = makeCompletedRun();
-        await generateAnalysisPDF(run, "My Project");
+        await generateAnalysisPDF(run, "My Project", (k) => k);
 
         const textCalls = mockText.mock.calls.map((c: any[]) => c[0]);
         expect(textCalls.some((t: string) => t.includes("My Project"))).toBe(true);
