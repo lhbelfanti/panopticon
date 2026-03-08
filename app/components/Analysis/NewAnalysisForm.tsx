@@ -4,7 +4,6 @@ import {
     Layers,
     CheckCircle2,
     XSquare,
-    ChevronRight,
     Filter,
     AlertCircle,
     Plus
@@ -46,11 +45,11 @@ export const NewAnalysisForm = ({
                                     {t("projects.analysis.newForm.exclusionsTitle")}
                                 </div>
                                 <div className="flex flex-col gap-1 w-full mt-2">
-                                    <div className="flex items-center gap-3">
+                                    <div className="flex items-center gap-3 flex-wrap">
                                         <span className="text-2xl font-extrabold text-white-1 leading-none group-hover/mini:text-bittersweet-shimmer transition-colors">
                                             {excludedEntryIds.length > 0 ? t("projects.analysis.newForm.refineList") : t("projects.analysis.newForm.manage")}
                                         </span>
-                                        <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-bittersweet-shimmer/10 border border-bittersweet-shimmer/30 text-[10px] font-bold uppercase tracking-widest text-bittersweet-shimmer group-hover/mini:bg-bittersweet-shimmer group-hover/mini:text-background-dark group-hover/mini:border-bittersweet-shimmer transition-all shadow-sm">
+                                        <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-bittersweet-shimmer/10 border border-bittersweet-shimmer/30 text-[10px] shrink-0 whitespace-nowrap font-bold uppercase tracking-widest text-bittersweet-shimmer group-hover/mini:bg-bittersweet-shimmer group-hover/mini:text-background-dark group-hover/mini:border-bittersweet-shimmer transition-all shadow-sm">
                                             <Plus size={12} strokeWidth={3} />
                                             <span>{t("projects.analysis.newForm.addExclusions")}</span>
                                         </div>
@@ -60,9 +59,6 @@ export const NewAnalysisForm = ({
                                             ? t("projects.analysis.newForm.entriesExcluded", { count: excludedEntryIds.length })
                                             : t("projects.analysis.newForm.noExclusions")}
                                     </span>
-                                </div>
-                                <div className="absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-hover/mini:opacity-100 transition-all group-hover/mini:translate-x-1 duration-300">
-                                    <ChevronRight size={20} className="text-bittersweet-shimmer" />
                                 </div>
                                 {/* Decorative highlight */}
                                 <div className="absolute inset-0 border-2 border-bittersweet-shimmer/0 group-hover/mini:border-bittersweet-shimmer/20 rounded-xl transition-colors pointer-events-none" />
