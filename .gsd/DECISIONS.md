@@ -35,5 +35,16 @@
 ### Phase 4 UI & Interaction
 - **Analysis Access**: A dedicated "Analysis" screen accessible from the Subproject view.
 - **Screen Layout**: Two tabs: "New Analysis" (for configuration and triggering) and "History" (list of past runs).
-- **Exclusion Logic**: Integrated into the `EntriesTable` via an "Exclude entries" mode. Toggles a checkbox column; checked = included, unchecked = excluded. Researchers use existing table filters to handle selection in bulk.
 - **PDF Generation**: Async frontend generation using `jspdf` or similar, pulling data from the subproject analysis results.
+
+## Phase 5 Decisions
+
+**Date:** 2026-03-08
+
+### Scope
+- **Target Environment:** Separate `compose.dev.yml` (for local development with hot-reloading) and `compose.yml` (optimized for production).
+- **Node Version:** Any suitable stable version (e.g. `node:22-alpine` or `node:20-alpine`) optimal for Vite/React Router v7.
+
+### Approach
+- **Port Bindings:** Expose the application on port `3000`.
+- **Backend Placeholder:** The placeholder backend service in the docker compose file will be named `panoptic-api`.
