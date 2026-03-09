@@ -15,8 +15,7 @@ export interface BehaviorConfig {
   id: TargetBehavior;
   enabled: boolean;
   availableModels: MLModel[];
-  colorClass: string;
-  bgClass: string;
+  color: string;
   iconName: string;
 }
 

@@ -46,6 +46,11 @@ export const getProjects = async (): Promise<Project[]> => {
   return [...projects];
 };
 
+export const getProjectsForSidebar = async (): Promise<Pick<Project, "id" | "name" | "subprojects">[]> => {
+  await delay(500); // Lighter query
+  return projects.map(({ id, name, subprojects }) => ({ id, name, subprojects }));
+};
+
 export const createProject = async (
   data: CreateProjectDTO,
 ): Promise<Project> => {
@@ -127,48 +132,42 @@ export const BEHAVIOR_CONFIGS: BehaviorConfig[] = [
     id: "illicit_drugs",
     enabled: true,
     availableModels: ["bert_spanish", "llama3_zero_shot"],
-    colorClass: "text-red-400",
-    bgClass: "bg-red-400/10",
+    color: "red",
     iconName: "Pill",
   },
   {
     id: "hate_speech",
     enabled: true,
     availableModels: ["bert_spanish", "roberta_english", "svm_baseline"],
-    colorClass: "text-orange-400",
-    bgClass: "bg-orange-400/10",
+    color: "orange",
     iconName: "MessageSquareWarning",
   },
   {
     id: "cyberbullying",
     enabled: true,
     availableModels: ["roberta_english", "llama3_zero_shot"],
-    colorClass: "text-purple-400",
-    bgClass: "bg-purple-400/10",
+    color: "purple",
     iconName: "UserMinus",
   },
   {
     id: "sexism",
     enabled: false,
     availableModels: [],
-    colorClass: "text-pink-400",
-    bgClass: "bg-pink-400/10",
+    color: "pink",
     iconName: "Scale",
   },
   {
     id: "suicidal_ideation_depression",
     enabled: true,
     availableModels: ["bert_spanish", "llama3_zero_shot", "svm_baseline"],
-    colorClass: "text-blue-400",
-    bgClass: "bg-blue-400/10",
+    color: "blue",
     iconName: "HeartCrack",
   },
   {
     id: "eating_disorders",
     enabled: false,
     availableModels: [],
-    colorClass: "text-teal-400",
-    bgClass: "bg-teal-400/10",
+    color: "teal",
     iconName: "UtensilsCrossed",
   },
 ];

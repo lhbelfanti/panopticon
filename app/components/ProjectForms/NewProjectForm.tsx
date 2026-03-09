@@ -9,6 +9,7 @@ import * as LucideIcons from "lucide-react";
 
 import type { BehaviorConfig } from "~/services/api/projects/types";
 import type { NewProjectFormProps } from "./types";
+import { getBehaviorClasses } from "~/utils/behaviorColors";
 
 
 export const NewProjectForm = (props: NewProjectFormProps) => {
@@ -148,6 +149,8 @@ export const NewProjectForm = (props: NewProjectFormProps) => {
               notAvailableText = t("projects.new.incompatibleWithModels");
             }
 
+            const { text: colorText, bg: colorBg } = getBehaviorClasses(config.color);
+
             return (
               <CustomCheckbox
                 key={config.id}
@@ -160,7 +163,7 @@ export const NewProjectForm = (props: NewProjectFormProps) => {
                 wrapperClassName={`p-4 bg-background-dark/50 pl-3 pr-4 ${isDisabled ? "opacity-60 cursor-not-allowed" : ""}`}
                 icon={
                   <div
-                    className={`p-1.5 rounded-md flex-shrink-0 ${config.bgClass} ${config.colorClass}`}
+                    className={`p-1.5 rounded-md flex-shrink-0 ${colorBg} ${colorText}`}
                   >
                     <IconComponent size={16} />
                   </div>

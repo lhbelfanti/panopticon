@@ -21,6 +21,7 @@ import * as LucideIcons from "lucide-react";
 import { Trans, useTranslation } from "react-i18next";
 
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
+import { getBehaviorClasses } from "~/utils/behaviorColors";
 
 export const meta = () => {
   return [
@@ -95,7 +96,7 @@ const ProjectViewPage = () => {
             <div className="flex flex-row gap-20 mt-6">
               <div className="flex flex-col gap-2">
                 <span className="text-[0.65rem] font-bold text-light-gray-50 uppercase tracking-widest">
-                  PROJECT ID
+                  {t("projects.view.projectId", "PROJECT ID")}
                 </span>
                 <span className="text-sm font-mono text-white-1 bg-white/5 border border-white/5 py-1.5 px-3 rounded-md self-start shadow-inner">
                   {project.id}
@@ -111,11 +112,12 @@ const ProjectViewPage = () => {
                     if (!config) return null;
                     const IconNode =
                       (LucideIcons as any)[config.iconName] || LucideIcons.Circle;
+                    const { text: colorText, bg: colorBg } = getBehaviorClasses(config.color);
 
                     return (
                       <div
                         key={b}
-                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-white/5 ${config.bgClass} ${config.colorClass}`}
+                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-white/5 ${colorBg} ${colorText}`}
                       >
                         <IconNode size={14} />
                         <span className="text-xs font-semibold">
