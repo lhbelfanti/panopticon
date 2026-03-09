@@ -25,19 +25,30 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   });
 
   const csvHeaders = ["id", "text", "verdict", "score", "created_at"];
-  const csvRows = data.entries.map((e) => {
-    return [
-      e.id,
-      `"${e.text.replace(/"/g, '""')}"`, // escape double quotes
-      e.verdict,
-      e.score ?? "",
-      e.createdAt,
-    ].join(",");
+  const encoder = new TextEncoder();
+
+  const stream = new ReadableStream({
+    start(controller) {
+      // Enqueue header row
+      controller.enqueue(encoder.encode(csvHeaders.join(",") + "\n"));
+
+      // Stream each entry row individually
+      for (const e of data.entries) {
+        const row = [
+          e.id,
+          `"${e.text.replace(/"/g, '""')}"`, // escape double quotes
+          e.verdict,
+          e.score ?? "",
+          e.createdAt,
+        ].join(",");
+        controller.enqueue(encoder.encode(row + "\n"));
+      }
+
+      controller.close();
+    },
   });
 
-  const csvContent = [csvHeaders.join(","), ...csvRows].join("\n");
-
-  return new Response(csvContent, {
+  return new Response(stream, {
     headers: {
       "Content-Type": "text/csv; charset=utf-8",
       "Content-Disposition": `attachment; filename="export_${modelId.replace(/-/g, '_')}_${id}_1.csv"`,
