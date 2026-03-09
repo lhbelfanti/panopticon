@@ -4,13 +4,15 @@ import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
 import type { SummaryGridProps } from "./types";
+import { DEFAULT_TOKEN_QUOTA } from "./types";
 
 const cn = (...inputs: ClassValue[]) => {
   return twMerge(clsx(inputs));
 };
 
 export const SummaryGrid = (props: SummaryGridProps) => {
-  const { summary } = props;
+  const { summary, tokenQuota } = props;
+  const maxTokens = tokenQuota ?? summary.tweetsQuota ?? DEFAULT_TOKEN_QUOTA;
   const { t } = useTranslation();
 
   // Convention: extract long Tailwind strings into variables
@@ -114,7 +116,7 @@ export const SummaryGrid = (props: SummaryGridProps) => {
                 <div
                   className="bg-primary h-1.5 rounded-full"
                   style={{
-                    width: `${Math.min((summary.remainingTokens / 5000000) * 100, 100)}%`,
+                    width: `${Math.min((summary.remainingTokens / maxTokens) * 100, 100)}%`,
                   }}
                 ></div>
               </div>

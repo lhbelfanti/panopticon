@@ -1,8 +1,11 @@
 export interface DashboardSummary {
   tweetsAnalyzed: number;
+  tweetsQuota?: number;
+  tweetsTrend?: number;
   activeProjects: number;
   averagePrecision: number;
   remainingTokens?: number;
+  mostUsedModel?: string;
 }
 
 export type RecentActivityType =

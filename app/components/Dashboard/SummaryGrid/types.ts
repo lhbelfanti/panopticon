@@ -8,6 +8,9 @@ export interface SummaryData {
   mostUsedModel?: string;
 }
 
+export const DEFAULT_TOKEN_QUOTA = 5_000_000;
+
 export interface SummaryGridProps {
   summary: SummaryData;
+  tokenQuota?: number;
 }
