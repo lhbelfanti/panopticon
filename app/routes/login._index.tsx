@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Form, redirect, useActionData, useNavigation } from "react-router";
 
-import { login } from "~/services/api/auth/index.server";
+import { login, signup, requestPasswordReset } from "~/services/api/auth/index.server";
 
 import { ForgotPasswordForm } from "~/components/LoginForms/ForgotPasswordForm";
 import { LoginForm } from "~/components/LoginForms/LoginForm";
@@ -22,6 +22,37 @@ export const meta = () => {
 
 export const action = async ({ request }: { request: Request }) => {
   const formData = await request.formData();
+  const intent = formData.get("intent");
+
+  if (intent === "signup") {
+    const email = formData.get("reg-email");
+    if (!email || typeof email !== "string") {
+      return { error: "emailRequired" };
+    }
+
+    try {
+      await signup({ email });
+      return { signupSuccess: true };
+    } catch (err) {
+      return { error: "signupFailed" };
+    }
+  }
+
+  if (intent === "forgot_password") {
+    const email = formData.get("reset-email");
+    if (!email || typeof email !== "string") {
+      return { error: "emailRequired" };
+    }
+
+    try {
+      await requestPasswordReset(email);
+      return { resetSuccess: true };
+    } catch (err) {
+      return { error: "resetFailed" };
+    }
+  }
+
+  // Default: login intent
   const username = formData.get("username");
   const password = formData.get("password");
 

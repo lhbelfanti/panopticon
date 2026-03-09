@@ -7,7 +7,7 @@ import {
   isRouteErrorResponse,
 } from "react-router";
 import { useLoaderData, useLocation } from "react-router";
-import { getProjects } from "~/services/api/projects/index.server";
+import { getProjectsForSidebar } from "~/services/api/projects/index.server";
 import type { Project } from "~/services/api/projects/types";
 import { LanguageSwitcher } from "~/components/LanguageSwitcher";
 import { Sidebar } from "~/components/Sidebar";
@@ -29,14 +29,11 @@ export const links: Route.LinksFunction = () => [
   },
 ];
 
-import { getUserById } from "~/services/api/users/users.server";
-import { getDataFromSession } from "~/services/api/auth/session.server";
+import { getSessionUser } from "~/services/api/auth/session.server";
 
 export const loader = async ({ request }: { request: Request }) => {
-  const projects = await getProjects();
-  const session = await getDataFromSession(request);
-  const userId = session?.userId ? parseInt(session.userId, 10) : 1;
-  const user = await getUserById(userId);
+  const projects = await getProjectsForSidebar();
+  const { user } = await getSessionUser(request);
   return { projects, user };
 };
 
@@ -47,7 +44,7 @@ export const Layout = (props: { children: React.ReactNode }) => {
   const isLoginPage = location.pathname.startsWith("/login");
 
   // Conditionally hook into useLoaderData in case of early Error Boundaries rendering the Layout before loader runs
-  let projects: Project[] = [];
+  let projects: Pick<Project, "id" | "name" | "subprojects">[] = [];
   let user = null;
   try {
     const data = useLoaderData<typeof loader>();

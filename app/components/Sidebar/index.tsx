@@ -196,8 +196,8 @@ export const Sidebar = (props: SidebarProps) => {
         description={t("sidebar.logoutConfirmDesc")}
         cancelText={t("sidebar.cancel")}
         confirmText={t("sidebar.logoutConfirmTitle")}
-        confirmAction="/login"
-        confirmMethod="get"
+        confirmAction="/logout"
+        confirmMethod="post"
         isDestructive={true}
       />
     </>

@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
+import { Form } from "react-router";
 import { Pencil, X } from "lucide-react";
 
 import type { RegisterFormProps } from "./types";
 
 export const RegisterForm = (props: RegisterFormProps) => {
-  const { setView, t } = props;
+  const { actionData, isSubmitting, setView, t } = props;
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [isUsernameEdited, setIsUsernameEdited] = useState(false);
@@ -35,13 +36,19 @@ export const RegisterForm = (props: RegisterFormProps) => {
         {t("login.register.title")}
       </h1>
       <p className="text-light-gray-70 mb-8">{t("login.register.subtitle")}</p>
-      <form
-        className="flex flex-col gap-6"
-        onSubmit={(e) => {
-          e.preventDefault();
-          setView("login");
-        }}
-      >
+      <Form method="post" className="flex flex-col gap-6">
+        <input type="hidden" name="intent" value="signup" />
+
+        {actionData?.signupSuccess && (
+          <div className="p-4 bg-green-900/30 border border-green-500/50 text-green-200 rounded-lg text-sm text-center font-medium">
+            {t("login.register.success")}
+          </div>
+        )}
+        {actionData?.error && (
+          <div className="p-4 bg-red-900/30 border border-red-500/50 text-red-200 rounded-lg text-sm text-center font-medium">
+            {t(`login.errors.${actionData.error}`)}
+          </div>
+        )}
         <div className="flex gap-4">
           <div className="flex flex-col gap-2 w-1/2">
             <label
@@ -118,8 +125,8 @@ export const RegisterForm = (props: RegisterFormProps) => {
               setUsername(e.target.value);
             }}
             className={`w-full border rounded-lg p-3.5 outline-none transition-all placeholder:opacity-30 ${isUsernameEdited
-                ? "bg-sidebar-dark border-white/10 text-white-1 focus:ring-2 focus:ring-primary focus:border-transparent"
-                : "bg-background-dark/50 border-white/5 text-light-gray-70"
+              ? "bg-sidebar-dark border-white/10 text-white-1 focus:ring-2 focus:ring-primary focus:border-transparent"
+              : "bg-background-dark/50 border-white/5 text-light-gray-70"
               }`}
             placeholder="jdoe"
           />
@@ -159,7 +166,7 @@ export const RegisterForm = (props: RegisterFormProps) => {
             </button>
           </p>
         </div>
-      </form>
+      </Form>
     </div>
   );
 };

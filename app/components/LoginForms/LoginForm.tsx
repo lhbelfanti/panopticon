@@ -18,6 +18,7 @@ export const LoginForm = (props: LoginFormProps) => {
       <p className="text-light-gray-70 mb-8">{t("login.subtitle")}</p>
 
       <Form method="post" className="flex flex-col gap-6">
+        <input type="hidden" name="intent" value="login" />
         {actionData?.error && (
           <div className="p-4 bg-red-900/30 border border-red-500/50 text-red-200 rounded-lg text-sm text-center font-medium">
             {t(`login.errors.${actionData.error}`)}

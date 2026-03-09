@@ -1,8 +1,11 @@
 import { createCookieSessionStorage } from "react-router";
 import type { SessionData } from "./types";
 
-const SESSION_SECRET =
-  process.env.SESSION_SECRET || "fallback-secret-for-panopticon";
+const SESSION_SECRET = process.env.SESSION_SECRET;
+if (!SESSION_SECRET && process.env.NODE_ENV === "production") {
+  throw new Error("SESSION_SECRET environment variable must be set in production");
+}
+const sessionSecret = SESSION_SECRET || "fallback-secret-for-panopticon";
 const SESSION_REFRESH_THRESHOLD_MS: number = 5 * 60 * 1000; // 5 minutes
 const COOKIE_SESSION_STORAGE_MAX_AGE: number = 30 * 24 * 60 * 60; // 30 days
 
@@ -10,7 +13,7 @@ const sessionStorage = createCookieSessionStorage({
   cookie: {
     name: "panopticon_session",
     secure: process.env.NODE_ENV === "production",
-    secrets: [SESSION_SECRET],
+    secrets: [sessionSecret],
     sameSite: "lax",
     maxAge: COOKIE_SESSION_STORAGE_MAX_AGE,
     httpOnly: true,
@@ -67,4 +70,19 @@ export const isAuthenticated = async (request: Request): Promise<boolean> => {
     return false;
   }
   return true;
+};
+
+/**
+ * Consolidates session retrieval + user lookup into a single call.
+ * Returns both session data and the associated user (if any).
+ */
+export const getSessionUser = async (request: Request) => {
+  const { getUserById } = await import("~/services/api/users/users.server");
+  const session = await getDataFromSession(request);
+  if (!session?.userId) {
+    return { session: null, user: null };
+  }
+  const userId = parseInt(session.userId, 10);
+  const user = await getUserById(userId);
+  return { session, user };
 };
