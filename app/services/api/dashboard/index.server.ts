@@ -7,9 +7,12 @@ export const getDashboardSummary = async (): Promise<DashboardSummary> => {
 
   return {
     tweetsAnalyzed: 2453,
+    tweetsQuota: 2500,
+    tweetsTrend: 85,
     activeProjects: 2,
     averagePrecision: 89.4,
     remainingTokens: 154200,
+    mostUsedModel: "LLaMA-3-8B",
   };
 };
 

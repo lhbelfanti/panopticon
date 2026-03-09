@@ -38,11 +38,11 @@ export const SummaryGrid = (props: SummaryGridProps) => {
               {summary.tweetsAnalyzed.toLocaleString()}
             </span>
             <span className="text-light-gray-70 text-lg font-medium ml-0.5">
-              / 2,500
+              / {summary.tweetsQuota?.toLocaleString() ?? "2,500"}
             </span>
             <div className="flex shrink-0 items-center gap-1 ml-auto bg-green-500/10 border border-green-500/20 px-2 py-0.5 rounded-lg text-green-400">
               <TrendingUp size={14} />
-              <span className="font-bold text-sm">85%</span>
+              <span className="font-bold text-sm">{summary.tweetsTrend ?? 85}%</span>
             </div>
           </div>
         </div>
@@ -88,7 +88,7 @@ export const SummaryGrid = (props: SummaryGridProps) => {
             </div>
           </div>
           <span className="text-xl font-extrabold text-white-1 tracking-tight">
-            LLaMA-3-8B
+            {summary.mostUsedModel ?? "N/A"}
           </span>
         </div>
 

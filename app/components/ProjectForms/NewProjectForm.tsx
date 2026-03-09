@@ -10,12 +10,6 @@ import * as LucideIcons from "lucide-react";
 import type { BehaviorConfig } from "~/services/api/projects/types";
 import type { NewProjectFormProps } from "./types";
 
-const modelsList = [
-  "bert_spanish",
-  "roberta_english",
-  "llama3_zero_shot",
-  "svm_baseline",
-];
 
 export const NewProjectForm = (props: NewProjectFormProps) => {
   const { actionData, isSubmitting, behaviorConfigs, mode = "create", initialData } = props;

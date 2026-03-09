@@ -30,10 +30,13 @@ export const links: Route.LinksFunction = () => [
 ];
 
 import { getUserById } from "~/services/api/users/users.server";
+import { getDataFromSession } from "~/services/api/auth/session.server";
 
-export const loader = async () => {
+export const loader = async ({ request }: { request: Request }) => {
   const projects = await getProjects();
-  const user = await getUserById(1);
+  const session = await getDataFromSession(request);
+  const userId = session?.userId ? parseInt(session.userId, 10) : 1;
+  const user = await getUserById(userId);
   return { projects, user };
 };
 
