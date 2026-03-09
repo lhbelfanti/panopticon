@@ -37,15 +37,13 @@ vi.mock("react-router", async (importOriginal) => {
                     id: "spam",
                     name: "Spam",
                     iconName: "FileText",
-                    bgClass: "bg-red-500",
-                    colorClass: "text-red-500",
+                    color: "red",
                 },
                 {
                     id: "toxicity",
                     name: "Toxicity",
                     iconName: "Shield",
-                    bgClass: "bg-blue-500",
-                    colorClass: "text-blue-500",
+                    color: "blue",
                 }
             ]
         }),

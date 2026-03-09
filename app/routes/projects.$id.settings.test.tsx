@@ -33,8 +33,8 @@ vi.mock("react-router", async (importOriginal) => {
                 createdAt: new Date().toISOString(),
             },
             behaviorConfigs: [
-                { id: "hate_speech", enabled: true, availableModels: ["bert_spanish"], iconName: "Shield", colorClass: "", bgClass: "" },
-                { id: "toxicity", enabled: true, availableModels: ["bert_spanish"], iconName: "AlertTriangle", colorClass: "", bgClass: "" },
+                { id: "hate_speech", enabled: true, availableModels: ["bert_spanish"], iconName: "Shield", color: "orange" },
+                { id: "toxicity", enabled: true, availableModels: ["bert_spanish"], iconName: "AlertTriangle", color: "purple" },
             ]
         }),
         useActionData: () => undefined,

@@ -391,7 +391,7 @@ describe("EntriesTable", () => {
         // Provide exclude mode but not exclusion only so banner shows
         renderTable({ isExclusionOnly: true, excludedIds: new Set(["entry_1"]), onExcludedIdsChange });
 
-        const resetBtn = screen.getByText("Reset selection");
+        const resetBtn = screen.getByText("projects.entries.resetSelection");
         await user.click(resetBtn);
 
         expect(onExcludedIdsChange).toHaveBeenCalled();

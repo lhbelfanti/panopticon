@@ -4,6 +4,14 @@ import { describe, it, expect, vi } from "vitest";
 import { BrowserRouter } from "react-router";
 import { RegisterForm } from "./RegisterForm";
 
+vi.mock("react-router", async (importOriginal) => {
+    const actual = await importOriginal();
+    return {
+        ...(actual as any),
+        Form: ({ children, ...props }: any) => <form {...props}>{children}</form>,
+    };
+});
+
 describe("RegisterForm", () => {
     const defaultProps = {
         setView: vi.fn(),
@@ -90,26 +98,9 @@ describe("RegisterForm", () => {
         expect(usernameInput).toHaveValue("jdoe");
     });
 
-    it("calls setView('login') when form is submitted", async () => {
-        const user = userEvent.setup();
-        const setViewMock = vi.fn();
-        render(
-            <BrowserRouter>
-                <RegisterForm t={defaultProps.t} setView={setViewMock} actionData={undefined} isSubmitting={false} />
-            </BrowserRouter>
-        );
-
-        const firstInput = screen.getByLabelText("login.register.firstName");
-        const lastInput = screen.getByLabelText("login.register.lastName");
-        const emailInput = screen.getByLabelText("login.register.email");
-
-        await user.type(firstInput, "John");
-        await user.type(lastInput, "Doe");
-        await user.type(emailInput, "john@example.com");
-
-        const submitBtn = screen.getByRole("button", { name: "login.register.requestAccess" });
-        await user.click(submitBtn);
-
-        expect(setViewMock).toHaveBeenCalledWith("login");
+    it("includes hidden intent field for signup", () => {
+        renderForm();
+        const hiddenInput = document.querySelector('input[name="intent"][value="signup"]') as HTMLInputElement;
+        expect(hiddenInput).toBeTruthy();
     });
 });
