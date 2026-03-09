@@ -184,10 +184,10 @@ const EntriesTable = (props: EntriesTableProps) => {
               <MousePointer2 size={20} />
             </div>
             <div>
-              <h3 className="text-white-1 font-bold text-sm">Exclude entries</h3>
+              <h3 className="text-white-1 font-bold text-sm">{t("projects.entries.excludeEntries", "Exclude entries")}</h3>
               <p className="text-light-gray-60 text-xs mt-0.5">
-                Select entries for the next analysis run. Unchecked entries will be excluded.
-                <span className="ml-2 text-primary">({data.total - excludedIds.size} / {data.total} Included)</span>
+                {t("projects.entries.excludeEntriesDesc", "Select entries for the next analysis run. Unchecked entries will be excluded.")}
+                <span className="ml-2 text-primary">{t("projects.entries.includedCount", { count: data.total - excludedIds.size, total: data.total, defaultValue: "({{count}} / {{total}} Included)" })}</span>
               </p>
             </div>
           </div>
@@ -196,7 +196,7 @@ const EntriesTable = (props: EntriesTableProps) => {
               onClick={() => setExcludedIds(new Set())}
               className="px-3 py-1.5 text-xs font-bold text-white-1 hover:text-primary transition-colors"
             >
-              Reset selection
+              {t("projects.entries.resetSelection", "Reset selection")}
             </button>
             {!isExclusionOnly && (
               <Link
@@ -205,7 +205,7 @@ const EntriesTable = (props: EntriesTableProps) => {
                 className="bg-yellow-500 hover:bg-yellow-400 text-background-dark px-4 py-2 rounded-lg font-bold text-sm shadow-lg shadow-yellow-500/20 transition-all flex items-center gap-2"
               >
                 <Zap size={16} />
-                Go to Analysis
+                {t("projects.entries.goToAnalysis", "Go to Analysis")}
               </Link>
             )}
           </div>
@@ -429,7 +429,7 @@ const EntriesTable = (props: EntriesTableProps) => {
                   >
                     {!data.entries.some(e => excludedIds.has(e.id)) ? <CheckSquare size={16} className="text-primary" /> : <Square size={16} className="text-light-gray-50 opacity-40" />}
                   </button>
-                  <span className="text-sm font-bold text-white-1">Select all</span>
+                  <span className="text-sm font-bold text-white-1">{t("projects.entries.selectAll", "Select all")}</span>
                 </div>
               </div>
             )}
