@@ -20,14 +20,28 @@
 - **Status:** Phase 4 (Analysis & History) fully verified and tested. Phase 5 Project Management features complete. Added Dashboard Login redirect and userId session extension. Sidebar Logo is now a home link.
 
 ## Current Position
-- **Phase**: 5 (completed)
-- **Task**: Fixed hardcoded values in Dashboard, users.ts, root.tsx, NewProjectForm, and resolved i18n gaps in EntriesTable and projects._index.tsx.
-- **Status**: Verified
+- **Phase**: 6 (completed)
+- **Task**: 6-01-PLAN.md — Write ENDPOINTS.md
+- **Status**: Verified and committed (bb0295c)
 
 ## Last Session Summary
-Phase 5 executed successfully. Dashboard login redirect implemented and verified. Sidebar Logo updated to act as a home link.
+Phase 6 Plan 01 executed successfully. Created ENDPOINTS.md (859 lines) at project root covering all 25 endpoints across 8 domains (Auth, Users, Config, Projects, Entries, Predictions, Analysis, Dashboard). Documented security ownership chain, type definitions, pagination/error patterns, and all 9 research gaps with recommended resolutions.
 
 ## Next Steps
-1. Milestone complete.
+1. Phase 6 complete — ENDPOINTS.md ready for backend team.
 
-**Status**: Active (resumed 2026-03-08 23:55:39)
+## Accumulated Context
+
+### Roadmap Evolution
+- Phase 6 added: Endpoints — audit all frontend API calls and produce a complete RESTful endpoint specification (ENDPOINTS.md) for backend development, including security analysis for user-scoped data access.
+
+### Decisions Made (Phase 6)
+- Use /v1 suffix at end of URL path (e.g. GET /projects/v1), not as a prefix
+- Numeric subprojectId is the canonical path param for entries, predictions, analysis — not model name string
+- Backend auto-creates one subproject per model on project creation; no separate POST subprojects endpoint initially
+- PATCH /projects/{id}/v1 treats behaviors and models as full replacements (not additive)
+- Export endpoint is dedicated (text/csv stream), not a variant of the JSON entries list
+- Dashboard endpoints derive userId from JWT, never accept it as a request param
+- Config endpoints require Authorization by default; team to revisit if registration form needs them before login (Gap 8)
+
+**Status**: Active (updated 2026-03-10)
