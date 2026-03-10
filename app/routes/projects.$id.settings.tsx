@@ -1,16 +1,17 @@
 import { useState } from "react";
 import {
+    Form,
     Link,
     redirect,
     useActionData,
     useLoaderData,
     useNavigation,
+    useOutletContext,
+    useRouteLoaderData
 } from "react-router";
 
 import {
     deleteProject,
-    getBehaviorsConfig,
-    getProjectById,
     updateProject,
 } from "~/services/api/projects/index.server";
 
@@ -22,6 +23,7 @@ import { useTranslation } from "react-i18next";
 
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
 import type { MLModel, TargetBehavior } from "~/services/api/projects/types";
+import type { ProjectContext } from "~/routes/projects.$id";
 
 export const meta = () => {
     return [
@@ -71,15 +73,13 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 export const loader = async ({ params }: LoaderFunctionArgs) => {
     const { id } = params;
     if (!id) throw new Response("Not Found", { status: 404 });
-    const project = await getProjectById(parseInt(id));
-    if (!project) throw new Response("Not Found", { status: 404 });
-
-    const behaviorConfigs = await getBehaviorsConfig();
-    return { project, behaviorConfigs };
+    return {};
 };
 
-const ProjectSettingsPage = () => {
-    const { project, behaviorConfigs } = useLoaderData<typeof loader>();
+export default function ProjectSettingsPage() {
+    const rootData = useRouteLoaderData("root") as { behaviorConfigs: any[] };
+    const behaviorConfigs = rootData?.behaviorConfigs || [];
+    const { project } = useOutletContext<ProjectContext>();
     const { t } = useTranslation();
     const actionData = useActionData<typeof action>();
     const navigation = useNavigation();
@@ -128,15 +128,9 @@ const ProjectSettingsPage = () => {
                             models: project.models,
                         }}
                     />
-                    {/* We need to pass the intent to the form */}
+                    {/* Inject intent for NewProjectForm submission as it's reused */}
                     <input type="hidden" name="intent" value="update_project" form="project-form" />
                 </div>
-
-                {/* Since NewProjectForm has its own Form tag, we need to adjust or wrap it. 
-            Actually, NewProjectForm already has a <Form method="post">. 
-            We need to make sure the intent is captured. 
-            Let's modify NewProjectForm to accept an optional intent hidden field or just use the button name.
-        */}
 
                 {/* Danger Zone */}
                 <div className="bg-surface-dark border border-bittersweet-shimmer/20 rounded-2xl shadow-xl overflow-hidden animate-in fade-in slide-in-from-bottom-8 duration-1000">
@@ -187,6 +181,4 @@ const ProjectSettingsPage = () => {
             </div>
         </div>
     );
-};
-
-export default ProjectSettingsPage;
+}

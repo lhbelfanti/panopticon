@@ -4,12 +4,12 @@ import {
   redirect,
   useLoaderData,
   useNavigation,
+  useOutletContext,
+  useRouteLoaderData,
 } from "react-router";
 
 import {
   deleteProject,
-  getBehaviorsConfig,
-  getProjectById,
 } from "~/services/api/projects/index.server";
 
 import ConfirmationModal from "~/components/ConfirmationModal";
@@ -22,6 +22,7 @@ import { Trans, useTranslation } from "react-i18next";
 
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
 import { getBehaviorClasses } from "~/utils/behaviorColors";
+import type { ProjectContext } from "~/routes/projects.$id";
 
 export const meta = () => {
   return [
@@ -50,15 +51,13 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 export const loader = async ({ params }: LoaderFunctionArgs) => {
   const { id } = params;
   if (!id) throw new Response("Not Found", { status: 404 });
-  const project = await getProjectById(parseInt(id));
-  if (!project) throw new Response("Not Found", { status: 404 });
-
-  const behaviorConfigs = await getBehaviorsConfig();
-  return { project, behaviorConfigs };
+  return {};
 };
 
-const ProjectViewPage = () => {
-  const { project, behaviorConfigs } = useLoaderData<typeof loader>();
+export default function ProjectDetailsPage() {
+  const { project } = useOutletContext<ProjectContext>();
+  const rootData = useRouteLoaderData("root") as { behaviorConfigs: any[] };
+  const behaviorConfigs = rootData?.behaviorConfigs || [];
   const { t } = useTranslation();
   const navigation = useNavigation();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -108,7 +107,7 @@ const ProjectViewPage = () => {
                 </span>
                 <div className="flex flex-wrap gap-2">
                   {project.behaviors?.map((b) => {
-                    const config = behaviorConfigs.find((c) => c.id === b);
+                    const config = behaviorConfigs.find((c: any) => c.id === b);
                     if (!config) return null;
                     const IconNode =
                       (LucideIcons as any)[config.iconName] || LucideIcons.Circle;
@@ -166,7 +165,7 @@ const ProjectViewPage = () => {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-              {project.subprojects.map((sub) => (
+              {project.subprojects.map((sub: any) => (
                 <SubprojectCard
                   key={sub.id}
                   subproject={sub}
@@ -211,6 +210,4 @@ const ProjectViewPage = () => {
       </div>
     </div>
   );
-};
-
-export default ProjectViewPage;
+}

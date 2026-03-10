@@ -7,7 +7,6 @@ import {
   isRouteErrorResponse,
 } from "react-router";
 import { useLoaderData, useLocation } from "react-router";
-import { getProjectsForSidebar } from "~/services/api/projects/index.server";
 import type { Project } from "~/services/api/projects/types";
 import { LanguageSwitcher } from "~/components/LanguageSwitcher";
 import { Sidebar } from "~/components/Sidebar";
@@ -30,11 +29,12 @@ export const links: Route.LinksFunction = () => [
 ];
 
 import { getSessionUser } from "~/services/api/auth/session.server";
+import { getBehaviorsConfig } from "~/services/api/projects/index.server";
 
 export const loader = async ({ request }: { request: Request }) => {
-  const projects = await getProjectsForSidebar();
-  const { user } = await getSessionUser(request);
-  return { projects, user };
+  const { user, projects } = await getSessionUser(request);
+  const behaviorConfigs = await getBehaviorsConfig();
+  return { projects: projects || [], user, behaviorConfigs };
 };
 
 export const Layout = (props: { children: React.ReactNode }) => {

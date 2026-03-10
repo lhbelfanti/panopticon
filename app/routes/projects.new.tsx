@@ -4,11 +4,11 @@ import {
   useActionData,
   useLoaderData,
   useNavigation,
+  useRouteLoaderData,
 } from "react-router";
 
 import {
   createProject,
-  getBehaviorsConfig,
 } from "~/services/api/projects/index.server";
 
 import { NewProjectForm } from "~/components/ProjectForms/NewProjectForm";
@@ -60,14 +60,14 @@ export const action = async ({ request }: { request: Request }) => {
 };
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const behaviorConfigs = await getBehaviorsConfig();
-  return { behaviorConfigs };
+  return {};
 };
 
 const NewProjectPage = () => {
   const { t } = useTranslation();
   const actionData = useActionData<typeof action>();
-  const { behaviorConfigs } = useLoaderData<typeof loader>();
+  const rootData = useRouteLoaderData("root") as { behaviorConfigs: any[] };
+  const behaviorConfigs = rootData?.behaviorConfigs || [];
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
 

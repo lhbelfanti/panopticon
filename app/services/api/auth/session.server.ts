@@ -73,16 +73,22 @@ export const isAuthenticated = async (request: Request): Promise<boolean> => {
 };
 
 /**
- * Consolidates session retrieval + user lookup into a single call.
- * Returns both session data and the associated user (if any).
+ * Consolidates session retrieval, user lookup, and sidebar projects into a single call.
  */
 export const getSessionUser = async (request: Request) => {
   const { getUserById } = await import("~/services/api/users/users.server");
-  const session = await getDataFromSession(request);
+  const { getProjectsForSidebar } = await import("~/services/api/projects/index.server");
+
+  const [session, projects] = await Promise.all([
+    getDataFromSession(request),
+    getProjectsForSidebar()
+  ]);
+
   if (!session?.userId) {
-    return { session: null, user: null };
+    return { session: null, user: null, projects };
   }
+
   const userId = parseInt(session.userId, 10);
   const user = await getUserById(userId);
-  return { session, user };
+  return { session, user, projects };
 };

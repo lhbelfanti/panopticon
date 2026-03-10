@@ -5,7 +5,8 @@ import {
     useLocation,
     useNavigation,
     useSubmit,
-    useActionData
+    useActionData,
+    useOutletContext
 } from "react-router";
 import { useTranslation } from "react-i18next";
 import {
@@ -20,7 +21,6 @@ import {
 } from "lucide-react";
 import { Breadcrumb } from "~/components/Breadcrumb";
 
-import { getProjectById } from "~/services/api/projects/index.server";
 import {
     getSubprojectAnalysisHistory,
     triggerProjectAnalysis
@@ -35,15 +35,13 @@ import { generateAnalysisPDF } from "~/utils/pdfGenerator";
 
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
 import type { AnalysisRun } from "~/services/api/analysis/types";
+import type { ProjectContext } from "~/routes/projects.$id";
 
 export const meta = () => [{ title: "Panopticon | Analysis" }];
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
-    const { id, modelId } = params;
-    if (!id || !modelId) throw new Response("Not Found", { status: 404 });
-
-    const project = await getProjectById(parseInt(id));
-    if (!project) throw new Response("Not Found", { status: 404 });
+    const { modelId } = params;
+    if (!modelId) throw new Response("Not Found", { status: 404 });
 
     const history = await getSubprojectAnalysisHistory(modelId);
 
@@ -55,8 +53,9 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     const page = parseInt(url.searchParams.get("page") || "1", 10);
     const limit = 10;
 
+    const { id } = params;
     const entriesData = await getEntries({
-        projectId: parseInt(id),
+        projectId: parseInt(id!),
         modelId,
         page,
         limit,
@@ -66,7 +65,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
         filterBias,
     });
 
-    return { project, modelId, history, entriesData, filterCol, filterVal, filterOp, filterBias };
+    return { modelId, history, entriesData, filterCol, filterVal, filterOp, filterBias };
 };
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
@@ -87,7 +86,8 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 };
 
 const AnalysisPage = () => {
-    const { project, modelId, history, entriesData, filterCol, filterVal, filterOp, filterBias } = useLoaderData<typeof loader>();
+    const { modelId, history, entriesData, filterCol, filterVal, filterOp, filterBias } = useLoaderData<typeof loader>();
+    const { project } = useOutletContext<ProjectContext>();
     const actionData = useActionData<typeof action>();
     const { t } = useTranslation();
     const location = useLocation();
@@ -230,7 +230,7 @@ const AnalysisPage = () => {
                         onViewReport={(run) => setSelectedRun(run)}
                         onDownloadPDF={(runId) => {
                             const runData = localHistory.find(r => r.id === runId);
-                            if (runData) generateAnalysisPDF(runData, project.name);
+                            if (runData) generateAnalysisPDF(runData, project.name, t);
                         }}
                     />
                 </div>
