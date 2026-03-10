@@ -17,7 +17,6 @@
     - [x] Add login check and redirect on main dashboard
     - [x] Store userId in session cookie
     - [x] Make Sidebar Logo a link to Dashboard Home
-    - [ ] Phase 6: Analysis Experience Improvements <!-- id: 19 -->
 - **Status:** Phase 4 (Analysis & History) fully verified and tested. Phase 5 Project Management features complete. Added Dashboard Login redirect and userId session extension. Sidebar Logo is now a home link.
 
 ## Current Position
