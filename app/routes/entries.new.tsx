@@ -13,7 +13,7 @@ import { useTranslation } from "react-i18next";
 import { ArrowLeft, PlusCircle, TableProperties, CheckCircle2, CopyPlus } from "lucide-react";
 
 import { getProjects } from "~/services/api/projects/index.server";
-import { getSupportedPlatforms } from "~/services/api/entries/mocks/platforms";
+import { getAppConfig } from "~/services/api/config.server";
 import { addEntriesToProject } from "~/services/api/entries/index.server";
 import { EntryForm } from "~/components/EntryIngestion/EntryForm";
 import { BulkUpload } from "~/components/EntryIngestion/BulkUpload";
@@ -22,11 +22,11 @@ import { CustomCheckbox } from "~/components/ui/CustomCheckbox";
 import type { ActionFunctionArgs } from "react-router";
 
 export const loader = async () => {
-    const [projects, platforms] = await Promise.all([
+    const [projects, config] = await Promise.all([
         getProjects(),
-        getSupportedPlatforms()
+        getAppConfig()
     ]);
-    return { projects, platforms };
+    return { projects, platforms: config.platforms };
 };
 
 export const action = async ({ request }: ActionFunctionArgs) => {

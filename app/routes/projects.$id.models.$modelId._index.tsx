@@ -1,16 +1,16 @@
-import { useLoaderData } from "react-router";
+import { useLoaderData, useOutletContext } from "react-router";
 
 import {
   deleteEntry,
   getEntries,
   predictPendingEntries,
 } from "~/services/api/entries/index.server";
-import { getProjectById } from "~/services/api/projects/index.server";
 
 import EntriesTable from "~/components/EntriesTable";
 
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
 import type { EntryVerdict } from "~/services/api/entries/types";
+import type { ProjectContext } from "~/routes/projects.$id";
 
 export const meta = () => [{ title: "Panopticon" }];
 
@@ -38,8 +38,6 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   const { id, modelId } = params;
   if (!id || !modelId) throw new Response("Not Found", { status: 404 });
-  const project = await getProjectById(parseInt(id));
-  if (!project) throw new Response("Not Found", { status: 404 });
 
   const url = new URL(request.url);
   const filterCol = (url.searchParams.get("filterCol") || "id") as any;
@@ -60,12 +58,13 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     filterBias,
   });
 
-  return { project, modelId, data, filterCol, filterVal, filterOp, filterBias };
+  return { modelId, data, filterCol, filterVal, filterOp, filterBias };
 };
 
-const SubprojectEntriesPage = () => {
-  const { project, modelId, data, filterCol, filterVal, filterOp, filterBias } =
+export default function SubprojectEntriesPage() {
+  const { modelId, data, filterCol, filterVal, filterOp, filterBias } =
     useLoaderData<typeof loader>();
+  const { project } = useOutletContext<ProjectContext>();
 
   return (
     <EntriesTable
@@ -78,6 +77,4 @@ const SubprojectEntriesPage = () => {
       filterBias={filterBias}
     />
   );
-};
-
-export default SubprojectEntriesPage;
+}
