@@ -73,7 +73,7 @@ export const TweetCard: React.FC<TweetCardProps> = ({ mode, initialData, onChang
                     <div className="flex items-center gap-3">
                         {/* Placeholder Avatar */}
                         <div className="w-12 h-12 rounded-full bg-light-gray-60 overflow-hidden flex-shrink-0">
-                            <img src="https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png" alt="Avatar" className="w-full h-full object-cover" />
+                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%236b7280'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z'/%3E%3C/svg%3E" alt="Avatar" className="w-full h-full object-cover" />
                         </div>
                         <div className="flex flex-col">
                             <span className="font-bold text-[15px] leading-5">{t("projects.entries.new.interactiveForm.tweetAuthor", "Tweet Author")}</span>
@@ -148,7 +148,7 @@ export const TweetCard: React.FC<TweetCardProps> = ({ mode, initialData, onChang
                         <div className="flex justify-between items-start mb-3 pt-2">
                             <div className="flex items-center gap-2">
                                 <div className="w-8 h-8 rounded-full bg-light-gray-60 overflow-hidden flex-shrink-0">
-                                    <img src="https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png" alt="Quoted Avatar" className="w-full h-full object-cover" />
+                                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%236b7280'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z'/%3E%3C/svg%3E" alt="Quoted Avatar" className="w-full h-full object-cover" />
                                 </div>
                                 <div className="flex flex-col">
                                     <span className="font-bold text-[14px] leading-4">{t("projects.entries.new.interactiveForm.quotedAuthor", "Quoted Author")}</span>

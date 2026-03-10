@@ -1,7 +1,9 @@
+import { Form } from "react-router";
+
 import type { ForgotPasswordFormProps } from "./types";
 
 export const ForgotPasswordForm = (props: ForgotPasswordFormProps) => {
-  const { setView, t } = props;
+  const { actionData, setView, t } = props;
 
   // Convention: extract long Tailwind strings into variables
   const inputClasses =
@@ -19,13 +21,20 @@ export const ForgotPasswordForm = (props: ForgotPasswordFormProps) => {
       <p className="text-light-gray-70 mb-8">
         {t("login.recoverPassword.subtitle")}
       </p>
-      <form
-        className="flex flex-col gap-6"
-        onSubmit={(e) => {
-          e.preventDefault();
-          setView("login");
-        }}
-      >
+      <Form method="post" className="flex flex-col gap-6">
+        <input type="hidden" name="intent" value="forgot_password" />
+
+        {actionData?.resetSuccess && (
+          <div className="p-4 bg-green-900/30 border border-green-500/50 text-green-200 rounded-lg text-sm text-center font-medium">
+            {t("login.recoverPassword.success")}
+          </div>
+        )}
+        {actionData?.error && (
+          <div className="p-4 bg-red-900/30 border border-red-500/50 text-red-200 rounded-lg text-sm text-center font-medium">
+            {t(`login.errors.${actionData.error}`)}
+          </div>
+        )}
+
         <div className="flex flex-col gap-2">
           <label
             className="text-sm font-semibold text-light-gray tracking-wide"
@@ -57,7 +66,7 @@ export const ForgotPasswordForm = (props: ForgotPasswordFormProps) => {
             {t("login.recoverPassword.backToLogin")}
           </button>
         </div>
-      </form>
+      </Form>
     </div>
   );
 };
