@@ -36,3 +36,13 @@
 **Status**: ✅ Complete
 **Objective**: Dockerize the application as defined in the requirements.
 **Requirements**: Multi-stage `Dockerfile`, `.dockerignore`, `compose.yml` for integration setup.
+
+### Phase 6: Endpoints
+**Status**: 🟡 Planned
+**Objective**: Audit all frontend API calls to produce a complete, RESTful endpoint specification for backend development. Verify each endpoint has all required parameters, identify optimizations, and document security requirements ensuring users can only access their own data.
+**Requirements**: RESTful conventions, versioning via `/v1` suffix (not `/api/v1` prefix), per-endpoint documentation of screen, resource, verb, path parameters, query parameters, request body, headers, and response. Security analysis for user-scoped data access. Deliverable: `ENDPOINTS.md`.
+**Depends on**: Phase 5
+**Plans:** 1 plan
+
+Plans:
+- [ ] 6-01-PLAN.md — Write ENDPOINTS.md: complete RESTful specification for all 8 resource domains (Auth, Users, Config, Projects, Entries, Predictions, Analysis, Dashboard)
