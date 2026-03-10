@@ -1,4 +1,4 @@
-import type { AnalysisRun, AnalysisResult } from "./types";
+import type { AnalysisRun, AnalysisResult, AnalysisRunSummary } from "./types";
 import { analysisStore } from "../mock/store";
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -78,10 +78,13 @@ export const triggerProjectAnalysis = async (
 
 /**
  * Retrieves the history of analysis runs for a specific subproject.
+ * Return type is AnalysisRunSummary[] to avoid over-fetching large result objects.
  */
-export const getSubprojectAnalysisHistory = async (subprojectId: string): Promise<AnalysisRun[]> => {
+export const getSubprojectAnalysisHistory = async (subprojectId: string): Promise<AnalysisRunSummary[]> => {
     await delay(500);
-    return analysisStore.runs.filter(r => r.subprojectId === subprojectId);
+    return analysisStore.runs
+        .filter(r => r.subprojectId === subprojectId)
+        .map(({ result, ...summary }) => summary);
 };
 
 /**

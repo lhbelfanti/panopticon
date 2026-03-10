@@ -12,6 +12,8 @@ export interface AnalysisRun {
     error?: string;
 }
 
+export type AnalysisRunSummary = Omit<AnalysisRun, "result">;
+
 export interface AnalysisResult {
     totalEntries: number;
     analyzedEntries: number;

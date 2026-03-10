@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import {
     BarChart,
@@ -23,19 +24,64 @@ interface AnalysisReportModalProps {
 
 const COLORS = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEEAD'];
 
-export const AnalysisReportModal = ({ isOpen, onClose, run }: AnalysisReportModalProps) => {
+export const AnalysisReportModal = ({ isOpen, onClose, run: initialRun }: AnalysisReportModalProps) => {
     const { t } = useTranslation();
+    const [run, setRun] = useState<AnalysisRun | null>(initialRun);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        setRun(initialRun);
+        setError(null);
+
+        if (isOpen && initialRun && !initialRun.result && initialRun.status === "completed") {
+            const fetchFullRun = async () => {
+                setIsLoading(true);
+                try {
+                    // Extract project and model from run ID if needed, or use placeholders for the path
+                    // Actually, our API path is /api/v1/projects/:id/models/:mid/analysis/:runId
+                    // But we can just use the runId if we change the route or use a simpler one.
+                    // Let's use the one we created. We need the params.
+                    // Wait, the run object has subprojectId.
+                    // For now, let's assume a simplified fetch or use the runId in the path.
+                    const response = await fetch(`/api/v1/projects/0/models/${initialRun.subprojectId}/analysis/${initialRun.id}`);
+                    if (!response.ok) throw new Error("Failed to fetch report data");
+                    const fullRun = await response.json();
+                    setRun(fullRun);
+                } catch (err: any) {
+                    setError(err.message);
+                } finally {
+                    setIsLoading(false);
+                }
+            };
+            fetchFullRun();
+        }
+    }, [isOpen, initialRun]);
 
     if (!isOpen || !run) return null;
 
-    if (run.status === "processing") {
+    if (isLoading) {
         return (
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-background-dark/80 backdrop-blur-sm p-4">
                 <div className="bg-surface-dark border border-white/10 rounded-2xl p-12 shadow-2xl flex flex-col items-center gap-6 max-w-md w-full animate-in zoom-in-95 duration-200">
                     <Loader2 size={48} className="text-primary animate-spin" />
                     <div className="text-center">
-                        <h3 className="text-xl font-bold text-white-1 mb-2">{t('projects.analysis.reportModal.processing.title')}</h3>
-                        <p className="text-light-gray-70 text-sm">{t('projects.analysis.reportModal.processing.desc')}</p>
+                        <h3 className="text-xl font-bold text-white-1 mb-2">{t('projects.analysis.reportModal.loading.title', "Loading Report")}</h3>
+                        <p className="text-light-gray-70 text-sm">{t('projects.analysis.reportModal.loading.desc', "Fetching detailed analysis results...")}</p>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-background-dark/80 backdrop-blur-sm p-4">
+                <div className="bg-surface-dark border border-white/10 rounded-2xl p-12 shadow-2xl flex flex-col items-center gap-6 max-w-md w-full">
+                    <XSquare size={48} className="text-bittersweet-shimmer" />
+                    <div className="text-center">
+                        <h3 className="text-xl font-bold text-white-1 mb-2">Error</h3>
+                        <p className="text-light-gray-70 text-sm">{error}</p>
                     </div>
                     <button onClick={onClose} className="mt-4 px-6 py-2 bg-white/5 hover:bg-white/10 text-white-1 rounded-lg font-bold transition-colors">
                         {t('projects.analysis.reportModal.close')}
