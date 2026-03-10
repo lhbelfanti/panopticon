@@ -41,3 +41,10 @@ export const logout = async (request: Request, authToken?: string) => {
   await delay(Math.floor(Math.random() * 500) + 500);
   return destroyAuthSession(request);
 };
+
+export const requestPasswordReset = async (
+  email: string,
+): Promise<{ success: boolean; message: string }> => {
+  await delay(Math.floor(Math.random() * 500) + 500);
+  return { success: true, message: "Password reset email sent" };
+};
