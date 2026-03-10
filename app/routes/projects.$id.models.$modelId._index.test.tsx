@@ -24,13 +24,15 @@ vi.mock("react-router", async (importOriginal) => {
     return {
         ...(actual as any),
         useLoaderData: () => ({
-            project: { id: "proj-1", name: "Test Project" },
             modelId: "roberta",
             data: { entries: [], total: 0 },
             filterCol: "text",
             filterVal: "test val",
             filterOp: "=",
             filterBias: 0,
+        }),
+        useOutletContext: () => ({
+            project: { id: "proj-1", name: "Test Project" },
         }),
     };
 });
@@ -67,10 +69,9 @@ vi.mock("~/services/api/projects/index.server", () => ({
 }));
 
 describe("SubprojectEntriesPage Route Functions", () => {
-    it("loader returns model and project data", async () => {
+    it("loader returns model data", async () => {
         const url = "http://localhost/projects/123/models/m1?filterCol=text&filterVal=foo";
         const result = await loader({ params: { id: "123", modelId: "m1" }, request: new Request(url) } as any);
-        expect(result.project.id).toBe(123);
         expect(result.modelId).toBe("m1");
         expect(result.filterVal).toBe("foo");
     });
@@ -99,10 +100,5 @@ describe("SubprojectEntriesPage Route Functions", () => {
         const request = new Request("http://localhost", { method: "POST", body: formData });
         const result = await action({ request, params: { id: "123", modelId: "m1" } } as any);
         expect(result).toBeNull();
-    });
-
-    it("loader throws 404 for non-existent project", async () => {
-        await expect(loader({ params: { id: "999", modelId: "m1" }, request: new Request("http://localhost") } as any))
-            .rejects.toThrow();
     });
 });

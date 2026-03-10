@@ -4,6 +4,14 @@ import { describe, it, expect, vi } from "vitest";
 import { BrowserRouter } from "react-router";
 import { ForgotPasswordForm } from "./ForgotPasswordForm";
 
+vi.mock("react-router", async (importOriginal) => {
+    const actual = await importOriginal();
+    return {
+        ...(actual as any),
+        Form: ({ children, ...props }: any) => <form {...props}>{children}</form>,
+    };
+});
+
 describe("ForgotPasswordForm", () => {
     const defaultProps = {
         setView: vi.fn(),
@@ -38,21 +46,9 @@ describe("ForgotPasswordForm", () => {
         expect(setViewMock).toHaveBeenCalledWith("login");
     });
 
-    it("calls setView('login') when form is submitted", async () => {
-        const user = userEvent.setup();
-        const setViewMock = vi.fn();
-        render(
-            <BrowserRouter>
-                <ForgotPasswordForm t={defaultProps.t} setView={setViewMock} actionData={undefined} isSubmitting={false} />
-            </BrowserRouter>
-        );
-
-        const emailInput = screen.getByLabelText("login.email");
-        await user.type(emailInput, "test@example.com");
-
-        const submitBtn = screen.getByRole("button", { name: "login.recoverPassword.sendLink" });
-        await user.click(submitBtn);
-
-        expect(setViewMock).toHaveBeenCalledWith("login");
+    it("includes hidden intent field for forgot_password", () => {
+        renderForm();
+        const hiddenInput = document.querySelector('input[name="intent"][value="forgot_password"]') as HTMLInputElement;
+        expect(hiddenInput).toBeTruthy();
     });
 });

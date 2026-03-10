@@ -63,16 +63,17 @@ const mockSubmit = vi.fn();
 
 // STABLE MOCK DATA TO AVOID INFINITE LOOPS IN USEEFFECT
 const stabelLoaderData = {
-    project: {
-        id: 1,
-        name: "Test Project",
-        behaviors: [],
-        subprojects: [],
-        models: [],
-        createdAt: "2024-01-01T00:00:00Z",
-    },
     modelId: "roberta",
     history: [],
+};
+
+const mockProject = {
+    id: 1,
+    name: "Test Project",
+    behaviors: [],
+    subprojects: [],
+    models: [],
+    createdAt: "2024-01-01T00:00:00Z",
 };
 
 vi.mock("react-router", async (importOriginal) => {
@@ -91,6 +92,7 @@ vi.mock("react-router", async (importOriginal) => {
         useLocation: () => ({ state: null }),
         useActionData: () => undefined,
         useSubmit: () => mockSubmit,
+        useOutletContext: () => ({ project: mockProject }),
         Link: ({ to, children, className }: any) => <a href={to} className={className}>{children}</a>,
     };
 });
@@ -225,29 +227,17 @@ import { getSubprojectAnalysisHistory, triggerProjectAnalysis } from "~/services
 import { getEntries } from "~/services/api/entries/index.server";
 
 describe("AnalysisPage Loader", () => {
-    it("returns project, modelId, history for valid params", async () => {
-        const result = await loader({ params: { id: "1", modelId: "roberta" }, request: new Request("http://localhost") } as any);
-        expect(result).toHaveProperty("project");
+    it("returns modelId, history for valid params", async () => {
+        const result = await loader({ params: { id: "1", modelId: "roberta" }, request: new Request("http://localhost") } as any) as any;
+        expect(result).not.toHaveProperty("project");
         expect(result).toHaveProperty("modelId", "roberta");
         expect(result).toHaveProperty("history");
         expect(getSubprojectAnalysisHistory).toHaveBeenCalledWith("roberta");
     });
 
-    it("throws 404 when id param is missing", async () => {
-        await expect(
-            loader({ params: { modelId: "roberta" }, request: new Request("http://localhost") } as any)
-        ).rejects.toThrow();
-    });
-
     it("throws 404 when modelId param is missing", async () => {
         await expect(
             loader({ params: { id: "1" }, request: new Request("http://localhost") } as any)
-        ).rejects.toThrow();
-    });
-
-    it("throws 404 when project is not found", async () => {
-        await expect(
-            loader({ params: { id: "999", modelId: "roberta" }, request: new Request("http://localhost") } as any)
         ).rejects.toThrow();
     });
 });

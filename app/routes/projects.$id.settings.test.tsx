@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, cleanup } from "@testing-library/react";
 import { MemoryRouter } from "react-router";
 import ProjectSettingsPage from "./projects.$id.settings";
+import * as projectsServer from "~/services/api/projects/index.server";
 
 // Mocks
 vi.mock("~/services/api/projects/index.server", () => ({
@@ -22,7 +23,17 @@ vi.mock("react-router", async (importOriginal) => {
     const actual = await importOriginal();
     return {
         ...(actual as any),
-        useLoaderData: () => ({
+        useLoaderData: () => ({}),
+        useRouteLoaderData: (id: string) => {
+            if (id === "root") return {
+                behaviorConfigs: [
+                    { id: "hate_speech", enabled: true, availableModels: ["bert_spanish"], iconName: "Shield", color: "orange" },
+                    { id: "toxicity", enabled: true, availableModels: ["bert_spanish"], iconName: "AlertTriangle", color: "purple" },
+                ]
+            };
+            return null;
+        },
+        useOutletContext: () => ({
             project: {
                 id: 1,
                 name: "Test Project",
@@ -32,10 +43,6 @@ vi.mock("react-router", async (importOriginal) => {
                 subprojects: [],
                 createdAt: new Date().toISOString(),
             },
-            behaviorConfigs: [
-                { id: "hate_speech", enabled: true, availableModels: ["bert_spanish"], iconName: "Shield", color: "orange" },
-                { id: "toxicity", enabled: true, availableModels: ["bert_spanish"], iconName: "AlertTriangle", color: "purple" },
-            ]
         }),
         useActionData: () => undefined,
         useNavigation: () => ({
@@ -104,7 +111,6 @@ describe("ProjectSettingsPage", () => {
 
     it("action handles update failure", async () => {
         const { action } = await import("./projects.$id.settings");
-        const projectsServer = await import("~/services/api/projects/index.server");
         const updateProjectSpy = vi.spyOn(projectsServer, "updateProject").mockRejectedValueOnce(new Error("API Error"));
 
         const formData = new FormData();
@@ -141,31 +147,15 @@ describe("ProjectSettingsPage", () => {
         expect(result).toBeNull();
     });
 
-    it("loader returns project and behaviors configs", async () => {
+    it("loader returns empty object after consolidation", async () => {
         const { loader } = await import("./projects.$id.settings");
-        const projectsServer = await import("~/services/api/projects/index.server");
-        const getProjectSpy = vi.spyOn(projectsServer, "getProjectById").mockResolvedValueOnce({ id: 1, name: "Test Project" } as any);
-        const getBehaviorsSpy = vi.spyOn(projectsServer, "getBehaviorsConfig").mockResolvedValueOnce([{ id: "hate_speech" }] as any);
-
         const result = await loader({ params: { id: "1" }, request: new Request("http://localhost") } as any);
-        expect(result).toEqual({ project: { id: 1, name: "Test Project" }, behaviorConfigs: [{ id: "hate_speech" }] });
-
-        getProjectSpy.mockRestore();
-        getBehaviorsSpy.mockRestore();
+        expect(result).toEqual({});
     });
 
     it("loader throws 404 if id is missing", async () => {
         const { loader } = await import("./projects.$id.settings");
         await expect(loader({ params: {}, request: new Request("http://localhost") } as any)).rejects.toThrow();
-    });
-
-    it("loader throws 404 if project is not found", async () => {
-        const { loader } = await import("./projects.$id.settings");
-        const projectsServer = await import("~/services/api/projects/index.server");
-        const getProjectSpy = vi.spyOn(projectsServer, "getProjectById").mockResolvedValueOnce(null as any);
-
-        await expect(loader({ params: { id: "99" }, request: new Request("http://localhost") } as any)).rejects.toThrow();
-        getProjectSpy.mockRestore();
     });
 
     it("opens the delete confirmation modal when danger zone button is clicked", async () => {

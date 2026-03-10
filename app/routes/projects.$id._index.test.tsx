@@ -16,12 +16,21 @@ vi.mock("~/components/SubprojectCard", () => ({
     default: ({ subproject }: any) => <div data-testid={`subproject-${subproject.model}`} />,
 }));
 
-const mockSubmit = vi.fn();
 vi.mock("react-router", async (importOriginal) => {
     const actual = await importOriginal();
     return {
         ...(actual as any),
-        useLoaderData: () => ({
+        useLoaderData: () => ({}),
+        useRouteLoaderData: (id: string) => {
+            if (id === "root") return {
+                behaviorConfigs: [
+                    { id: "spam", name: "Spam", iconName: "FileText", color: "red" },
+                    { id: "toxicity", name: "Toxicity", iconName: "Shield", color: "blue" }
+                ]
+            };
+            return null;
+        },
+        useOutletContext: () => ({
             project: {
                 id: "proj-123",
                 name: "Test Project",
@@ -32,20 +41,6 @@ vi.mock("react-router", async (importOriginal) => {
                     { id: "sub-2", model: "llama3_zero_shot" },
                 ],
             },
-            behaviorConfigs: [
-                {
-                    id: "spam",
-                    name: "Spam",
-                    iconName: "FileText",
-                    color: "red",
-                },
-                {
-                    id: "toxicity",
-                    name: "Toxicity",
-                    iconName: "Shield",
-                    color: "blue",
-                }
-            ]
         }),
         useNavigation: () => ({
             state: "idle",
@@ -109,15 +104,9 @@ vi.mock("~/services/api/projects/index.server", () => ({
 }));
 
 describe("ProjectViewPage Route Functions", () => {
-    it("loader returns project data for valid ID", async () => {
+    it("loader returns empty object after consolidation", async () => {
         const result = await loader({ params: { id: "123" }, request: new Request("http://localhost") } as any);
-        expect(result).toHaveProperty("project");
-        expect(result.project.id).toBe(123);
-    });
-
-    it("loader throws 404 for invalid ID", async () => {
-        await expect(loader({ params: { id: "999" }, request: new Request("http://localhost") } as any))
-            .rejects.toThrow();
+        expect(result).toEqual({});
     });
 
     it("action handles delete_project intent", async () => {
