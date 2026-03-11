@@ -133,7 +133,7 @@ const EntriesTable = (props: EntriesTableProps) => {
   // Convention: extract long Tailwind strings into variables
   const containerClasses = isExclusionOnly
     ? "flex flex-col flex-1 gap-6 relative px-2 pb-4 overflow-hidden"
-    : "flex-1 p-6 lg:p-10 overflow-y-auto bg-background-dark min-h-screen custom-scrollbar relative flex flex-col gap-6";
+    : "flex-1 overflow-y-auto bg-background-dark min-h-screen custom-scrollbar relative flex flex-col gap-6";
 
   const headerSectionClasses =
     "flex flex-col gap-4 animate-in fade-in slide-in-from-bottom-2 duration-300";
@@ -361,11 +361,10 @@ const EntriesTable = (props: EntriesTableProps) => {
             <button
               type="button"
               onClick={() => setIsExcludeMode(!isExcludeMode)}
-              className={`flex items-center gap-2 px-4 py-2 text-sm font-bold border rounded-lg transition-all whitespace-nowrap ${
-                isExcludeMode 
-                  ? "bg-primary text-background-dark border-primary shadow-lg shadow-primary/20" 
+              className={`flex items-center gap-2 px-4 py-2 text-sm font-bold border rounded-lg transition-all whitespace-nowrap ${isExcludeMode
+                  ? "bg-primary text-background-dark border-primary shadow-lg shadow-primary/20"
                   : "text-light-gray-70 bg-surface-dark border-white/10 hover:border-primary/50"
-              }`}
+                }`}
             >
               <MousePointer2 size={16} />
               {isExcludeMode ? t("projects.entries.exitExcludeMode", "Exit exclude mode") : t("projects.entries.excludeMode", "Exclude mode")}
