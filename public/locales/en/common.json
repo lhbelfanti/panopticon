@@ -1,4 +1,15 @@
 {
+    "titles": {
+        "dashboard": "Dashboard",
+        "login": "Login",
+        "createProject": "Create project",
+        "projectDetails": "Project details",
+        "modelEntries": "Model entries",
+        "modelAnalysis": "Model analysis",
+        "modelExport": "Model export",
+        "projectSettings": "Project settings",
+        "addEntries": "Add entries"
+    },
     "login": {
         "description": "Adverse Human Behaviours analysis platform",
         "signIn": "Log in",

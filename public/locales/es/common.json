@@ -1,4 +1,15 @@
 {
+    "titles": {
+        "dashboard": "Panel de control",
+        "login": "Iniciar sesión",
+        "createProject": "Crear proyecto",
+        "projectDetails": "Detalles del proyecto",
+        "modelEntries": "Entradas del modelo",
+        "modelAnalysis": "Análisis del modelo",
+        "modelExport": "Exportar modelo",
+        "projectSettings": "Configuración del proyecto",
+        "addEntries": "Agregar entradas"
+    },
     "login": {
         "description": "Plataforma para el análisis de Comportamientos Humanos Adversos",
         "signIn": "Iniciar sesión",

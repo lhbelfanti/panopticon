@@ -12,13 +12,14 @@ import { SummaryGrid } from "~/components/Dashboard/SummaryGrid";
 import { AdverseBehaviorLabel } from "~/components/AdverseBehaviorLabel";
 
 import { isAuthenticated } from "~/services/api/auth/session.server";
+import { i18next } from "~/localization/i18n.server";
 
 import type { MetaFunction } from "react-router";
 import { redirect } from "react-router";
 
-export const meta: MetaFunction = () => {
+export const meta: MetaFunction<typeof loader> = ({ data }) => {
   return [
-    { title: "Panopticon" },
+    { title: `Panopticon - ${data?.title}` },
     {
       name: "description",
       content: "Adverse Human Behaviour Analysis Platform",
@@ -29,14 +30,18 @@ export const meta: MetaFunction = () => {
 export const loader = async ({ request }: { request: Request }) => {
   const isAuth = await isAuthenticated(request);
   if (!isAuth) {
-    throw redirect("/login");
+    return redirect("/login");
   }
 
-  const [summary, recentActivities] = await Promise.all([
+  const t = await i18next.getFixedT(request);
+  const title = t("titles.dashboard");
+
+  const [summary, activities] = await Promise.all([
     getDashboardSummary(),
     getRecentActivities(),
   ]);
-  return { summary, recentActivities };
+
+  return { summary, activities, title };
 };
 
 const Index = () => {
