@@ -26,7 +26,7 @@ import {
   Square,
   History
 } from "lucide-react";
-import { Breadcrumb, type BreadcrumbItem } from "~/components/Breadcrumb";
+import { Breadcrumb } from "~/components/Breadcrumb";
 
 import type {
   Entry,
@@ -117,6 +117,8 @@ const EntriesTable = (props: EntriesTableProps) => {
         return "bg-yellow-500/10 text-yellow-400 border-yellow-500/20";
       case "In Progress":
         return "bg-blue-500/10 text-blue-400 border-blue-500/20";
+      case "Error":
+        return "bg-red-500/10 text-red-400 border-red-500/20";
       default:
         return "bg-gray-500/10 text-gray-400 border-gray-500/20";
     }
@@ -146,36 +148,6 @@ const EntriesTable = (props: EntriesTableProps) => {
 
   return (
     <div className={containerClasses}>
-      {/* Header / Breadcrumb - Hidden in exclusion-only mode */}
-      {!isExclusionOnly && (
-        <div className={headerSectionClasses}>
-          <Link
-            to={`/projects/${project.id}`}
-            className="flex items-center gap-2 text-primary hover:text-white-1 transition-colors text-sm font-semibold max-w-max"
-          >
-            <ArrowLeft size={16} />
-            {t("projects.entries.backToProject")}
-          </Link>
-
-          <div>
-            <Breadcrumb
-              items={[
-                {
-                  label: project.name,
-                  to: `/projects/${project.id}`,
-                  icon: <Folder size={28} className="text-primary" />
-                },
-                {
-                  label: t(`projects.models.${modelId}`),
-                  icon: <Box size={28} className="text-primary" />
-                }
-              ]}
-            />
-            <p className="text-light-gray-70 text-sm mt-5">{t("projects.entries.desc")}</p>
-          </div>
-        </div>
-      )}
-
       {/* Analysis Exclusion Banner */}
       {isExcludeMode && (
         <div className="bg-primary/10 border border-primary/20 p-4 rounded-xl flex items-center justify-between animate-in fade-in slide-in-from-top-2 duration-300">
@@ -245,10 +217,10 @@ const EntriesTable = (props: EntriesTableProps) => {
                 }}
                 className="appearance-none bg-background-dark border border-white/10 rounded-lg py-2 pl-9 pr-8 text-sm text-white-1 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"
               >
-                <option value="id">ID</option>
-                <option value="text">Text</option>
-                <option value="verdict">Verdict</option>
-                <option value="score">Score</option>
+                <option value="id">{t("projects.entries.tableId")}</option>
+                <option value="text">{t("projects.entries.tableText")}</option>
+                <option value="verdict">{t("projects.entries.tableVerdict")}</option>
+                <option value="score">{t("projects.entries.tableScore")}</option>
               </select>
               <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-light-gray-70 pointer-events-none" />
             </div>
@@ -265,7 +237,7 @@ const EntriesTable = (props: EntriesTableProps) => {
                   name="filterVal"
                   value={localFilterVal}
                   onChange={(e) => setLocalFilterVal(e.target.value)}
-                  placeholder="Number ID"
+                  placeholder={t("projects.entries.numberIdPlaceholder")}
                   className="w-full bg-background-dark border border-white/10 rounded-lg py-2 pl-9 pr-4 text-sm text-white-1 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"
                 />
               </div>
@@ -282,7 +254,7 @@ const EntriesTable = (props: EntriesTableProps) => {
                   name="filterVal"
                   value={localFilterVal}
                   onChange={(e) => setLocalFilterVal(e.target.value)}
-                  placeholder="Search characters"
+                  placeholder={t("projects.entries.searchCharactersPlaceholder")}
                   className="w-full bg-background-dark border border-white/10 rounded-lg py-2 pl-9 pr-4 text-sm text-white-1 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"
                 />
               </div>
@@ -296,12 +268,12 @@ const EntriesTable = (props: EntriesTableProps) => {
                   onChange={(e) => setLocalFilterVal(e.target.value)}
                   className="w-full appearance-none bg-background-dark border border-white/10 rounded-lg py-2 px-4 pr-8 text-sm text-white-1 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"
                 >
-                  <option value="">All Verdicts</option>
-                  <option value="Positive">Positive</option>
-                  <option value="Negative">Negative</option>
-                  <option value="Pending">Pending</option>
-                  <option value="In Progress">In Progress</option>
-                  <option value="Error">Error</option>
+                  <option value="">{t("projects.entries.allVerdicts")}</option>
+                  <option value="Positive">{t("projects.entries.verdicts.positive")}</option>
+                  <option value="Negative">{t("projects.entries.verdicts.negative")}</option>
+                  <option value="Pending">{t("projects.entries.verdicts.pending")}</option>
+                  <option value="In Progress">{t("projects.entries.verdicts.inProgress")}</option>
+                  <option value="Error">{t("projects.entries.verdicts.error")}</option>
                 </select>
                 <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-light-gray-70 pointer-events-none" />
               </div>
@@ -331,7 +303,7 @@ const EntriesTable = (props: EntriesTableProps) => {
                     name="filterVal"
                     value={localFilterVal}
                     onChange={(e) => setLocalFilterVal(e.target.value)}
-                    placeholder="0-100"
+                    placeholder={t("projects.entries.scorePlaceholder")}
                     min="0"
                     max="100"
                     step="0.01"
@@ -352,7 +324,7 @@ const EntriesTable = (props: EntriesTableProps) => {
                       type="number"
                       name="filterBias"
                       defaultValue={filterBias}
-                      placeholder="Bias"
+                      placeholder={t("projects.entries.biasPlaceholder")}
                       min="0"
                       max="100"
                       step="0.01"
@@ -385,6 +357,19 @@ const EntriesTable = (props: EntriesTableProps) => {
                 {t("projects.entries.analysis")}
               </Link>
             )}
+
+            <button
+              type="button"
+              onClick={() => setIsExcludeMode(!isExcludeMode)}
+              className={`flex items-center gap-2 px-4 py-2 text-sm font-bold border rounded-lg transition-all whitespace-nowrap ${
+                isExcludeMode 
+                  ? "bg-primary text-background-dark border-primary shadow-lg shadow-primary/20" 
+                  : "text-light-gray-70 bg-surface-dark border-white/10 hover:border-primary/50"
+              }`}
+            >
+              <MousePointer2 size={16} />
+              {isExcludeMode ? t("projects.entries.exitExcludeMode", "Exit exclude mode") : t("projects.entries.excludeMode", "Exclude mode")}
+            </button>
 
             <a
               href={`/projects/${project.id}/models/${modelId}/export?filterCol=${filterCol}&filterVal=${encodeURIComponent(filterVal)}&filterOp=${encodeURIComponent(filterOp)}&filterBias=${filterBias}`}
@@ -425,11 +410,11 @@ const EntriesTable = (props: EntriesTableProps) => {
                       setExcludedIds(newExcluded);
                     }}
                     className="hover:text-primary transition-colors flex items-center justify-center p-1 rounded hover:bg-white/5"
-                    title={!data.entries.some(e => excludedIds.has(e.id)) ? "Deselect page" : "Select page"}
+                    title={!data.entries.some(e => excludedIds.has(e.id)) ? t("projects.entries.deselectPage") : t("projects.entries.selectPage")}
                   >
                     {!data.entries.some(e => excludedIds.has(e.id)) ? <CheckSquare size={16} className="text-primary" /> : <Square size={16} className="text-light-gray-50 opacity-40" />}
                   </button>
-                  <span className="text-sm font-bold text-white-1">{t("projects.entries.selectAll", "Select all")}</span>
+                  <span className="text-sm font-bold text-white-1">{t("projects.entries.selectAll")}</span>
                 </div>
               </div>
             )}
@@ -438,7 +423,7 @@ const EntriesTable = (props: EntriesTableProps) => {
                 <tr className={tableHeaderRowClasses}>
                   {isExcludeMode && (
                     <th className="py-3 px-4 whitespace-nowrap text-left w-1">
-                      <span className="font-bold">Selected</span>
+                      <span className="font-bold">{t("projects.entries.selectedLabel")}</span>
                     </th>
                   )}
                   <th className="py-3 px-4 w-1 whitespace-nowrap text-left">{t("projects.entries.tableId")}</th>
@@ -524,7 +509,7 @@ const EntriesTable = (props: EntriesTableProps) => {
                         <span
                           className={`px-2 py-0.5 text-[0.65rem] font-bold rounded-full border ${getVerdictStyle(entry.verdict)}`}
                         >
-                          {entry.verdict}
+                          {t(`projects.entries.verdicts.${entry.verdict.toLowerCase().replace(" ", "")}`, entry.verdict)}
                         </span>
                       </td>
                       <td className="py-2 px-4 text-sm text-light-gray-80 font-mono whitespace-nowrap text-left">
@@ -724,7 +709,7 @@ const EntriesTable = (props: EntriesTableProps) => {
                 <span
                   className={`px-2 py-0.5 text-xs font-bold rounded-full border ${getVerdictStyle(entryToView.verdict)}`}
                 >
-                  {entryToView.verdict}
+                  {t(`projects.entries.verdicts.${entryToView.verdict.toLowerCase().replace(" ", "")}`, entryToView.verdict)}
                 </span>
 
                 {entryToView.score !== undefined && (

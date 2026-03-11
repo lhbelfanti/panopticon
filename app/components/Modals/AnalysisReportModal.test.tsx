@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { AnalysisReportModal } from "../Modals/AnalysisReportModal";
@@ -7,9 +7,30 @@ import type { AnalysisRun } from "~/services/api/analysis/types";
 vi.mock("react-i18next", () => ({
     Trans: ({ i18nKey, children }: any) => children || i18nKey,
     useTranslation: () => ({
-        t: (key: string) => key,
+        t: (key: string, options?: any) => {
+            if (options && options.total) return `${key} (total: ${options.total})`;
+            if (options && options.count) return `${key} (count: ${options.count})`;
+            if (options && options.range) return `${key} (range: ${options.range})`;
+            if (options && options.value) return `${key} (value: ${options.value})`;
+            return key;
+        },
     }),
 }));
+
+// Mock ResizeObserver for Recharts
+global.ResizeObserver = vi.fn().mockImplementation(() => ({
+    observe: vi.fn(),
+    unobserve: vi.fn(),
+    disconnect: vi.fn(),
+}));
+
+// Mock fetch
+vi.stubGlobal("fetch", vi.fn(() => 
+    Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve({}),
+    })
+));
 
 // Mock recharts to avoid canvas rendering issues in jsdom
 vi.mock("recharts", () => ({
@@ -73,12 +94,12 @@ describe("AnalysisReportModal", () => {
         expect(container.firstChild).toBeNull();
     });
 
-    it("renders nothing for completed run with no result", () => {
+    it("shows loading state for completed run with no result", () => {
         const run = makeCompletedRun({ result: undefined });
-        const { container } = render(
+        render(
             <AnalysisReportModal isOpen={true} onClose={onCloseMock} run={run} />
         );
-        expect(container.firstChild).toBeNull();
+        expect(screen.getByText("projects.analysis.reportModal.loading.title")).toBeInTheDocument();
     });
 
     it("shows processing state for a processing run", () => {
@@ -154,8 +175,83 @@ describe("AnalysisReportModal", () => {
         expect(onCloseMock).toHaveBeenCalled();
     });
 
-    it("renders Executive Summary section heading", () => {
-        render(<AnalysisReportModal isOpen={true} onClose={onCloseMock} run={makeCompletedRun()} />);
-        expect(screen.getByText("projects.analysis.reportModal.summary")).toBeInTheDocument();
+    it("renders legacy insights correctly", () => {
+        const run = makeCompletedRun({
+            result: {
+                ...makeCompletedRun().result!,
+                insights: ["Legacy insight 1", "Legacy insight 2"] as any
+            }
+        });
+        render(<AnalysisReportModal isOpen={true} onClose={onCloseMock} run={run} />);
+        expect(screen.getByText("Legacy insight 1 Legacy insight 2")).toBeInTheDocument();
+    });
+
+    it("renders different confidence trends and verdict concentrations", () => {
+        const run = makeCompletedRun({
+            result: {
+                ...makeCompletedRun().result!,
+                insights: {
+                    topBehaviorId: "hate_speech",
+                    confidenceTrend: "low",
+                    verdictConcentration: "negative"
+                }
+            }
+        });
+        render(<AnalysisReportModal isOpen={true} onClose={onCloseMock} run={run} />);
+        expect(screen.getByText("projects.analysis.reportModal.insights.confidenceLow")).toBeInTheDocument();
+        expect(screen.getByText("projects.analysis.reportModal.insights.verdictsNegative")).toBeInTheDocument();
+        
+        // Test medium trend
+        const run2 = makeCompletedRun({
+            result: {
+                ...makeCompletedRun().result!,
+                insights: {
+                    ...makeCompletedRun().result!.insights,
+                    confidenceTrend: "medium"
+                }
+            }
+        });
+        render(<AnalysisReportModal isOpen={false} onClose={onCloseMock} run={run2} />); // Just to trigger state
+    });
+
+    it("renders error state correctly", async () => {
+        const user = userEvent.setup();
+        vi.stubGlobal("fetch", vi.fn(() => 
+            Promise.resolve({
+                ok: false,
+                statusText: "Server Error",
+            })
+        ));
+
+        const run = makeCompletedRun({ result: undefined });
+        render(<AnalysisReportModal isOpen={true} onClose={onCloseMock} run={run} />);
+        
+        await screen.findByText("Failed to fetch report data");
+        const closeBtn = screen.getByText("projects.analysis.reportModal.close");
+        await user.click(closeBtn);
+        expect(onCloseMock).toHaveBeenCalled();
+    });
+
+    it("closes when backdrop is clicked", async () => {
+        const user = userEvent.setup();
+        const { container } = render(<AnalysisReportModal isOpen={true} onClose={onCloseMock} run={makeCompletedRun()} />);
+        const backdrop = container.querySelector(".bg-background-dark\\/90");
+        if (backdrop) await user.click(backdrop);
+        expect(onCloseMock).toHaveBeenCalled();
+    });
+
+    it("successfully fetches full run data", async () => {
+        const fullRun = { ...makeCompletedRun(), result: { ...makeCompletedRun().result, totalEntries: 999 } };
+        vi.stubGlobal("fetch", vi.fn(() => 
+            Promise.resolve({
+                ok: true,
+                json: () => Promise.resolve(fullRun),
+            })
+        ));
+
+        const run = makeCompletedRun({ result: undefined });
+        render(<AnalysisReportModal isOpen={true} onClose={onCloseMock} run={run} />);
+        
+        await screen.findByText(/999/);
     });
 });

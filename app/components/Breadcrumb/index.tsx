@@ -1,19 +1,11 @@
 import { Link } from "react-router";
 import { ChevronRight } from "lucide-react";
-import type { ReactNode } from "react";
+import type { BreadcrumbProps, BreadcrumbItem } from "./types";
 
-export interface BreadcrumbItem {
-    label: string;
-    to?: string;
-    icon?: ReactNode;
-}
+export type { BreadcrumbItem };
 
-interface BreadcrumbProps {
-    items: BreadcrumbItem[];
-    className?: string;
-}
-
-export const Breadcrumb = ({ items, className = "" }: BreadcrumbProps) => {
+export const Breadcrumb = (props: BreadcrumbProps) => {
+    const { items, className = "" } = props;
     return (
         <nav className={`flex items-center gap-3 text-light-gray-50 font-medium ${className}`}>
             {items.map((item, index) => {

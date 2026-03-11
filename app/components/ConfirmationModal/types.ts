@@ -12,4 +12,5 @@ export interface ConfirmationModalProps {
   confirmMethod?: "post" | "get" | "put" | "patch" | "delete";
   hiddenInputs?: Record<string, string>;
   isDestructive?: boolean;
+  maxWidth?: string;
 }

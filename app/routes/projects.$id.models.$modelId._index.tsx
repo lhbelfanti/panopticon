@@ -1,4 +1,5 @@
 import { useLoaderData, useOutletContext } from "react-router";
+import { useTranslation } from "react-i18next";
 
 import {
   deleteEntry,
@@ -7,12 +8,13 @@ import {
 } from "~/services/api/entries/index.server";
 
 import EntriesTable from "~/components/EntriesTable";
+import { BackButton } from "~/components/ui/BackButton";
+import { SubprojectHeader } from "~/components/Project/SubprojectHeader";
 
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
-import type { EntryVerdict } from "~/services/api/entries/types";
 import type { ProjectContext } from "~/routes/projects.$id";
 
-export const meta = () => [{ title: "Panopticon" }];
+export const meta = () => [{ title: "Panopticon - Model Entries" }];
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
   const { id, modelId } = params;
@@ -65,16 +67,32 @@ export default function SubprojectEntriesPage() {
   const { modelId, data, filterCol, filterVal, filterOp, filterBias } =
     useLoaderData<typeof loader>();
   const { project } = useOutletContext<ProjectContext>();
+  const { t } = useTranslation();
 
   return (
-    <EntriesTable
-      project={project}
-      modelId={modelId}
-      data={data}
-      filterCol={filterCol}
-      filterVal={filterVal}
-      filterOp={filterOp}
-      filterBias={filterBias}
-    />
+    <div className="flex-1 p-8 lg:p-12 overflow-y-auto bg-background-dark min-h-screen custom-scrollbar flex flex-col gap-6">
+      <div className="max-w-max">
+        <BackButton
+          to={`/projects/${project.id}`}
+          text={t("projects.entries.backToProject")}
+        />
+      </div>
+
+      <SubprojectHeader
+        project={project}
+        modelId={modelId}
+        description={t("projects.entries.desc")}
+      />
+
+      <EntriesTable
+        project={project}
+        modelId={modelId}
+        data={data}
+        filterCol={filterCol}
+        filterVal={filterVal}
+        filterOp={filterOp}
+        filterBias={filterBias}
+      />
+    </div>
   );
 }

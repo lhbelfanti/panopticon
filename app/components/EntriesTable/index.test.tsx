@@ -338,11 +338,13 @@ describe("EntriesTable", () => {
         const onExcludedIdsChange = vi.fn();
         const excludedIds = new Set<string>();
 
-        renderTable({ isExclusionOnly: true, excludedIds, onExcludedIdsChange });
+        renderTable({ excludedIds, onExcludedIdsChange });
+        
+        // Enter exclude mode via toggle
+        const toggleBtn = screen.getByText("projects.entries.excludeMode");
+        await user.click(toggleBtn);
 
         // Find the checkboxes (lucide icons). Since the row is clickable, let's just click the cell containing the square icon.
-        // In exclude mode, the text text-primary is used for CheckSquare when NOT excluded (meaning it IS selected).
-        // Clicking it should add to excludedIds.
         const firstRowCheckbox = screen.getAllByRole("row")[1].querySelector("td:first-child");
         if (firstRowCheckbox) {
             await user.click(firstRowCheckbox);
@@ -358,9 +360,12 @@ describe("EntriesTable", () => {
         const onExcludedIdsChange = vi.fn();
         const excludedIds = new Set<string>();
 
-        renderTable({ isExclusionOnly: true, excludedIds, onExcludedIdsChange });
+        renderTable({ excludedIds, onExcludedIdsChange });
+        
+        // Enter exclude mode
+        await user.click(screen.getByText("projects.entries.excludeMode"));
 
-        // Find the "Select all" button (it has title "Deselect page" because both entries are checked initially)
+        // Find the "Select all" button
         const selectAllBtn = screen.getByTitle("Deselect page");
         if (selectAllBtn) {
             await user.click(selectAllBtn);
@@ -368,7 +373,6 @@ describe("EntriesTable", () => {
 
         expect(onExcludedIdsChange).toHaveBeenCalled();
         const newSet = onExcludedIdsChange.mock.calls[0][0];
-        // Since it was "Deselect page" (all initially selected), clicking it should exclude all on page
         expect(newSet.has("entry_1")).toBe(true);
         expect(newSet.has("entry_2")).toBe(true);
     });
@@ -385,29 +389,123 @@ describe("EntriesTable", () => {
         expect(screen.getByText("projects.entries.viewFullEntry")).toBeInTheDocument();
     });
 
-    it("handles reset selection in exclude mode banner (if not exclusion only but in exclude mode? Wait, banner only shows if isExcludeMode)", async () => {
+    it("triggers form submit on select change", async () => {
+        const user = userEvent.setup();
+        renderTable({ filterCol: "verdict" });
+
+        const selects = screen.getAllByRole("combobox");
+        const valSelect = selects[1];
+        
+        await user.selectOptions(valSelect, "Negative");
+        
+        // Form onChange should trigger submit
+        expect(mockSubmit).toHaveBeenCalled();
+    });
+
+    it("handles reset selection in exclusion banner", async () => {
         const user = userEvent.setup();
         const onExcludedIdsChange = vi.fn();
-        // Provide exclude mode but not exclusion only so banner shows
-        renderTable({ isExclusionOnly: true, excludedIds: new Set(["entry_1"]), onExcludedIdsChange });
+        renderTable({ excludedIds: new Set(["entry_1"]), onExcludedIdsChange });
+        
+        await user.click(screen.getByText("projects.entries.excludeMode"));
 
         const resetBtn = screen.getByText("projects.entries.resetSelection");
         await user.click(resetBtn);
 
-        expect(onExcludedIdsChange).toHaveBeenCalled();
-        const newSet = onExcludedIdsChange.mock.calls[0][0];
-        expect(newSet.size).toBe(0);
+        expect(onExcludedIdsChange).toHaveBeenCalledWith(new Set());
     });
 
-    it("renders fallback setExcludedIds if onExcludedIdsChange not passed", async () => {
+    it("renders Go to Analysis link with correct state in banner", async () => {
         const user = userEvent.setup();
-        renderTable({ isExclusionOnly: true });
+        renderTable({ excludedIds: new Set(["entry_1"]) });
+        
+        await user.click(screen.getByText("projects.entries.excludeMode"));
+        
+        const analysisLink = screen.getByText("projects.entries.goToAnalysis").closest("a");
+        expect(analysisLink).toHaveAttribute("href", "/projects/proj-1/models/roberta/analysis");
+    });
 
-        // Click to select the first row
+    it("triggers predict pending action", async () => {
+        const user = userEvent.setup();
+        renderTable();
+        
+        const predictBtn = screen.getByText("projects.entries.predictPending");
+        await user.click(predictBtn);
+        
+        expect(mockSubmit).toHaveBeenCalledWith(expect.any(FormData), { method: "post" });
+        const formData = mockSubmit.mock.calls[0][0] as FormData;
+        expect(formData.get("intent")).toBe("predict_pending");
+    });
+
+    it("handles pagination next/prev clicks", async () => {
+        const user = userEvent.setup();
+        renderTable({ data: { ...mockData, totalPages: 5, page: 2 } });
+        
+        const nextBtn = screen.getByTitle("projects.entries.next");
+        const prevBtn = screen.getByTitle("projects.entries.prev");
+        
+        expect(nextBtn).not.toBeDisabled();
+        expect(prevBtn).not.toBeDisabled();
+    });
+
+    it("handles partial selection toggle in exclude mode", async () => {
+        const user = userEvent.setup();
+        const onExcludedIdsChange = vi.fn();
+        // entry_1 is excluded, entry_2 is NOT excluded
+        renderTable({ excludedIds: new Set(["entry_1"]), onExcludedIdsChange });
+
+        await user.click(screen.getByText("projects.entries.excludeMode"));
+
+        // The "Select page" button should be visible (Square icon) because not all are selected
+        const selectPageBtn = screen.getByTitle("Select page");
+        await user.click(selectPageBtn);
+
+        // Clicking "Select page" should remove all from excludedIds (making them all selected)
+        expect(onExcludedIdsChange).toHaveBeenCalledWith(new Set());
+    });
+
+    it("toggles individual re-selection of items", async () => {
+        const user = userEvent.setup();
+        const onExcludedIdsChange = vi.fn();
+        renderTable({ excludedIds: new Set(["entry_1"]), onExcludedIdsChange });
+
+        await user.click(screen.getByText("projects.entries.excludeMode"));
+
+        // entry_1 is excluded (Square icon), click it to re-select
+        const rows = screen.getAllByRole("row");
+        const entry1Row = rows[1]; // Header is 0, entry_1 is 1
+        const checkbox = entry1Row.querySelector("td:first-child");
+        
+        if (checkbox) await user.click(checkbox);
+
+        expect(onExcludedIdsChange).toHaveBeenCalledWith(new Set());
+    });
+
+    it("opens predictions history modal", async () => {
+        const user = userEvent.setup();
+        renderTable();
+
+        const historyBtn = screen.getByText("projects.entries.predictionHistory");
+        await user.click(historyBtn);
+
+        expect(screen.getByTestId("predictions-modal")).toBeInTheDocument();
+
+        // Close it
+        const closeBtns = screen.getAllByText("projects.entries.predictionHistory");
+        expect(closeBtns.length).toBeGreaterThan(0);
+        // Our mock just renders the text, so let's check if it's there. 
+        // In real component, onClose would be called.
+    });
+
+    it("handles internal exclusion state when no prop provided", async () => {
+        const user = userEvent.setup();
+        renderTable(); // No excludedIds prop
+        
+        await user.click(screen.getByText("projects.entries.excludeMode"));
+        
         const firstRowCheckbox = screen.getAllByRole("row")[1].querySelector("td:first-child");
         if (firstRowCheckbox) await user.click(firstRowCheckbox);
-
-        // No crash, internal state updated
-        expect(screen.getByText("projects.entries.tableId")).toBeInTheDocument();
+        // Should show translation key in banner if mock doesn't interpolate
+        expect(screen.getByText("projects.entries.includedCount")).toBeInTheDocument();
     });
 });

@@ -15,6 +15,7 @@ const ConfirmationModal = (props: ConfirmationModalProps) => {
     confirmMethod = "post",
     hiddenInputs = {},
     isDestructive = true,
+    maxWidth = "max-w-md"
   } = props;
 
   if (!isOpen) return null;
@@ -30,7 +31,7 @@ const ConfirmationModal = (props: ConfirmationModalProps) => {
   const overlayClasses =
     "fixed inset-0 z-[100] flex items-center justify-center bg-background-dark/80 backdrop-blur-sm p-4";
   const modalCardClasses =
-    "bg-surface-dark border border-white/10 rounded-2xl shadow-2xl p-6 lg:p-8 w-full max-w-sm flex flex-col items-center animate-in fade-in zoom-in-95 duration-200";
+    `bg-surface-dark border border-white/10 rounded-2xl shadow-2xl p-6 lg:p-8 w-full ${maxWidth} flex flex-col items-center animate-in fade-in zoom-in-95 duration-200`;
   const cancelButtonClasses =
     "flex-1 py-2.5 px-4 rounded-lg font-semibold cursor-pointer text-light-gray hover:text-white-1 bg-white/5 hover:bg-white/10 transition-colors duration-150";
   const confirmButtonClasses = `flex-1 flex justify-center items-center py-2.5 px-4 rounded-lg cursor-pointer font-semibold text-white-1 transition-colors duration-150 shadow-lg ${btnColor}`;
