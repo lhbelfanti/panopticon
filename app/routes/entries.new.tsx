@@ -11,7 +11,7 @@ import {
 } from "react-router";
 import { i18next } from "~/localization/i18n.server";
 import { useTranslation } from "react-i18next";
-import { CopyPlus } from "lucide-react";
+import { CopyPlus, CheckCircle2 } from "lucide-react";
 
 import { getProjects } from "~/services/api/projects/index.server";
 import { getAppConfig } from "~/services/api/config.server";
@@ -96,7 +96,12 @@ export default function GlobalEntriesNewPage() {
     }, [searchParams, projects]);
 
     const isSubmitting = navigation.state === "submitting";
-
+    const actionData = useActionData<{ success?: boolean; count?: number; error?: string }>();
+ 
+    const selectedProject = useMemo(() => 
+        selectedProjectId ? projects.find(p => p.id === selectedProjectId) : null,
+    [projects, selectedProjectId]);
+ 
     const handleProjectChange = (projectId: number | "") => {
         setSelectedProjectId(projectId);
         if (!projectId) {
@@ -161,7 +166,17 @@ export default function GlobalEntriesNewPage() {
                         {t("projects.entries.new.subtitleGlobal", "Select a configuration below to import data into your workspace.")}
                     </p>
                 </div>
-
+ 
+                {actionData?.success && (
+                    <div className="bg-green-500/10 border border-green-500/20 p-4 rounded-xl flex items-center gap-3 text-green-400 animate-in fade-in slide-in-from-top-2 duration-300">
+                        <CheckCircle2 size={24} />
+                        <div>
+                            <p className="font-bold">{t("projects.entries.new.bulkUpload.successTitle")}</p>
+                            <p className="text-sm opacity-90">{t("projects.entries.new.bulkUpload.successDesc", { count: actionData.count })}</p>
+                        </div>
+                    </div>
+                )}
+ 
                 <ConfigurationSection
                     projects={projects}
                     platforms={platforms}

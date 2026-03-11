@@ -1,6 +1,7 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Upload, FileText, CheckCircle2, AlertCircle, DownloadCloud, TableProperties, Trash2 } from "lucide-react";
 import { useTranslation, Trans } from "react-i18next";
+import { useActionData } from "react-router";
 import type { BulkUploadProps } from "./types";
 
 export const BulkUpload = (props: BulkUploadProps) => {
@@ -11,6 +12,16 @@ export const BulkUpload = (props: BulkUploadProps) => {
     const [error, setError] = useState<string | null>(null);
     const [isDragActive, setIsDragActive] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const actionData = useActionData<{ success?: boolean; error?: string }>();
+ 
+    useEffect(() => {
+        if (actionData?.success) {
+            setFile(null);
+            setParsedEntries(null);
+            setError(null);
+            if (fileInputRef.current) fileInputRef.current.value = "";
+        }
+    }, [actionData]);
 
     const XLogo = () => (
         <svg viewBox="0 0 24 24" aria-hidden="true" className="w-5 h-5 fill-current">
