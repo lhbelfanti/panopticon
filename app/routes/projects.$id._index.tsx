@@ -4,7 +4,9 @@ import {
   useNavigation,
   useOutletContext,
   useRouteLoaderData,
+  type MetaFunction,
 } from "react-router";
+import { i18next } from "~/localization/i18n.server";
 import { useTranslation } from "react-i18next";
 import { Trash2 } from "lucide-react";
 
@@ -21,9 +23,9 @@ import { BackButton } from "~/components/ui/BackButton";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
 import type { ProjectContext } from "~/routes/projects.$id";
 
-export const meta = () => {
+export const meta: MetaFunction<typeof loader> = ({ data }) => {
   return [
-    { title: "Panopticon" },
+    { title: `Panopticon - ${data?.title}` },
     {
       name: "description",
       content: "Adverse Human Behaviour Analysis Platform",
@@ -45,10 +47,12 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
   return null;
 };
 
-export const loader = async ({ params }: LoaderFunctionArgs) => {
+export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   const { id } = params;
   if (!id) throw new Response("Not Found", { status: 404 });
-  return {};
+  const t = await i18next.getFixedT(request);
+  const title = t("titles.projectDetails");
+  return { title };
 };
 
 export default function ProjectDetailsPage() {
@@ -62,11 +66,9 @@ export default function ProjectDetailsPage() {
   const isDeleting = navigation.formData?.get("intent") === "delete_project";
 
   return (
-    <div className="flex-1 p-8 lg:p-12 overflow-y-auto bg-background-dark min-h-screen custom-scrollbar relative">
-      <div className="max-w-6xl mx-auto flex flex-col gap-10">
-        <div className="animate-in fade-in slide-in-from-top-4 duration-300">
-          <BackButton to="/" text={t("sidebar.home")} />
-        </div>
+    <div className="flex-1 p-8 lg:p-12 overflow-y-auto bg-background-dark min-h-screen custom-scrollbar">
+      <div className="max-w-4xl mx-auto flex flex-col gap-6">
+        <BackButton to="/" text={t("sidebar.home")} />
 
         <ProjectDetailsHeader project={project} behaviorConfigs={behaviorConfigs} />
 

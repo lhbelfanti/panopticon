@@ -1,4 +1,5 @@
-import { useLoaderData, useOutletContext } from "react-router";
+import { useLoaderData, useOutletContext, type MetaFunction } from "react-router";
+import { i18next } from "~/localization/i18n.server";
 import { useTranslation } from "react-i18next";
 
 import {
@@ -14,7 +15,15 @@ import { SubprojectHeader } from "~/components/Project/SubprojectHeader";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
 import type { ProjectContext } from "~/routes/projects.$id";
 
-export const meta = () => [{ title: "Panopticon - Model Entries" }];
+export const meta: MetaFunction<typeof loader> = ({ data }) => {
+  return [
+    { title: `Panopticon - ${data?.title}` },
+    {
+      name: "description",
+      content: "Adverse Human Behaviour Analysis Platform",
+    },
+  ];
+};
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
   const { id, modelId } = params;
@@ -60,7 +69,10 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     filterBias,
   });
 
-  return { modelId, data, filterCol, filterVal, filterOp, filterBias };
+  const t = await i18next.getFixedT(request);
+  const title = t("titles.modelEntries");
+
+  return { modelId, data, filterCol, filterVal, filterOp, filterBias, title };
 };
 
 export default function SubprojectEntriesPage() {

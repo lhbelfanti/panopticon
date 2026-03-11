@@ -4,8 +4,10 @@ import {
     useActionData,
     useNavigation,
     useOutletContext,
-    useRouteLoaderData
+    useRouteLoaderData,
+    type MetaFunction
 } from "react-router";
+import { i18next } from "~/localization/i18n.server";
 import { useTranslation } from "react-i18next";
 import { Folder, Trash2 } from "lucide-react";
 
@@ -24,9 +26,13 @@ import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
 import type { MLModel, TargetBehavior } from "~/services/api/projects/types";
 import type { ProjectContext } from "~/routes/projects.$id";
 
-export const meta = () => {
+export const meta: MetaFunction<typeof loader> = ({ data }) => {
     return [
-        { title: "Panopticon - Project Settings" },
+        { title: `Panopticon - ${data?.title}` },
+        {
+            name: "description",
+            content: "Adverse Human Behaviour Analysis Platform",
+        },
     ];
 };
 
@@ -67,10 +73,12 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     return null;
 };
 
-export const loader = async ({ params }: LoaderFunctionArgs) => {
+export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     const { id } = params;
     if (!id) throw new Response("Not Found", { status: 404 });
-    return {};
+    const t = await i18next.getFixedT(request);
+    const title = t("titles.projectSettings");
+    return { title };
 };
 
 export default function ProjectSettingsPage() {
@@ -87,13 +95,11 @@ export default function ProjectSettingsPage() {
 
     return (
         <div className="flex-1 p-8 lg:p-12 overflow-y-auto bg-background-dark min-h-screen custom-scrollbar">
-            <div className="max-w-3xl mx-auto">
-                <div className="mb-8">
-                    <BackButton
-                        to={`/projects/${project.id}`}
-                        text={t("projects.settings.backToProject")}
-                    />
-                </div>
+            <div className="max-w-3xl mx-auto flex flex-col gap-6">
+                <BackButton
+                    to={`/projects/${project.id}`}
+                    text={t("projects.settings.backToProject")}
+                />
 
                 <SettingsHeader
                     title={t("projects.settings.title")}

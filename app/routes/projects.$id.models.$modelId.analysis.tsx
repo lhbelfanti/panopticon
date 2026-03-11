@@ -5,8 +5,10 @@ import {
     useNavigation,
     useSubmit,
     useActionData,
-    useOutletContext
+    useOutletContext,
+    type MetaFunction
 } from "react-router";
+import { i18next } from "~/localization/i18n.server";
 import { useTranslation } from "react-i18next";
 
 import {
@@ -27,7 +29,15 @@ import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
 import type { AnalysisRun } from "~/services/api/analysis/types";
 import type { ProjectContext } from "~/routes/projects.$id";
 
-export const meta = () => [{ title: "Panopticon | Analysis" }];
+export const meta: MetaFunction<typeof loader> = ({ data }) => {
+    return [
+        { title: `Panopticon - ${data?.title}` },
+        {
+            name: "description",
+            content: "Adverse Human Behaviour Analysis Platform",
+        },
+    ];
+};
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     const { modelId, id } = params;
@@ -53,7 +63,10 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
         filterBias,
     });
 
-    return { modelId, history, entriesData, filterCol, filterVal, filterOp, filterBias };
+    const t = await i18next.getFixedT(request);
+    const title = t("titles.modelAnalysis");
+
+    return { modelId, history, entriesData, filterCol, filterVal, filterOp, filterBias, title };
 };
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {

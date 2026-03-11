@@ -5,7 +5,7 @@ import type { BackButtonProps } from "./types";
 export const BackButton = (props: BackButtonProps) => {
     const { to, text, icon, className = "" } = props;
 
-    const defaultClassName = "flex items-center gap-2 text-primary hover:text-white-1 transition-colors text-sm font-semibold max-w-max mb-8";
+    const defaultClassName = "flex items-center gap-2 text-primary hover:text-white-1 transition-colors text-sm font-semibold max-w-max";
 
     return (
         <Link

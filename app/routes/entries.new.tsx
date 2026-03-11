@@ -7,7 +7,9 @@ import {
     useNavigation,
     useSubmit,
     useSearchParams,
+    type MetaFunction,
 } from "react-router";
+import { i18next } from "~/localization/i18n.server";
 import { useTranslation } from "react-i18next";
 import { CopyPlus } from "lucide-react";
 
@@ -20,14 +22,26 @@ import { ConfigurationSection } from "~/components/EntryIngestion/ConfigurationS
 import { IngestionTabs } from "~/components/EntryIngestion/IngestionTabs";
 import { BackButton } from "~/components/ui/BackButton";
 
-import type { ActionFunctionArgs } from "react-router";
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
 
-export const loader = async () => {
-    const [projects, config] = await Promise.all([
+export const meta: MetaFunction<typeof loader> = ({ data }) => {
+    return [
+        { title: `Panopticon - ${data?.title}` },
+        {
+            name: "description",
+            content: "Adverse Human Behaviour Analysis Platform",
+        },
+    ];
+};
+
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+    const [projects, config, t] = await Promise.all([
         getProjects(),
-        getAppConfig()
+        getAppConfig(),
+        i18next.getFixedT(request)
     ]);
-    return { projects, platforms: config.platforms };
+    const title = t("titles.addEntries");
+    return { projects, platforms: config.platforms, title };
 };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
@@ -135,7 +149,7 @@ export default function GlobalEntriesNewPage() {
 
     return (
         <div className="flex-1 p-8 lg:p-12 overflow-y-auto bg-background-dark min-h-screen custom-scrollbar">
-            <div className="max-w-4xl mx-auto">
+            <div className="max-w-4xl mx-auto flex flex-col gap-6">
                 <BackButton to="/" text={t("sidebar.home")} />
 
                 <div className="mb-10 animate-in fade-in slide-in-from-top-4 duration-500">

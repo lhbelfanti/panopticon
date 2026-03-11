@@ -9,7 +9,7 @@ export const SubprojectHeader = (props: SubprojectHeaderProps) => {
     const { t } = useTranslation();
 
     return (
-        <div className="flex flex-col gap-4 animate-in fade-in slide-in-from-bottom-2 duration-300 mb-6">
+        <div className="flex flex-col gap-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
             <div>
                 <Breadcrumb
                     items={[

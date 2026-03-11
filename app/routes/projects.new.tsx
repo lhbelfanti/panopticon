@@ -5,7 +5,9 @@ import {
   useLoaderData,
   useNavigation,
   useRouteLoaderData,
+  type MetaFunction,
 } from "react-router";
+import { i18next } from "~/localization/i18n.server";
 
 import {
   createProject,
@@ -19,9 +21,9 @@ import { useTranslation } from "react-i18next";
 import type { LoaderFunctionArgs } from "react-router";
 import type { MLModel, TargetBehavior } from "~/services/api/projects/types";
 
-export const meta = () => {
+export const meta: MetaFunction<typeof loader> = ({ data }) => {
   return [
-    { title: "Panopticon" },
+    { title: `Panopticon - ${data?.title}` },
     {
       name: "description",
       content: "Adverse Human Behaviour Analysis Platform",
@@ -60,7 +62,9 @@ export const action = async ({ request }: { request: Request }) => {
 };
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  return {};
+  const t = await i18next.getFixedT(request);
+  const title = t("titles.createProject");
+  return { title };
 };
 
 const NewProjectPage = () => {

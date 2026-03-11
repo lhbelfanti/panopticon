@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { redirect, useActionData, useNavigation } from "react-router";
+import { redirect, useActionData, useNavigation, type MetaFunction } from "react-router";
+import { i18next } from "~/localization/i18n.server";
 
 import { login, signup, requestPasswordReset } from "~/services/api/auth/index.server";
 
@@ -8,9 +9,15 @@ import { AuthFormManager } from "~/components/LoginForms/AuthFormManager";
 
 import { useTranslation } from "react-i18next";
 
-export const meta = () => {
+export const loader = async ({ request }: { request: Request }) => {
+  const t = await i18next.getFixedT(request);
+  const title = t("titles.login");
+  return { title };
+};
+
+export const meta: MetaFunction<typeof loader> = ({ data }) => {
   return [
-    { title: "Panopticon" },
+    { title: `Panopticon - ${data?.title}` },
     {
       name: "description",
       content: "Adverse Human Behaviour Analysis Platform",
