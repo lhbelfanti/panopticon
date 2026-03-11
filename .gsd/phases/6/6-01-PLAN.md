@@ -361,7 +361,21 @@ Gap 8 (config auth): Requires team decision — recommend requiring Authorizatio
 Gap 9 (analysis polling): Already resolved — GET /analysis/{runId}/v1 is the polling endpoint; lifecycle is processing → completed | failed.
   </action>
   <verify>
-    <automated>test -f /Users/lhbelfanti/workspace/github/panopticon/ENDPOINTS.md && echo "ENDPOINTS.md exists" && wc -l /Users/lhbelfanti/workspace/github/panopticon/ENDPOINTS.md</automated>
+    <automated>
+F=/Users/lhbelfanti/workspace/github/panopticon/ENDPOINTS.md
+test -f "$F" && echo "ENDPOINTS.md exists" && wc -l "$F" &&
+grep -q "^## Auth" "$F" && echo "domain: Auth OK" &&
+grep -q "^## Users" "$F" && echo "domain: Users OK" &&
+grep -q "^## Config" "$F" && echo "domain: Config OK" &&
+grep -q "^## Projects" "$F" && echo "domain: Projects OK" &&
+grep -q "^## Entries" "$F" && echo "domain: Entries OK" &&
+grep -q "^## Predictions" "$F" && echo "domain: Predictions OK" &&
+grep -q "^## Analysis" "$F" && echo "domain: Analysis OK" &&
+grep -q "^## Dashboard" "$F" && echo "domain: Dashboard OK" &&
+grep -q "Security Checklist" "$F" && echo "Security Checklist OK" &&
+grep -q "Gap 1" "$F" && echo "Gap 1 OK" &&
+grep -q "Gap 9" "$F" && echo "Gap 9 OK"
+    </automated>
   </verify>
   <done>
 ENDPOINTS.md exists at the project root. It contains sections for Overview, Resource Ownership Chain, Common Headers, Common Response Patterns, Type Definitions, all eight endpoint domains (Auth, Users, Config, Projects, Entries, Predictions, Analysis, Dashboard), a Security Checklist table, and a Design Decisions section addressing all 9 research gaps. Every mocked API call from RESEARCH.md maps to exactly one documented endpoint.
