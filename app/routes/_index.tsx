@@ -41,7 +41,7 @@ export const loader = async ({ request }: { request: Request }) => {
     getRecentActivities(),
   ]);
 
-  return { summary, activities, title };
+  return { summary, recentActivities: activities, title };
 };
 
 const Index = () => {
