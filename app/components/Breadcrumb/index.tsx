@@ -20,7 +20,7 @@ export const Breadcrumb = (props: BreadcrumbProps) => {
 
                 return (
                     <div key={index} className="flex items-center gap-3">
-                        {index > 0 && <span className="opacity-50 text-light-gray-50 flex items-center">/</span>}
+                        {index > 0 && <span className="opacity-50 text-light-gray-50 flex items-center"><ChevronRight size={16} /></span>}
                         {item.to && !isLast ? (
                             <Link to={item.to} className="transition-colors">
                                 {content}

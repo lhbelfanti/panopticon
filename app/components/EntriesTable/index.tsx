@@ -26,7 +26,6 @@ import {
   Square,
   History
 } from "lucide-react";
-import { Breadcrumb } from "~/components/Breadcrumb";
 
 import type {
   Entry,
@@ -133,12 +132,11 @@ const EntriesTable = (props: EntriesTableProps) => {
   // Convention: extract long Tailwind strings into variables
   const containerClasses = isExclusionOnly
     ? "flex flex-col flex-1 gap-6 relative px-2 pb-4 overflow-hidden"
-    : "flex-1 overflow-y-auto bg-background-dark min-h-screen custom-scrollbar relative flex flex-col gap-6";
+    : `relative flex flex-col gap-6 ${isExclusionOnly ? "flex-1" : ""}`;
 
   const headerSectionClasses =
     "flex flex-col gap-4 animate-in fade-in slide-in-from-bottom-2 duration-300";
-  const tableCardClasses =
-    "bg-surface-dark border border-white/5 rounded-2xl shadow-xl overflow-hidden flex flex-col flex-1 animate-in fade-in slide-in-from-bottom-4 duration-500";
+  const tableCardClasses = `bg-surface-dark border border-white/5 rounded-2xl shadow-xl overflow-hidden flex flex-col animate-in fade-in slide-in-from-bottom-4 duration-500 ${isExclusionOnly ? "flex-1" : ""}`;
   const toolbarClasses =
     "p-4 border-b border-white/5 bg-black/10 flex flex-col sm:flex-row gap-4 justify-between items-center";
   const tableHeaderRowClasses =
@@ -527,7 +525,7 @@ const EntriesTable = (props: EntriesTableProps) => {
                                 e.stopPropagation();
                                 setEntryToView(entry);
                               }}
-                              title="View full entry"
+                              title={t("projects.entries.viewEntry", "View full entry")}
                               className="p-1.5 rounded-full hover:bg-blue-500/20 hover:scale-105 text-light-gray-50 hover:text-blue-400 transition-all"
                             >
                               <Eye size={16} />
