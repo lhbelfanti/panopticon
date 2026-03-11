@@ -52,7 +52,7 @@ const Index = () => {
             {t("dashboard.welcome")}
           </h1>
           <div className="flex items-center gap-4">
-            <p className="text-light-gray-70 text-lg flex items-center gap-3">
+            <p className="text-light-gray-70 text-lg flex items-center gap-2">
               <Trans i18nKey="dashboard.subtitle" components={{ 1: <AdverseBehaviorLabel /> }} />
             </p>
           </div>
