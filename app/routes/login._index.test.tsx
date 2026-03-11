@@ -66,6 +66,27 @@ describe("Login Route", () => {
         await user.click(screen.getByText("login.registerNow"));
         expect(screen.getByText("login.register.title")).toBeInTheDocument();
     });
+    it("switches back to login from register view", async () => {
+        const user = userEvent.setup();
+        renderLogin();
+
+        await user.click(screen.getByText("login.registerNow"));
+        expect(screen.getByText("login.register.title")).toBeInTheDocument();
+
+        await user.click(screen.getByText("login.register.loginHere"));
+        expect(screen.getByText("login.signIn")).toBeInTheDocument();
+    });
+
+    it("switches back to login from forgot password view", async () => {
+        const user = userEvent.setup();
+        renderLogin();
+
+        await user.click(screen.getByText("login.forgotPassword"));
+        expect(screen.getByText("login.recoverPassword.title")).toBeInTheDocument();
+
+        await user.click(screen.getByText("login.recoverPassword.backToLogin"));
+        expect(screen.getByText("login.signIn")).toBeInTheDocument();
+    });
 });
 
 import { action } from "./login._index";
@@ -77,6 +98,18 @@ vi.mock("~/services/api/auth/index.server", () => ({
                 user: { id: 1, name: "Test" },
                 headers: { "Set-Cookie": "session=abc" }
             };
+        }
+        throw new Error("failed");
+    }),
+    signup: vi.fn(async ({ email }) => {
+        if (email === "valid@example.com") {
+            return { signupSuccess: true };
+        }
+        throw new Error("failed");
+    }),
+    requestPasswordReset: vi.fn(async (email) => {
+        if (email === "valid@example.com") {
+            return { resetSuccess: true };
         }
         throw new Error("failed");
     })
@@ -119,6 +152,82 @@ describe("Login Route Functions", () => {
 
         const result = await action({ request });
         expect(result).toEqual({ error: "loginFailed" });
+    });
+
+    it("action handles signup intent success", async () => {
+        const formData = new FormData();
+        formData.set("intent", "signup");
+        formData.set("reg-email", "valid@example.com");
+        const request = new Request("http://localhost/login", {
+            method: "POST",
+            body: formData,
+        });
+
+        const result = await action({ request });
+        expect(result).toEqual({ signupSuccess: true });
+    });
+
+    it("action handles signup intent failure", async () => {
+        const formData = new FormData();
+        formData.set("intent", "signup");
+        formData.set("reg-email", "invalid@example.com");
+        const request = new Request("http://localhost/login", {
+            method: "POST",
+            body: formData,
+        });
+
+        const result = await action({ request });
+        expect(result).toEqual({ error: "signupFailed" });
+    });
+
+    it("action handles forgot_password intent success", async () => {
+        const formData = new FormData();
+        formData.set("intent", "forgot_password");
+        formData.set("reset-email", "valid@example.com");
+        const request = new Request("http://localhost/login", {
+            method: "POST",
+            body: formData,
+        });
+
+        const result = await action({ request });
+        expect(result).toEqual({ resetSuccess: true });
+    });
+
+    it("action handles forgot_password intent failure", async () => {
+        const formData = new FormData();
+        formData.set("intent", "forgot_password");
+        formData.set("reset-email", "invalid@example.com");
+        const request = new Request("http://localhost/login", {
+            method: "POST",
+            body: formData,
+        });
+
+        const result = await action({ request });
+        expect(result).toEqual({ error: "resetFailed" });
+    });
+
+    it("action validates email for signup", async () => {
+        const formData = new FormData();
+        formData.set("intent", "signup");
+        const request = new Request("http://localhost/login", {
+            method: "POST",
+            body: formData,
+        });
+
+        const result = await action({ request });
+        expect(result).toEqual({ error: "emailRequired" });
+    });
+
+    it("action validates email for forgot_password", async () => {
+        const formData = new FormData();
+        formData.set("intent", "forgot_password");
+        const request = new Request("http://localhost/login", {
+            method: "POST",
+            body: formData,
+        });
+
+        const result = await action({ request });
+        expect(result).toEqual({ error: "emailRequired" });
     });
 });
 

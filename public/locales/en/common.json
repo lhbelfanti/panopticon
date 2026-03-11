@@ -35,7 +35,9 @@
     },
     "common": {
         "notAvailable": "Not available",
-        "deleting": "Deleting..."
+        "deleting": "Deleting...",
+        "error": "Error",
+        "submitting": "Submitting..."
     },
     "sidebar": {
         "home": "Home",
@@ -78,7 +80,7 @@
             "title": "Recent activity",
             "noActivity": "No recent activity.",
             "messages": {
-                "project_created": "Project '{{name}}' was created",
+                "project_created": "You created the project '{{name}}'",
                 "csv_uploaded": "You uploaded file '{{name}}' ({{count}} entries)",
                 "tweets_added": "{{count}} entries added to '{{name}}'",
                 "predictions_made": "{{count}} predictions completed with '{{model}}'"
@@ -243,6 +245,7 @@
             "deleteProject": "Delete project",
             "settings": "Settings",
             "deleteProjectDesc": "Are you sure you want to delete the project \"{{name}}\"? This action cannot be undone and will permanently delete all associated entries and subprojects.",
+            "projectId": "PROJECT ID",
             "deleteProjectConfirm": "Delete project"
         },
         "edit": {
@@ -278,6 +281,22 @@
             "deleteEntry": "Delete entry",
             "deleteEntryDesc": "Are you sure you want to delete this entry? This action cannot be undone.",
             "exportCsv": "Export CSV",
+            "numberIdPlaceholder": "Number ID",
+            "searchCharactersPlaceholder": "Search characters",
+            "scorePlaceholder": "0-100",
+            "biasPlaceholder": "Bias",
+            "deselectPage": "Deselect page",
+            "selectPage": "Select page",
+            "selectedLabel": "Selected",
+            "exitExcludeMode": "Exit exclude mode",
+            "excludeMode": "Exclude mode",
+            "verdicts": {
+                "positive": "Positive",
+                "negative": "Negative",
+                "pending": "Pending",
+                "inProgress": "In Progress",
+                "error": "Error"
+            },
             "viewFullEntry": "View full entry",
             "metadataReply": "Is a reply",
             "metadataQuote": "Has quote",
@@ -312,6 +331,11 @@
                 "dropzoneSubtitle": "or click to browse your files",
                 "selectFile": "Select CSV",
                 "errorInvalidCsv": "Please select a valid .csv file",
+                "errorEmptyCsv": "CSV is empty or has no valid entries",
+                "errorNoTextColumn": "No 'text' column found in CSV",
+                "errorMissingTextField": "Row {{row}}: Missing mandatory 'text' field.",
+                "errorEmptyRows": "File is empty or missing data rows",
+                "errorReadFailed": "Failed to read file",
                 "confirmUpload": "Process and upload",
                 "csvInstructionsTitle": "Requirements",
                 "csvInstruction1": "The file must be in .csv format.",
@@ -319,6 +343,7 @@
                 "csvInstruction3": "Use the template to see all supported fields for this configuration.",
                 "successTitle": "Entries added",
                 "successDesc": "Successfully added {{count}} entries to the project.",
+                "removeFile": "Remove file",
                 "targetConfiguration": {
                     "title": "Configuration",
                     "targetProject": "Project",
@@ -350,7 +375,10 @@
                     "dataFormatTitle": "Data format",
                     "formatInstruction": "Make sure your CSV contains the exact headers shown below.",
                     "mandatoryHeaderNote": "Mandatory headers are <1>bolded</1>.",
-                    "downloadTemplate": "Download template"
+                    "downloadTemplate": "Download template",
+                    "readyCount_one": "Success! Ready to upload 1 entry",
+                    "readyCount_other": "Success! Ready to upload {{count}} entries",
+                    "uploadButton": "Upload"
                 }
             }
         }

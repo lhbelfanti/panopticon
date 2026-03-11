@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
-import { BrowserRouter } from "react-router";
+import { createMemoryRouter, RouterProvider } from "react-router";
 import NewProjectPage from "./projects.new";
 
 vi.mock("react-i18next", () => ({
@@ -27,21 +27,35 @@ vi.mock("react-router", async (importOriginal) => {
 });
 
 describe("NewProjectPage Route", () => {
-    const renderPage = () => {
-        return render(
-            <BrowserRouter>
-                <NewProjectPage />
-            </BrowserRouter>
-        );
+    const renderPage = (loaderData = { behaviorConfigs: [] }) => {
+        const routes = [
+            {
+                id: "root",
+                path: "/",
+                loader: () => loaderData,
+                children: [
+                    {
+                        path: "projects/new",
+                        element: <NewProjectPage />,
+                    },
+                ],
+            },
+        ];
+
+        const router = createMemoryRouter(routes, {
+            initialEntries: ["/projects/new"],
+        });
+
+        return render(<RouterProvider router={router} />);
     };
 
-    it("renders the new project page layout with the form", () => {
+    it("renders the new project page layout with the form", async () => {
         renderPage();
-        expect(screen.getByText("projects.new.title")).toBeInTheDocument();
+        expect(await screen.findByText("projects.new.title")).toBeInTheDocument();
 
         // Elements from NewProjectForm
-        expect(screen.getByText("projects.new.name")).toBeInTheDocument();
-        expect(screen.getByText("projects.new.description")).toBeInTheDocument();
+        expect(await screen.findByText("projects.new.name")).toBeInTheDocument();
+        expect(await screen.findByText("projects.new.description")).toBeInTheDocument();
     });
 });
 
@@ -132,8 +146,8 @@ describe("NewProjectPage Route Functions", () => {
         createProjectSpy.mockRestore();
     });
 
-    it("loader returns behavior configs", async () => {
+    it("loader returns an empty object (data is in root)", async () => {
         const result = await loader({ request: new Request("http://localhost/projects/new"), params: {} } as any);
-        expect(result).toHaveProperty("behaviorConfigs");
+        expect(result).toEqual({});
     });
 });

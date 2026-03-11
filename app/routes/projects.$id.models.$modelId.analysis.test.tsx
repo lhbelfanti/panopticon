@@ -1,6 +1,7 @@
 import { render, screen, fireEvent, act, waitFor } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { MemoryRouter } from "react-router";
+import { generateAnalysisPDF } from "~/utils/pdfGenerator";
 
 vi.mock("react-i18next", () => ({
     Trans: ({ i18nKey, children }: any) => children || i18nKey,
@@ -26,11 +27,19 @@ vi.mock("~/utils/pdfGenerator", () => ({
     generateAnalysisPDF: vi.fn(),
 }));
 
+const mockHistoryTableProps = {
+    onRefresh: vi.fn(),
+    onViewReport: vi.fn(),
+    onDownloadPDF: vi.fn(),
+};
+
 vi.mock("~/components/Analysis/AnalysisHistoryTable", () => ({
-    AnalysisHistoryTable: ({ history, onRefresh }: any) => (
+    AnalysisHistoryTable: ({ history, onRefresh, onViewReport, onDownloadPDF }: any) => (
         <div data-testid="history-table">
             <span data-testid="history-count">{history.length}</span>
             <button onClick={onRefresh}>refresh</button>
+            <button onClick={() => onViewReport({ id: "run_1" })}>view-report</button>
+            <button onClick={() => onDownloadPDF("run_1")}>download-pdf</button>
         </div>
     ),
 }));
@@ -59,7 +68,33 @@ vi.mock("~/components/Modals/AnalysisReportModal", () => ({
         isOpen ? <div data-testid="report-modal"><button onClick={onClose}>close-modal</button></div> : null,
 }));
 
-const mockSubmit = vi.fn();
+const { mockSubmit, mockProject, mockUseLoaderData, mockUseActionData, mockLocation, mockNavigation } = vi.hoisted(() => ({
+    mockSubmit: vi.fn(),
+    mockProject: {
+        id: 1,
+        name: "Test Project",
+        behaviors: [],
+        subprojects: [],
+        models: [],
+        createdAt: "2024-01-01T00:00:00Z",
+    },
+    mockUseLoaderData: (() => {
+        const history: any[] = [];
+        const entriesData = { entries: [], total: 0, page: 1, limit: 10, totalPages: 0 };
+        return vi.fn(() => ({
+            modelId: "roberta",
+            history,
+            entriesData,
+            filterCol: "id",
+            filterVal: "",
+            filterOp: "",
+            filterBias: 0
+        }));
+    })(),
+    mockUseActionData: vi.fn(() => undefined as any),
+    mockLocation: { state: null, search: "" },
+    mockNavigation: { state: "idle", formData: null },
+}));
 
 // STABLE MOCK DATA TO AVOID INFINITE LOOPS IN USEEFFECT
 const stabelLoaderData = {
@@ -67,30 +102,14 @@ const stabelLoaderData = {
     history: [],
 };
 
-const mockProject = {
-    id: 1,
-    name: "Test Project",
-    behaviors: [],
-    subprojects: [],
-    models: [],
-    createdAt: "2024-01-01T00:00:00Z",
-};
-
 vi.mock("react-router", async (importOriginal) => {
     const actual = await importOriginal();
     return {
         ...(actual as any),
-        useLoaderData: () => ({
-            ...stabelLoaderData,
-            entriesData: { entries: [], total: 0, page: 1, limit: 10, totalPages: 0 },
-            filterCol: "id",
-            filterVal: "",
-            filterOp: "",
-            filterBias: 0
-        }),
-        useNavigation: () => ({ state: "idle", formData: null }),
-        useLocation: () => ({ state: null }),
-        useActionData: () => undefined,
+        useLoaderData: () => mockUseLoaderData(),
+        useNavigation: () => mockNavigation,
+        useLocation: () => mockLocation,
+        useActionData: () => mockUseActionData(),
         useSubmit: () => mockSubmit,
         useOutletContext: () => ({ project: mockProject }),
         Link: ({ to, children, className }: any) => <a href={to} className={className}>{children}</a>,
@@ -102,6 +121,17 @@ import AnalysisPage from "./projects.$id.models.$modelId.analysis";
 describe("AnalysisPage Route Component", () => {
     beforeEach(() => {
         vi.clearAllMocks();
+        mockUseActionData.mockReturnValue(undefined as any);
+        mockUseLoaderData.mockReset();
+        mockUseLoaderData.mockReturnValue({
+            modelId: "roberta",
+            history: [],
+            entriesData: { entries: [], total: 0, page: 1, limit: 10, totalPages: 0 },
+            filterCol: "id",
+            filterVal: "",
+            filterOp: "",
+            filterBias: 0
+        });
     });
 
     const renderPage = () => {
@@ -201,6 +231,103 @@ describe("AnalysisPage Route Component", () => {
         // Count should be 1
         expect(screen.getByTestId("excluded-count")).toHaveTextContent("1");
     });
+
+    it("auto-switches to history tab when action is successful", async () => {
+        const { rerender } = renderPage();
+        
+        // Mock actionData success
+        mockUseActionData.mockReturnValue({ success: true });
+        
+        rerender(<MemoryRouter><AnalysisPage /></MemoryRouter>);
+        
+        expect(screen.getByTestId("history-table")).toBeInTheDocument();
+    });
+
+    it("locks body overflow when exclusion modal is open", async () => {
+        vi.useFakeTimers();
+        renderPage();
+        
+        await act(async () => {
+            fireEvent.click(screen.getByTestId("open-exclusions-btn"));
+            vi.advanceTimersByTime(400);
+        });
+        
+        expect(document.body.style.overflow).toBe("hidden");
+        
+        await act(async () => {
+            fireEvent.click(screen.getByText(/projects\.analysis\.exclusions\.applyAndClose/i));
+        });
+        
+        expect(document.body.style.overflow).toBe("unset");
+        
+        vi.useRealTimers();
+    });
+
+    it("handles history table actions", async () => {
+        const historyMock = [
+            { id: "run_1", status: "completed", metrics: {}, createdAt: "2024-01-01" }
+        ];
+        mockUseLoaderData.mockReturnValue({
+            ...stabelLoaderData,
+            history: historyMock as any,
+            entriesData: { entries: [], total: 0, page: 1, limit: 10, totalPages: 0 },
+            filterCol: "id",
+            filterVal: "",
+            filterOp: "",
+            filterBias: 0
+        });
+
+        renderPage();
+        fireEvent.click(screen.getByText("projects.analysis.tabs.history"));
+        
+        // Assert data is there
+        expect(screen.getByTestId("history-count")).toHaveTextContent("1");
+        
+        fireEvent.click(screen.getByText("refresh"));
+        expect(mockSubmit).toHaveBeenCalled();
+
+        fireEvent.click(screen.getByText("view-report"));
+        expect(screen.getByTestId("report-modal")).toBeInTheDocument();
+
+        await act(async () => {
+            fireEvent.click(screen.getByText("download-pdf"));
+        });
+        
+        await waitFor(() => {
+            expect(vi.mocked(generateAnalysisPDF)).toHaveBeenCalled();
+        });
+    });
+
+    it("closes the analysis report modal", () => {
+        const historyMock = [{ id: "run_1", status: "completed", metrics: {}, createdAt: "2024" }];
+        mockUseLoaderData.mockReturnValueOnce({
+            ...stabelLoaderData,
+            history: historyMock as any,
+            entriesData: { entries: [], total: 0, page: 1, limit: 10, totalPages: 0 },
+            filterCol: "id",
+            filterVal: "",
+            filterOp: "",
+            filterBias: 0
+        });
+
+        renderPage();
+        fireEvent.click(screen.getByText("projects.analysis.tabs.history"));
+        
+        // Open it
+        fireEvent.click(screen.getByText("view-report"));
+        expect(screen.getByTestId("report-modal")).toBeInTheDocument();
+
+        // Close it
+        fireEvent.click(screen.getByText("close-modal"));
+        expect(screen.queryByTestId("report-modal")).not.toBeInTheDocument();
+    });
+
+    it("initializes excluded ids from location state", () => {
+        (mockLocation as any).state = { excludedEntryIds: ["e1", "e2"] };
+        renderPage();
+        expect(screen.getByTestId("excluded-count")).toHaveTextContent("2");
+        (mockLocation as any).state = null; // cleanup
+    });
 });
 
 // ─── Loader & Action Tests ────────────────────────────────────────────────────
@@ -228,11 +355,16 @@ import { getEntries } from "~/services/api/entries/index.server";
 
 describe("AnalysisPage Loader", () => {
     it("returns modelId, history for valid params", async () => {
-        const result = await loader({ params: { id: "1", modelId: "roberta" }, request: new Request("http://localhost") } as any) as any;
+        const result = await loader({ params: { id: "1", modelId: "roberta" }, request: new Request("http://localhost?page=2&filterCol=text&filterVal=foo") } as any) as any;
         expect(result).not.toHaveProperty("project");
         expect(result).toHaveProperty("modelId", "roberta");
         expect(result).toHaveProperty("history");
         expect(getSubprojectAnalysisHistory).toHaveBeenCalledWith("roberta");
+        expect(getEntries).toHaveBeenCalledWith(expect.objectContaining({
+            page: 2,
+            filterCol: "text",
+            filterVal: "foo"
+        }));
     });
 
     it("throws 404 when modelId param is missing", async () => {

@@ -35,7 +35,9 @@
     },
     "common": {
         "notAvailable": "No disponible",
-        "deleting": "Eliminando..."
+        "deleting": "Eliminando...",
+        "error": "Error",
+        "submitting": "Enviando..."
     },
     "sidebar": {
         "home": "Inicio",
@@ -78,7 +80,7 @@
             "title": "Actividad reciente",
             "noActivity": "No hay actividad reciente.",
             "messages": {
-                "project_created": "El proyecto '{{name}}' ha sido creado",
+                "project_created": "Creaste el proyecto '{{name}}'",
                 "csv_uploaded": "Subiste el archivo '{{name}}' ({{count}} entradas)",
                 "tweets_added": "Se agregaron {{count}} entradas a '{{name}}'",
                 "predictions_made": "Se completaron {{count}} predicciones con '{{model}}'"
@@ -235,13 +237,14 @@
         },
         "view": {
             "subprojectsTitle": "Subproyectos por modelo",
-            "subprojectsDesc": "Explore the different models applied to this project. Select a subproject to access its specific dataset, evaluate predictions, and manage the filtered results.",
+            "subprojectsDesc": "Explore los diferentes modelos aplicados a este proyecto. Seleccione un subproyecto para acceder a su conjunto de datos específico, evaluar predicciones individuales y administrar los resultados filtrados.",
             "behaviorsTracked": "<1>Comportamientos Humanos Adversos</1> a detectar",
-            "emptyModels": "No hay modelos CL configurados para este proyecto.",
-            "openSubproject": "Explore subproject \u2192",
+            "emptyModels": "No hay modelos de ML configurados para este proyecto.",
+            "openSubproject": "Abrir predicciones \u2192",
             "deleteProject": "Eliminar proyecto",
             "settings": "Configuración",
             "deleteProjectDesc": "¿Estás seguro de que deseas eliminar el proyecto \"{{name}}\"? Esta acción no se puede deshacer y eliminará permanentemente todas las entradas y subproyectos asociados.",
+            "projectId": "ID DEL PROYECTO",
             "deleteProjectConfirm": "Eliminar proyecto"
         },
         "edit": {
@@ -277,6 +280,22 @@
             "deleteEntry": "Eliminar entrada",
             "deleteEntryDesc": "Est\u00e1 seguro de que desea eliminar esta entrada? Esta acci\u00f3n no se puede deshacer.",
             "exportCsv": "Exportar CSV",
+            "numberIdPlaceholder": "ID numérico",
+            "searchCharactersPlaceholder": "Buscar caracteres",
+            "scorePlaceholder": "0-100",
+            "biasPlaceholder": "Desviación",
+            "deselectPage": "Deseleccionar página",
+            "selectPage": "Seleccionar página",
+            "selectedLabel": "Seleccionado",
+            "exitExcludeMode": "Salir del modo exclusión",
+            "excludeMode": "Modo exclusión",
+            "verdicts": {
+                "positive": "Positivo",
+                "negative": "Negativo",
+                "pending": "Pendiente",
+                "inProgress": "En progreso",
+                "error": "Error"
+            },
             "metadataReply": "Es una respuesta",
             "metadataQuote": "Tiene cita",
             "metadataQuoteIsReply": "La cita es una respuesta",
@@ -308,6 +327,11 @@
                 "dropzoneSubtitle": "o haz clic para buscar en tus archivos",
                 "selectFile": "Seleccionar CSV",
                 "errorInvalidCsv": "Por favor, selecciona un archivo .csv válido",
+                "errorEmptyCsv": "El CSV está vacío o no tiene entradas válidas",
+                "errorNoTextColumn": "No se encontró la columna 'text' en el CSV",
+                "errorMissingTextField": "Fila {{row}}: Falta el campo obligatorio 'text'.",
+                "errorEmptyRows": "El archivo está vacío o le faltan filas de datos",
+                "errorReadFailed": "Fallo al leer el archivo",
                 "confirmUpload": "Procesar y subir",
                 "csvInstructionsTitle": "Requisitos",
                 "csvInstruction1": "El archivo debe estar en formato .csv.",
@@ -315,6 +339,7 @@
                 "csvInstruction3": "Usa la plantilla para ver todos los campos compatibles con esta configuración.",
                 "successTitle": "Entradas agregadas",
                 "successDesc": "Se han agregado exitosamente {{count}} entradas al proyecto.",
+                "removeFile": "Eliminar archivo",
                 "targetConfiguration": {
                     "title": "Configuración",
                     "targetProject": "Proyecto",
@@ -346,7 +371,10 @@
                     "dataFormatTitle": "Formato de datos",
                     "formatInstruction": "Asegúrate de que tu CSV contenga exactamente los encabezados mostrados abajo.",
                     "mandatoryHeaderNote": "Los encabezados obligatorios están en <1>negrita</1>.",
-                    "downloadTemplate": "Descargar plantilla"
+                    "downloadTemplate": "Descargar plantilla",
+                    "readyCount_one": "¡Éxito! Listo para subir 1 entrada",
+                    "readyCount_other": "¡Éxito! Listo para subir {{count}} entradas",
+                    "uploadButton": "Subir"
                 }
             }
         }

@@ -1,4 +1,5 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import GlobalEntriesNewPage, { loader, action } from "./entries.new";
 import { createMemoryRouter, RouterProvider } from "react-router";
@@ -15,6 +16,10 @@ vi.mock("~/services/api/projects/index.server", () => ({
             ]
         }
     ]),
+}));
+
+vi.mock("~/services/api/config.server", () => ({
+    getAppConfig: vi.fn().mockResolvedValue({ platforms: [{ id: "twitter", name: "Twitter" }] }),
 }));
 
 vi.mock("~/services/api/entries/mocks/platforms", () => ({
@@ -227,7 +232,150 @@ describe("GlobalEntriesNewPage", () => {
         await waitFor(() => expect(screen.queryByText("projects.models.model_a")).not.toBeInTheDocument());
     });
 
+    it("loader fetches and returns projects and platforms", async () => {
+        const { getAppConfig } = await import("~/services/api/config.server");
+        const { getProjects } = await import("~/services/api/projects/index.server");
+        
+        vi.mocked(getProjects).mockResolvedValueOnce([{ id: 1, name: "Proj" }] as any);
+        vi.mocked(getAppConfig).mockResolvedValueOnce({ platforms: [{ id: "fb", name: "FB" }] } as any);
 
+        const result = await loader();
+        expect(result).toEqual({
+            projects: [{ id: 1, name: "Proj" }],
+            platforms: [{ id: "fb", name: "FB" }]
+        });
+    });
 
+    it("action handles API failure", async () => {
+        const { addEntriesToProject } = await import("~/services/api/entries/index.server");
+        vi.mocked(addEntriesToProject).mockRejectedValueOnce(new Error("API Fail"));
 
+        const formData = new FormData();
+        formData.append("projectId", "1");
+        formData.append("subprojectIds", JSON.stringify(["m1"]));
+        formData.append("entriesData", JSON.stringify([{ text: "t" }]));
+
+        const request = new Request("http://localhost/entries/new", { method: "POST", body: formData });
+        
+        await expect(action({ request, params: {}, context: {} } as any)).rejects.toThrow("API Fail");
+    });
+
+    it("shows alert if submitting without project or subprojects", async () => {
+        if (!window.alert) window.alert = vi.fn();
+        const alertSpy = vi.spyOn(window, "alert").mockImplementation(() => {});
+        renderWithRouter(<GlobalEntriesNewPage />, mockLoaderData);
+        
+        // Single entry tab - manual submit
+        const textarea = await screen.findByPlaceholderText("projects.entries.new.interactiveForm.placeholder");
+        fireEvent.change(textarea, { target: { value: "test" } });
+        
+        const submitBtn = screen.getByRole("button", { name: "entries.new.submit" });
+        fireEvent.click(submitBtn);
+        
+        expect(alertSpy).toHaveBeenCalledWith("Please select a project and at least one subproject.");
+
+        // Bulk tab
+        const bulkTab = screen.getByText("projects.entries.new.tabs.bulk");
+        fireEvent.click(bulkTab);
+        
+        // Manual call to handleBulkUpload since we can't easily trigger it via UI without project selection
+        // Actually we can just test the function directly if it was exported, but it's internal.
+        // We can mock BulkUpload to call onUpload.
+    });
+
+    it("handles invalid projectId in query params", async () => {
+        renderWithRouter(<GlobalEntriesNewPage />, mockLoaderData, ["/entries/new?projectId=abc"]);
+        // Use findBy to wait for router
+        const projectSelect = await screen.findByLabelText("projects.entries.new.targetConfiguration.targetProject") as HTMLSelectElement;
+        expect(projectSelect.value).toBe("");
+    });
+
+    it("automatically selects all subprojects when a project is chosen", async () => {
+        renderWithRouter(<GlobalEntriesNewPage />, mockLoaderData);
+        const projectSelect = await screen.findByLabelText("projects.entries.new.targetConfiguration.targetProject");
+        fireEvent.change(projectSelect, { target: { value: "1" } });
+        
+        await waitFor(() => {
+            const checkboxes = screen.getAllByRole("checkbox") as HTMLInputElement[];
+            // Filter checkboxes that are for subprojects (usually have values like "model_a")
+            const subprojectCheckboxes = checkboxes.filter(c => ["model_a", "model_b"].includes(c.value));
+            expect(subprojectCheckboxes.every(c => c.checked)).toBe(true);
+        });
+    });
+
+    it("shows alert if submitting bulk without subprojects", async () => {
+        const user = userEvent.setup();
+        const alertSpy = vi.spyOn(window, "alert").mockImplementation(() => {});
+        renderWithRouter(<GlobalEntriesNewPage />, mockLoaderData);
+        
+        // Select project first
+        const projectSelect = await screen.findByLabelText("projects.entries.new.targetConfiguration.targetProject");
+        await user.selectOptions(projectSelect, "1");
+
+        // Switch to bulk tab first
+        const bulkTab = await screen.findByText("projects.entries.new.tabs.bulk");
+        await user.click(bulkTab);
+
+        // Unselect all subprojects
+        const checkboxes = screen.getAllByRole("checkbox") as HTMLInputElement[];
+        for (const cb of checkboxes) {
+            if (cb.checked) await user.click(cb);
+        }
+
+        // Mock a file upload to make the button appear
+        const file = new File(["text\nsample entry"], "test.csv", { type: "text/csv" });
+        const input = screen.getByLabelText("csv-upload-input");
+        await user.upload(input, file);
+
+        const uploadBtn = await screen.findByText("projects.entries.new.confirmUpload");
+        fireEvent.click(uploadBtn);
+        
+        await waitFor(() => {
+            expect(alertSpy).toHaveBeenCalledWith("Please select a project and at least one subproject.");
+        });
+    });
+
+    it("action handles uploadAnother correctly and returns data", async () => {
+        const { addEntriesToProject } = await import("~/services/api/entries/index.server");
+        vi.mocked(addEntriesToProject).mockResolvedValueOnce({} as any);
+
+        const formData = new FormData();
+        formData.append("projectId", "1");
+        formData.append("subprojectIds", JSON.stringify(["m1"]));
+        formData.append("entriesData", JSON.stringify([{ text: "t" }]));
+        formData.append("uploadAnother", "true");
+
+        const request = new Request("http://localhost/entries/new", { method: "POST", body: formData });
+        
+        const response = await action({ request, params: {}, context: {} } as any);
+        // In RRv7 data() might return an object with 'data' or just the data depending on the test env
+        const responseData = (response as any).data || response;
+        expect(responseData).toEqual({ success: true, count: 1 });
+    });
+
+    it("automatically selects all subprojects when a project is chosen", async () => {
+        const user = userEvent.setup();
+        renderWithRouter(<GlobalEntriesNewPage />, mockLoaderData);
+        const projectSelect = await screen.findByLabelText("projects.entries.new.targetConfiguration.targetProject");
+        await user.selectOptions(projectSelect, "1");
+        
+        await waitFor(() => {
+            const checkboxes = screen.getAllByRole("checkbox") as HTMLInputElement[];
+            const subprojectCheckboxes = checkboxes.filter(c => ["model_a", "model_b"].includes(c.value));
+            expect(subprojectCheckboxes.every(c => c.checked)).toBe(true);
+        });
+    });
+
+    it("clears selection when project is changed to empty", async () => {
+        const user = userEvent.setup();
+        renderWithRouter(<GlobalEntriesNewPage />, mockLoaderData);
+        const projectSelect = await screen.findByLabelText("projects.entries.new.targetConfiguration.targetProject");
+        await user.selectOptions(projectSelect, "1");
+        await screen.findByTitle("projects.models.model_a");
+        
+        fireEvent.change(projectSelect, { target: { value: "" } });
+        await waitFor(() => {
+            expect(screen.queryByTitle("projects.models.model_a")).not.toBeInTheDocument();
+        }, { timeout: 3000 });
+    });
 });
