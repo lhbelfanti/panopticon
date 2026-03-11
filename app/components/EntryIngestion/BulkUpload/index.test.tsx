@@ -1,7 +1,8 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { BulkUpload } from "./index";
-
+import { createMemoryRouter, RouterProvider } from "react-router";
+ 
 // Mock i18next
 vi.mock("react-i18next", () => ({
     Trans: ({ i18nKey, children }: any) => children || i18nKey,
@@ -9,22 +10,31 @@ vi.mock("react-i18next", () => ({
         t: (key: string) => key,
     }),
 }));
-
+ 
 describe("BulkUpload", () => {
     const onUploadMock = vi.fn();
-
+ 
     beforeEach(() => {
         vi.clearAllMocks();
     });
-
+ 
+    const renderWithRouter = (ui: React.ReactElement) => {
+        const router = createMemoryRouter([
+            { path: "/", element: ui }
+        ], {
+            initialEntries: ["/"],
+        });
+        return render(<RouterProvider router={router} />);
+    };
+ 
     it("renders the dropzone correctly", () => {
-        render(<BulkUpload onUpload={onUploadMock} />);
+        renderWithRouter(<BulkUpload onUpload={onUploadMock} />);
         expect(screen.getByText("projects.entries.new.dropzoneTitle")).toBeInTheDocument();
         expect(screen.getByText("projects.entries.new.selectFile")).toBeInTheDocument();
     });
 
     it("shows file name when a valid CSV is selected", async () => {
-        render(<BulkUpload onUpload={onUploadMock} />);
+        renderWithRouter(<BulkUpload onUpload={onUploadMock} />);
         const input = screen.getByLabelText("csv-upload-input") as HTMLInputElement;
 
         const file = new File(["text\nhello\nworld"], "test.csv", { type: "text/csv" });
@@ -37,7 +47,7 @@ describe("BulkUpload", () => {
     });
 
     it("handles file removal", async () => {
-        render(<BulkUpload onUpload={onUploadMock} />);
+        renderWithRouter(<BulkUpload onUpload={onUploadMock} />);
         const input = screen.getByLabelText("csv-upload-input") as HTMLInputElement;
         const file = new File(["text\nhello"], "test.csv", { type: "text/csv" });
         fireEvent.change(input, { target: { files: [file] } });
@@ -49,7 +59,7 @@ describe("BulkUpload", () => {
     });
 
     it("handles drag and drop events", async () => {
-        render(<BulkUpload onUpload={onUploadMock} />);
+        renderWithRouter(<BulkUpload onUpload={onUploadMock} />);
         const dropzone = screen.getByText("projects.entries.new.dropzoneTitle").parentElement?.parentElement?.parentElement!;
         
         fireEvent.dragEnter(dropzone);
@@ -69,7 +79,7 @@ describe("BulkUpload", () => {
     });
 
     it("displays error for invalid file type", async () => {
-        render(<BulkUpload onUpload={onUploadMock} />);
+        renderWithRouter(<BulkUpload onUpload={onUploadMock} />);
         const input = screen.getByLabelText("csv-upload-input");
         const file = new File(["hello"], "test.txt", { type: "text/plain" });
         fireEvent.change(input, { target: { files: [file] } });
@@ -108,7 +118,7 @@ describe("BulkUpload", () => {
             return originalRemoveChild(node);
         });
         
-        render(<BulkUpload onUpload={onUploadMock} />);
+        renderWithRouter(<BulkUpload onUpload={onUploadMock} />);
         fireEvent.click(screen.getByText("projects.entries.new.bulkUpload.downloadTemplate"));
 
         expect(setAttributeSpy).toHaveBeenCalledWith("download", expect.stringContaining(".csv"));
@@ -118,7 +128,7 @@ describe("BulkUpload", () => {
     });
 
     it("parses Twitter CSV with metadata correctly", async () => {
-        render(<BulkUpload onUpload={onUploadMock} socialMediaType="twitter" />);
+        renderWithRouter(<BulkUpload onUpload={onUploadMock} socialMediaType="twitter" />);
         const input = screen.getByLabelText("csv-upload-input");
 
         const csvContent = 
@@ -148,24 +158,24 @@ describe("BulkUpload", () => {
     });
 
     it("handles empty CSV error", async () => {
-        render(<BulkUpload onUpload={onUploadMock} />);
+        renderWithRouter(<BulkUpload onUpload={onUploadMock} />);
         const input = screen.getByLabelText("csv-upload-input");
         const file = new File([""], "empty.csv", { type: "text/csv" });
         fireEvent.change(input, { target: { files: [file] } });
 
         await waitFor(() => {
-            expect(screen.getByText("File is empty or missing data rows")).toBeInTheDocument();
+            expect(screen.getByText("projects.entries.new.errorEmptyRows")).toBeInTheDocument();
         });
     });
 
     it("handles missing text column error", async () => {
-        render(<BulkUpload onUpload={onUploadMock} />);
+        renderWithRouter(<BulkUpload onUpload={onUploadMock} />);
         const input = screen.getByLabelText("csv-upload-input");
         const file = new File(["invalid,header\nval1,val2"], "invalid.csv", { type: "text/csv" });
         fireEvent.change(input, { target: { files: [file] } });
 
         await waitFor(() => {
-            expect(screen.getByText("No 'text' column found in CSV")).toBeInTheDocument();
+            expect(screen.getByText("projects.entries.new.errorNoTextColumn")).toBeInTheDocument();
         });
     });
 });

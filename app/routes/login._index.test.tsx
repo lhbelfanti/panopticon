@@ -235,8 +235,8 @@ import { meta } from "./login._index";
 
 describe("Login Route Meta", () => {
     it("returns expected meta tags", () => {
-        const result = meta();
-        expect(result).toContainEqual({ title: "Panopticon" });
+        const result = meta({ data: { title: "Login" } } as any);
+        expect(result).toContainEqual({ title: "Panopticon - Login" });
         expect(result).toContainEqual(expect.objectContaining({ name: "description" }));
     });
 });

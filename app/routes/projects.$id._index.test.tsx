@@ -104,9 +104,9 @@ vi.mock("~/services/api/projects/index.server", () => ({
 }));
 
 describe("ProjectViewPage Route Functions", () => {
-    it("loader returns empty object after consolidation", async () => {
+    it("loader returns title for page tab", async () => {
         const result = await loader({ params: { id: "123" }, request: new Request("http://localhost") } as any);
-        expect(result).toEqual({});
+        expect(result).toHaveProperty("title");
     });
 
     it("action handles delete_project intent", async () => {
@@ -144,8 +144,8 @@ vi.mock("~/components/ConfirmationModal", () => ({
 
 describe("ProjectViewPage Route Meta & Edge Cases", () => {
     it("returns expected meta tags", () => {
-        const result = meta();
-        expect(result).toContainEqual({ title: "Panopticon" });
+        const result = meta({ data: { title: "Project Details" } } as any);
+        expect(result).toContainEqual({ title: "Panopticon - Project Details" });
     });
 
     it("throws 404 if id is missing in loader", async () => {

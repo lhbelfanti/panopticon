@@ -146,8 +146,8 @@ describe("NewProjectPage Route Functions", () => {
         createProjectSpy.mockRestore();
     });
 
-    it("loader returns an empty object (data is in root)", async () => {
+    it("loader returns title for page tab", async () => {
         const result = await loader({ request: new Request("http://localhost/projects/new"), params: {} } as any);
-        expect(result).toEqual({});
+        expect(result).toHaveProperty("title");
     });
 });

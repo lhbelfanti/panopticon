@@ -414,6 +414,6 @@ describe("AnalysisPage Action", () => {
 
 describe("AnalysisPage Meta", () => {
     it("returns correct title meta tag", () => {
-        expect(meta()).toContainEqual({ title: "Panopticon | Analysis" });
+        expect(meta({ data: { title: "Analysis" } } as any)).toContainEqual({ title: "Panopticon - Analysis" });
     });
 });

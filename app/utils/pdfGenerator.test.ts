@@ -76,7 +76,11 @@ const makeCompletedRun = (): AnalysisRun => ({
             median: 0.85,
             distribution: [{ range: "0.8-1.0", count: 80 }],
         },
-        insights: ["Insight A", "Insight B"],
+        insights: {
+            topBehaviorId: "hate_speech",
+            confidenceTrend: "high",
+            verdictConcentration: "negative"
+        },
     },
 });
 

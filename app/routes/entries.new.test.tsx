@@ -200,7 +200,7 @@ describe("GlobalEntriesNewPage", () => {
         const file = new File([csvContent], "test.csv", { type: "text/csv" });
         fireEvent.change(input, { target: { files: [file] } });
 
-        const confirmBtn = await screen.findByRole("button", { name: "projects.entries.new.confirmUpload" });
+        const confirmBtn = await screen.findByRole("button", { name: "projects.entries.new.bulkUpload.uploadButton" });
         fireEvent.click(confirmBtn);
     });
 
@@ -239,11 +239,12 @@ describe("GlobalEntriesNewPage", () => {
         vi.mocked(getProjects).mockResolvedValueOnce([{ id: 1, name: "Proj" }] as any);
         vi.mocked(getAppConfig).mockResolvedValueOnce({ platforms: [{ id: "fb", name: "FB" }] } as any);
 
-        const result = await loader();
-        expect(result).toEqual({
+        const result = await loader({ request: new Request("http://localhost/") } as any);
+        expect(result).toMatchObject({
             projects: [{ id: 1, name: "Proj" }],
             platforms: [{ id: "fb", name: "FB" }]
         });
+        expect(result).toHaveProperty("title");
     });
 
     it("action handles API failure", async () => {
@@ -327,7 +328,7 @@ describe("GlobalEntriesNewPage", () => {
         const input = screen.getByLabelText("csv-upload-input");
         await user.upload(input, file);
 
-        const uploadBtn = await screen.findByText("projects.entries.new.confirmUpload");
+        const uploadBtn = await screen.findByText("projects.entries.new.bulkUpload.uploadButton");
         fireEvent.click(uploadBtn);
         
         await waitFor(() => {

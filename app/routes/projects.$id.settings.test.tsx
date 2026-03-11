@@ -147,10 +147,10 @@ describe("ProjectSettingsPage", () => {
         expect(result).toBeNull();
     });
 
-    it("loader returns empty object after consolidation", async () => {
+    it("loader returns title for page tab", async () => {
         const { loader } = await import("./projects.$id.settings");
         const result = await loader({ params: { id: "1" }, request: new Request("http://localhost") } as any);
-        expect(result).toEqual({});
+        expect(result).toHaveProperty("title");
     });
 
     it("loader throws 404 if id is missing", async () => {

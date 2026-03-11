@@ -22,12 +22,11 @@ describe("ProjectLayout Route", () => {
     describe("loader", () => {
         it("throws 400 for invalid ID", async () => {
             try {
-                await loader({ params: { id: "abc" } } as any);
+                await loader({ params: { id: "abc" }, request: new Request("http://localhost") } as any);
                 expect.fail("Should have thrown");
             } catch (err: any) {
-                console.log('LOADER ERROR:', err);
-                // Check status if it's from data() or a Response
-                const status = err.status || err.getResponse?.()?.status;
+                // RRv7 throws a DataWithResponseInit or Response. 
+                const status = err.status || err.init?.status || (err.getResponse && err.getResponse().status);
                 expect(status).toBe(400);
             }
         });
@@ -35,10 +34,10 @@ describe("ProjectLayout Route", () => {
         it("throws 404 if project not found", async () => {
             vi.mocked(getProjectById).mockResolvedValue(null);
             try {
-                 await loader({ params: { id: "1" } } as any);
+                 await loader({ params: { id: "1" }, request: new Request("http://localhost") } as any);
                  expect.fail("Should have thrown");
             } catch (err: any) {
-                const status = err.status || err.getResponse?.()?.status;
+                const status = err.status || err.init?.status || (err.getResponse && err.getResponse().status);
                 expect(status).toBe(404);
             }
         });

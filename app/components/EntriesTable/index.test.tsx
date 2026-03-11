@@ -1,6 +1,6 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, cleanup } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { BrowserRouter } from "react-router";
 import EntriesTable from "./index";
 
@@ -102,24 +102,30 @@ describe("EntriesTable", () => {
         vi.clearAllMocks();
     });
 
+    afterEach(() => {
+        cleanup();
+    });
+
     it("renders table headers correctly", () => {
         renderTable();
-        expect(screen.getByText("projects.entries.tableId")).toBeInTheDocument();
-        expect(screen.getByText("projects.entries.tableText")).toBeInTheDocument();
-        expect(screen.getByText("projects.entries.tableVerdict")).toBeInTheDocument();
-        expect(screen.getByText("projects.entries.tableScore")).toBeInTheDocument();
+        // These keys appear in both the header and the filter dropdown
+        expect(screen.getAllByText("projects.entries.tableId")[0]).toBeInTheDocument();
+        expect(screen.getAllByText("projects.entries.tableText")[0]).toBeInTheDocument();
+        expect(screen.getAllByText("projects.entries.tableVerdict")[0]).toBeInTheDocument();
+        expect(screen.getAllByText("projects.entries.tableScore")[0]).toBeInTheDocument();
     });
 
     it("renders entries data correctly", () => {
         renderTable();
         expect(screen.getAllByText("1")[0]).toBeInTheDocument(); // entry_1 split
         expect(screen.getByText("This is a test entry")).toBeInTheDocument();
-        expect(screen.getByText("Positive")).toBeInTheDocument();
+        // Verdict AND score are rendered as strings in table; i18n mock returns key
+        expect(screen.getAllByText("projects.entries.verdicts.positive")[0]).toBeInTheDocument();
         expect(screen.getByText("95.0%")).toBeInTheDocument();
 
         expect(screen.getAllByText("2")[0]).toBeInTheDocument(); // entry_2 split
         expect(screen.getByText("Another pending entry")).toBeInTheDocument();
-        expect(screen.getByText("Pending")).toBeInTheDocument();
+        expect(screen.getAllByText("projects.entries.verdicts.pending")[0]).toBeInTheDocument();
         expect(screen.getByText("-")).toBeInTheDocument();
     });
 
@@ -138,15 +144,16 @@ describe("EntriesTable", () => {
         // Modal should appear
         expect(screen.getByText("projects.entries.viewFullEntry")).toBeInTheDocument();
 
-        // Check elements inside modal (there might be multiple verdicts now, one in table, one in modal)
-        const verdicts = screen.getAllByText("Positive");
-        expect(verdicts.length).toBeGreaterThan(1);
+        // Check elements inside modal — verdicts in modal use i18n keys, in table use i18n keys too
+        // The mock t() returns the key. The raw entry.verdict is NOT rendered directly in the badge.
+        const verdictBadges = screen.getAllByText("projects.entries.verdicts.positive");
+        expect(verdictBadges.length).toBeGreaterThan(1);
 
         // Close modal
         const closeBtn = screen.getAllByRole("button").find(b => b.querySelector('svg.lucide-x'));
         if (closeBtn) await user.click(closeBtn);
 
-        expect(screen.queryByText("View Full Entry")).not.toBeInTheDocument();
+        expect(screen.queryByText("projects.entries.viewFullEntry")).not.toBeInTheDocument();
     });
 
     it("opens delete confirmation modal when trash icon is clicked", async () => {
@@ -170,11 +177,13 @@ describe("EntriesTable", () => {
         ];
         renderTable({ data: { ...mockData, entries: entryOverrides as any } });
 
-        expect(screen.getByText("Positive")).toHaveClass("border-green-500/20");
-        expect(screen.getByText("Negative")).toHaveClass("border-bittersweet-shimmer/20");
-        expect(screen.getByText("Pending")).toHaveClass("border-yellow-500/20");
-        expect(screen.getByText("In Progress")).toHaveClass("border-blue-500/20");
-        expect(screen.getByText("Other")).toHaveClass("border-gray-500/20");
+        // Verdicts are translated via i18n key — mock t() returns the key string
+        expect(screen.getByText("projects.entries.verdicts.positive")).toHaveClass("border-green-500/20");
+        expect(screen.getByText("projects.entries.verdicts.negative")).toHaveClass("border-bittersweet-shimmer/20");
+        expect(screen.getByText("projects.entries.verdicts.pending")).toHaveClass("border-yellow-500/20");
+        expect(screen.getByText("projects.entries.verdicts.inprogress")).toHaveClass("border-blue-500/20");
+        // "Other" has no key so falls back to entry.verdict value
+        expect(screen.getByText("projects.entries.verdicts.other")).toHaveClass("border-gray-500/20");
     });
 
     it("handles filter column switching and value typing", async () => {
@@ -183,15 +192,17 @@ describe("EntriesTable", () => {
 
         const colSelect = screen.getByRole("combobox", { name: "" }); // The first one
         await user.selectOptions(colSelect, "id");
-        expect(screen.getByPlaceholderText("Number ID")).toBeInTheDocument();
+        // Placeholder is an i18n key in test environment
+        expect(screen.getByPlaceholderText("projects.entries.numberIdPlaceholder")).toBeInTheDocument();
 
         await user.selectOptions(colSelect, "verdict");
         const selects = screen.getAllByRole("combobox");
         expect(selects.length).toBe(2); // col + val
-        expect(screen.getByRole("option", { name: "Positive" })).toBeInTheDocument();
+        expect(screen.getByRole("option", { name: "projects.entries.verdicts.positive" })).toBeInTheDocument();
 
         await user.selectOptions(colSelect, "score");
-        expect(screen.getByPlaceholderText("0-100")).toBeInTheDocument();
+        // Score placeholder is also an i18n key
+        expect(screen.getByPlaceholderText("projects.entries.scorePlaceholder")).toBeInTheDocument();
     });
 
     it("renders pagination ellipsis for many pages", () => {
@@ -249,10 +260,9 @@ describe("EntriesTable", () => {
         expect(screen.getAllByText("...").length).toBe(2);
     });
 
-    it("renders fuzzy score filter when ~= is selected", async () => {
-        const user = userEvent.setup();
+    it("renders fuzzy score filter when ~= is selected", () => {
         renderTable({ filterCol: "score", filterOp: "~=" });
-        expect(screen.getByPlaceholderText("Bias")).toBeInTheDocument();
+        expect(screen.getByPlaceholderText("projects.entries.biasPlaceholder")).toBeInTheDocument();
     });
 
     it("applies loading opacity when navigation is loading", () => {
@@ -271,54 +281,53 @@ describe("EntriesTable", () => {
         vi.useFakeTimers();
         renderTable({ filterCol: "text" });
 
-        const searchInput = screen.getByPlaceholderText("Search characters");
+        const searchInput = screen.getByPlaceholderText("projects.entries.searchCharactersPlaceholder");
         fireEvent.change(searchInput, { target: { value: "test search" } });
 
         // Submit shouldn't be called immediately due to debounce
         expect(mockSubmit).not.toHaveBeenCalled();
 
         // Advance time
-        vi.runAllTimers(); // Or vi.advanceTimersByTime(300);
+        vi.runAllTimers();
         expect(mockSubmit).toHaveBeenCalled();
 
         vi.useRealTimers();
     });
 
-    it("cancels deletion when cancel button is clicked", async () => {
-        const user = userEvent.setup();
+    it("cancels deletion when cancel button is clicked", () => {
         renderTable();
 
         const deleteBtns = screen.getAllByTitle("projects.entries.deleteEntry");
-        await user.click(deleteBtns[0]);
+        fireEvent.click(deleteBtns[0]);
 
         expect(screen.getByText("projects.entries.deleteEntryDesc")).toBeInTheDocument();
 
         const cancelBtn = screen.getByText("sidebar.cancel");
-        await user.click(cancelBtn);
+        fireEvent.click(cancelBtn);
 
         expect(screen.queryByText("projects.entries.deleteEntryDesc")).not.toBeInTheDocument();
     });
 
-    it("does not open view modal when clicking action cell", async () => {
-        const user = userEvent.setup();
+    it("does not open view modal when clicking action cell", () => {
         renderTable();
 
         // Assuming action cell is the last cell of the row. We will find it by its child buttons.
-        const viewIcons = screen.getAllByTitle("View full entry");
+        const viewIcons = screen.getAllByTitle("projects.entries.viewEntry");
         const actionCell = viewIcons[0].parentElement?.parentElement;
 
+        // Click on the action cell (which has stopPropagation) so modal should NOT open
         if (actionCell) {
-            await user.click(actionCell);
+            fireEvent.click(actionCell);
         }
 
-        expect(screen.queryByText("View Full Entry")).not.toBeInTheDocument();
+        expect(screen.queryByText("projects.entries.viewFullEntry")).not.toBeInTheDocument();
     });
 
     it("clears debounce timeout on unmount", () => {
         vi.useFakeTimers();
         const { unmount } = renderTable({ filterCol: "text" });
 
-        const searchInput = screen.getByPlaceholderText("Search characters");
+        const searchInput = screen.getByPlaceholderText("projects.entries.searchCharactersPlaceholder");
         fireEvent.change(searchInput, { target: { value: "test search 2" } });
 
         // Unmount before timer finishes
@@ -326,15 +335,12 @@ describe("EntriesTable", () => {
         vi.runAllTimers();
 
         // If cleared, submit won't be called
-        // Since other tests might have called mockSubmit, we rely on the specific call not happening
-        // (Wait, `mockSubmit` was cleared in `beforeEach`, but let's just assert `not.toHaveBeenCalled()`)
         expect(mockSubmit).not.toHaveBeenCalled();
 
         vi.useRealTimers();
     });
 
-    it("handles exclude mode individual row selection", async () => {
-        const user = userEvent.setup();
+    it("handles exclude mode individual row selection", () => {
         const onExcludedIdsChange = vi.fn();
         const excludedIds = new Set<string>();
 
@@ -342,12 +348,12 @@ describe("EntriesTable", () => {
         
         // Enter exclude mode via toggle
         const toggleBtn = screen.getByText("projects.entries.excludeMode");
-        await user.click(toggleBtn);
+        fireEvent.click(toggleBtn);
 
         // Find the checkboxes (lucide icons). Since the row is clickable, let's just click the cell containing the square icon.
         const firstRowCheckbox = screen.getAllByRole("row")[1].querySelector("td:first-child");
         if (firstRowCheckbox) {
-            await user.click(firstRowCheckbox);
+            fireEvent.click(firstRowCheckbox);
         }
 
         expect(onExcludedIdsChange).toHaveBeenCalled();
@@ -355,20 +361,19 @@ describe("EntriesTable", () => {
         expect(newSet.has("entry_1")).toBe(true);
     });
 
-    it("handles exclude mode select all / deselect all", async () => {
-        const user = userEvent.setup();
+    it("handles exclude mode select all / deselect all", () => {
         const onExcludedIdsChange = vi.fn();
         const excludedIds = new Set<string>();
 
         renderTable({ excludedIds, onExcludedIdsChange });
         
         // Enter exclude mode
-        await user.click(screen.getByText("projects.entries.excludeMode"));
+        fireEvent.click(screen.getByText("projects.entries.excludeMode"));
 
-        // Find the "Select all" button
-        const selectAllBtn = screen.getByTitle("Deselect page");
+        // Find the "Select all" button — title is shown as i18n key from t() mock
+        const selectAllBtn = screen.getByTitle("projects.entries.deselectPage");
         if (selectAllBtn) {
-            await user.click(selectAllBtn);
+            fireEvent.click(selectAllBtn);
         }
 
         expect(onExcludedIdsChange).toHaveBeenCalled();
@@ -377,68 +382,62 @@ describe("EntriesTable", () => {
         expect(newSet.has("entry_2")).toBe(true);
     });
 
-    it("opens view modal when Eye icon is clicked", async () => {
-        const user = userEvent.setup();
+    it("opens view modal when Eye icon is clicked", () => {
         renderTable();
 
-        const viewBtns = screen.getAllByTitle("View full entry");
+        const viewBtns = screen.getAllByTitle("projects.entries.viewEntry");
         if (viewBtns.length > 0) {
-            await user.click(viewBtns[0]);
+            fireEvent.click(viewBtns[0]);
         }
 
         expect(screen.getByText("projects.entries.viewFullEntry")).toBeInTheDocument();
     });
 
-    it("triggers form submit on select change", async () => {
-        const user = userEvent.setup();
+    it("triggers form submit on select change", () => {
         renderTable({ filterCol: "verdict" });
 
         const selects = screen.getAllByRole("combobox");
         const valSelect = selects[1];
         
-        await user.selectOptions(valSelect, "Negative");
+        fireEvent.change(valSelect, { target: { value: "Negative" } });
         
         // Form onChange should trigger submit
         expect(mockSubmit).toHaveBeenCalled();
     });
 
-    it("handles reset selection in exclusion banner", async () => {
-        const user = userEvent.setup();
+    it("handles reset selection in exclusion banner", () => {
         const onExcludedIdsChange = vi.fn();
         renderTable({ excludedIds: new Set(["entry_1"]), onExcludedIdsChange });
         
-        await user.click(screen.getByText("projects.entries.excludeMode"));
+        fireEvent.click(screen.getByText("projects.entries.excludeMode"));
 
         const resetBtn = screen.getByText("projects.entries.resetSelection");
-        await user.click(resetBtn);
+        fireEvent.click(resetBtn);
 
         expect(onExcludedIdsChange).toHaveBeenCalledWith(new Set());
     });
 
-    it("renders Go to Analysis link with correct state in banner", async () => {
-        const user = userEvent.setup();
+    it("renders Go to Analysis link with correct state in banner", () => {
         renderTable({ excludedIds: new Set(["entry_1"]) });
         
-        await user.click(screen.getByText("projects.entries.excludeMode"));
+        fireEvent.click(screen.getByText("projects.entries.excludeMode"));
         
         const analysisLink = screen.getByText("projects.entries.goToAnalysis").closest("a");
         expect(analysisLink).toHaveAttribute("href", "/projects/proj-1/models/roberta/analysis");
     });
 
-    it("triggers predict pending action", async () => {
-        const user = userEvent.setup();
+    it("triggers predict pending action", () => {
         renderTable();
         
         const predictBtn = screen.getByText("projects.entries.predictPending");
-        await user.click(predictBtn);
+        fireEvent.click(predictBtn);
         
         expect(mockSubmit).toHaveBeenCalledWith(expect.any(FormData), { method: "post" });
         const formData = mockSubmit.mock.calls[0][0] as FormData;
         expect(formData.get("intent")).toBe("predict_pending");
     });
 
-    it("handles pagination next/prev clicks", async () => {
-        const user = userEvent.setup();
+    it("handles pagination next/prev clicks", () => {
         renderTable({ data: { ...mockData, totalPages: 5, page: 2 } });
         
         const nextBtn = screen.getByTitle("projects.entries.next");
@@ -448,45 +447,43 @@ describe("EntriesTable", () => {
         expect(prevBtn).not.toBeDisabled();
     });
 
-    it("handles partial selection toggle in exclude mode", async () => {
-        const user = userEvent.setup();
+    it("handles partial selection toggle in exclude mode", () => {
         const onExcludedIdsChange = vi.fn();
         // entry_1 is excluded, entry_2 is NOT excluded
         renderTable({ excludedIds: new Set(["entry_1"]), onExcludedIdsChange });
 
-        await user.click(screen.getByText("projects.entries.excludeMode"));
+        fireEvent.click(screen.getByText("projects.entries.excludeMode"));
 
         // The "Select page" button should be visible (Square icon) because not all are selected
-        const selectPageBtn = screen.getByTitle("Select page");
-        await user.click(selectPageBtn);
+        // With t() mock, title comes back as the i18n key
+        const selectPageBtn = screen.getByTitle("projects.entries.selectPage");
+        fireEvent.click(selectPageBtn);
 
         // Clicking "Select page" should remove all from excludedIds (making them all selected)
         expect(onExcludedIdsChange).toHaveBeenCalledWith(new Set());
     });
 
-    it("toggles individual re-selection of items", async () => {
-        const user = userEvent.setup();
+    it("toggles individual re-selection of items", () => {
         const onExcludedIdsChange = vi.fn();
         renderTable({ excludedIds: new Set(["entry_1"]), onExcludedIdsChange });
 
-        await user.click(screen.getByText("projects.entries.excludeMode"));
+        fireEvent.click(screen.getByText("projects.entries.excludeMode"));
 
         // entry_1 is excluded (Square icon), click it to re-select
         const rows = screen.getAllByRole("row");
         const entry1Row = rows[1]; // Header is 0, entry_1 is 1
         const checkbox = entry1Row.querySelector("td:first-child");
         
-        if (checkbox) await user.click(checkbox);
+        if (checkbox) fireEvent.click(checkbox);
 
         expect(onExcludedIdsChange).toHaveBeenCalledWith(new Set());
     });
 
-    it("opens predictions history modal", async () => {
-        const user = userEvent.setup();
+    it("opens predictions history modal", () => {
         renderTable();
 
         const historyBtn = screen.getByText("projects.entries.predictionHistory");
-        await user.click(historyBtn);
+        fireEvent.click(historyBtn);
 
         expect(screen.getByTestId("predictions-modal")).toBeInTheDocument();
 
@@ -497,14 +494,13 @@ describe("EntriesTable", () => {
         // In real component, onClose would be called.
     });
 
-    it("handles internal exclusion state when no prop provided", async () => {
-        const user = userEvent.setup();
+    it("handles internal exclusion state when no prop provided", () => {
         renderTable(); // No excludedIds prop
         
-        await user.click(screen.getByText("projects.entries.excludeMode"));
+        fireEvent.click(screen.getByText("projects.entries.excludeMode"));
         
         const firstRowCheckbox = screen.getAllByRole("row")[1].querySelector("td:first-child");
-        if (firstRowCheckbox) await user.click(firstRowCheckbox);
+        if (firstRowCheckbox) fireEvent.click(firstRowCheckbox);
         // Should show translation key in banner if mock doesn't interpolate
         expect(screen.getByText("projects.entries.includedCount")).toBeInTheDocument();
     });

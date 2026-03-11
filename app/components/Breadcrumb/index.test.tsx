@@ -39,16 +39,17 @@ describe("Breadcrumb Component", () => {
         expect(currentItem).toHaveClass("text-yellow-400");
     });
 
-    it("renders slashes as separators", () => {
+    it("renders chevron separators", () => {
         const items = [
             { label: "Home", to: "/" },
             { label: "Project", to: "/project" },
             { label: "Current" }
         ];
 
-        renderBreadcrumb(items);
-
-        const separators = screen.getAllByText("/");
-        expect(separators).toHaveLength(2);
+        const { container } = renderBreadcrumb(items);
+        
+        // ChevronRight is a lucide icon
+        const chevrons = container.querySelectorAll('.lucide-chevron-right');
+        expect(chevrons).toHaveLength(2);
     });
 });

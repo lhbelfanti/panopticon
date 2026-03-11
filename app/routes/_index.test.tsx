@@ -80,13 +80,9 @@ describe("Dashboard Index Route Functions", () => {
     it("loader redirects to login when not authenticated", async () => {
         vi.mocked(isAuthenticated).mockResolvedValueOnce(false);
         const request = new Request("http://localhost/");
-        try {
-            await loader({ request } as any);
-            expect.fail("should have thrown redirect");
-        } catch (error: any) {
-            expect(error.status).toBe(302);
-            expect(error.headers.get("Location")).toBe("/login");
-        }
+        const result = await loader({ request } as any) as Response;
+        expect(result.status).toBe(302);
+        expect(result.headers.get("Location")).toBe("/login");
     });
 });
 
@@ -94,8 +90,8 @@ import { meta } from "./_index";
 
 describe("Dashboard Index Route Meta", () => {
     it("returns expected meta tags", () => {
-        const result = meta({} as any);
-        expect(result).toContainEqual({ title: "Panopticon" });
+        const result = meta({ data: { title: "Dashboard" } } as any);
+        expect(result).toContainEqual({ title: "Panopticon - Dashboard" });
         expect(result).toContainEqual({ name: "description", content: "Adverse Human Behaviour Analysis Platform" });
     });
 });
