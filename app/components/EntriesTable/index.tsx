@@ -168,16 +168,6 @@ const EntriesTable = (props: EntriesTableProps) => {
             >
               {t("projects.entries.resetSelection", "Reset selection")}
             </button>
-            {!isExclusionOnly && (
-              <Link
-                to={`/projects/${project.id}/models/${modelId}/analysis`}
-                state={{ excludedEntryIds: Array.from(excludedIds) }}
-                className="bg-yellow-500 hover:bg-yellow-400 text-background-dark px-4 py-2 rounded-lg font-bold text-sm shadow-lg shadow-yellow-500/20 transition-all flex items-center gap-2"
-              >
-                <Zap size={16} />
-                {t("projects.entries.goToAnalysis", "Go to Analysis")}
-              </Link>
-            )}
           </div>
         </div>
       )}
@@ -356,17 +346,7 @@ const EntriesTable = (props: EntriesTableProps) => {
               </Link>
             )}
 
-            <button
-              type="button"
-              onClick={() => setIsExcludeMode(!isExcludeMode)}
-              className={`flex items-center gap-2 px-4 py-2 text-sm font-bold border rounded-lg transition-all whitespace-nowrap ${isExcludeMode
-                  ? "bg-primary text-background-dark border-primary shadow-lg shadow-primary/20"
-                  : "text-light-gray-70 bg-surface-dark border-white/10 hover:border-primary/50"
-                }`}
-            >
-              <MousePointer2 size={16} />
-              {isExcludeMode ? t("projects.entries.exitExcludeMode", "Exit exclude mode") : t("projects.entries.excludeMode", "Exclude mode")}
-            </button>
+
 
             <a
               href={`/projects/${project.id}/models/${modelId}/export?filterCol=${filterCol}&filterVal=${encodeURIComponent(filterVal)}&filterOp=${encodeURIComponent(filterOp)}&filterBias=${filterBias}`}
