@@ -6,7 +6,7 @@ import { ProjectDetailsHeader } from "./index";
 vi.mock("react-i18next", () => ({
     Trans: ({ i18nKey, children }: any) => children || i18nKey,
     useTranslation: () => ({
-        t: (key: string) => key,
+        t: (key: string, options?: any) => options?.defaultValue || key,
     }),
 }));
 

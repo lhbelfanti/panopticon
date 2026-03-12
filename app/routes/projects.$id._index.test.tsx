@@ -6,7 +6,7 @@ import ProjectViewPage from "./projects.$id._index";
 
 vi.mock("react-i18next", () => ({
     useTranslation: () => ({
-        t: (key: string, options?: any) => options ? `${key} ${JSON.stringify(options)}` : key,
+        t: (key: string, options?: any) => options?.defaultValue || key,
     }),
     Trans: ({ i18nKey }: any) => <span>{i18nKey}</span>,
 }));
