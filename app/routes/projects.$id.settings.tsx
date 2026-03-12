@@ -103,7 +103,7 @@ export default function ProjectSettingsPage() {
 
                 <SettingsHeader
                     title={t("projects.settings.title")}
-                    description={t("projects.settings.description", { name: t(`projects.${project.name}`, { defaultValue: project.name }) })}
+                    description={t("projects.settings.description", { name: project.name })}
                 />
 
                 <div className="bg-surface-dark border border-white/5 rounded-2xl shadow-xl overflow-hidden mb-10 animate-in fade-in slide-in-from-bottom-8 duration-700">
@@ -130,7 +130,7 @@ export default function ProjectSettingsPage() {
                     onClose={() => setShowDeleteModal(false)}
                     icon={<Trash2 size={28} />}
                     title={t("projects.view.deleteProject")}
-                    description={t("projects.view.deleteProjectDesc", { name: t(`projects.${project.name}`, { defaultValue: project.name }) })}
+                    description={t("projects.view.deleteProjectDesc", { name: project.name })}
                     cancelText={t("sidebar.cancel")}
                     confirmText={isDeleting ? t("common.deleting") : t("projects.view.deleteProjectConfirm")}
                     confirmAction="."

@@ -43,7 +43,7 @@ export const ConfigurationSection = (props: ConfigurationSectionProps) => {
                     >
                         <option value="" disabled>{t("projects.entries.new.targetConfiguration.selectProject", "Select a project...")}</option>
                         {projects.map(p => (
-                            <option key={p.id} value={p.id}>{t(`projects.${p.name}`, { defaultValue: p.name })}</option>
+                            <option key={p.id} value={p.id}>{p.name}</option>
                         ))}
                     </select>
                 </div>

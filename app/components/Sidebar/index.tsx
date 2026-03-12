@@ -115,7 +115,7 @@ export const Sidebar = (props: SidebarProps) => {
                 key={project.id}
                 to={`/projects/${project.id}`}
                 icon={<Folder size={18} className="transition-colors" />}
-                label={t(`projects.${project.name}`, { defaultValue: project.name })}
+                label={project.name}
                 collapsed={collapsed}
                 indented={!collapsed}
                 subItems={project.subprojects?.map((sub) => ({

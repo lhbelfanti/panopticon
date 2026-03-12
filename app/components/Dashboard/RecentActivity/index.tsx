@@ -53,7 +53,7 @@ export const RecentActivity = (props: RecentActivityProps) => {
                 <p className="text-white-1 text-sm truncate">
                   {t(`dashboard.recentActivity.messages.${activity.type}`, {
                     ...(activity.metadata || {}),
-                    name: activity.metadata?.name ? t(`projects.${activity.metadata.name}`, { defaultValue: activity.metadata.name }) : undefined,
+                    name: activity.metadata?.name,
                     defaultValue: activity.description,
                   }) as string}
                 </p>
