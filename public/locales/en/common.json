@@ -264,6 +264,10 @@
             "submit": "Save changes",
             "saving": "Saving..."
         },
+        "Default Analysis": "Default Analysis",
+        "Default project for all uncategorized analysis": "Default project for all uncategorized analysis",
+        "Mental Health Cohort A": "Mental Health Cohort A",
+        "Analyzing posts related to depression and suicidal thoughts": "Analyzing posts related to depression and suicidal thoughts",
         "settings": {
             "title": "Project settings",
             "description": "Information and configuration for project \"{{name}}\"",

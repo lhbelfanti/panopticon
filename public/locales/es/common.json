@@ -261,8 +261,12 @@
         "edit": {
             "title": "Editar proyecto",
             "submit": "Guardar cambios",
-            "saving": "Guardando..."
+            "count": "Guardando..."
         },
+        "Default Analysis": "Análisis Predeterminado",
+        "Default project for all uncategorized analysis": "Proyecto predeterminado para todos los análisis no categorizados",
+        "Mental Health Cohort A": "Cohorte de Salud Mental A",
+        "Analyzing posts related to depression and suicidal thoughts": "Analizando publicaciones relacionadas con depresión y pensamientos suicidas",
         "settings": {
             "title": "Configuración del proyecto",
             "description": "Información y configuración para el proyecto \"{{name}}\"",
