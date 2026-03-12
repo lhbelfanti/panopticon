@@ -226,7 +226,7 @@ describe("AnalysisReportModal", () => {
         const run = makeCompletedRun({ result: undefined });
         render(<AnalysisReportModal isOpen={true} onClose={onCloseMock} run={run} />);
         
-        await screen.findByText("Failed to fetch report data");
+        await screen.findByText("projects.analysis.reportModal.loading.fetchError");
         const closeBtn = screen.getByText("projects.analysis.reportModal.close");
         await user.click(closeBtn);
         expect(onCloseMock).toHaveBeenCalled();

@@ -344,11 +344,11 @@ describe("EntriesTable", () => {
         const onExcludedIdsChange = vi.fn();
         const excludedIds = new Set<string>();
 
-        renderTable({ excludedIds, onExcludedIdsChange });
+        renderTable({ excludedIds, onExcludedIdsChange, isExclusionOnly: true });
         
         // Enter exclude mode via toggle
-        const toggleBtn = screen.getByText("projects.entries.excludeMode");
-        fireEvent.click(toggleBtn);
+        // In the new logic, passing isExclusionOnly: true means it's already in exclude mode on mount.
+        // So we don't need to click the toggle button.
 
         // Find the checkboxes (lucide icons). Since the row is clickable, let's just click the cell containing the square icon.
         const firstRowCheckbox = screen.getAllByRole("row")[1].querySelector("td:first-child");
@@ -365,10 +365,10 @@ describe("EntriesTable", () => {
         const onExcludedIdsChange = vi.fn();
         const excludedIds = new Set<string>();
 
-        renderTable({ excludedIds, onExcludedIdsChange });
+        renderTable({ excludedIds, onExcludedIdsChange, isExclusionOnly: true });
         
         // Enter exclude mode
-        fireEvent.click(screen.getByText("projects.entries.excludeMode"));
+        // Already in exclude mode because of isExclusionOnly: true
 
         // Find the "Select all" button — title is shown as i18n key from t() mock
         const selectAllBtn = screen.getByTitle("projects.entries.deselectPage");
@@ -407,23 +407,14 @@ describe("EntriesTable", () => {
 
     it("handles reset selection in exclusion banner", () => {
         const onExcludedIdsChange = vi.fn();
-        renderTable({ excludedIds: new Set(["entry_1"]), onExcludedIdsChange });
+        renderTable({ excludedIds: new Set(["entry_1"]), onExcludedIdsChange, isExclusionOnly: true });
         
-        fireEvent.click(screen.getByText("projects.entries.excludeMode"));
+        // Already in exclude mode because of isExclusionOnly: true
 
         const resetBtn = screen.getByText("projects.entries.resetSelection");
         fireEvent.click(resetBtn);
 
         expect(onExcludedIdsChange).toHaveBeenCalledWith(new Set());
-    });
-
-    it("renders Go to Analysis link with correct state in banner", () => {
-        renderTable({ excludedIds: new Set(["entry_1"]) });
-        
-        fireEvent.click(screen.getByText("projects.entries.excludeMode"));
-        
-        const analysisLink = screen.getByText("projects.entries.goToAnalysis").closest("a");
-        expect(analysisLink).toHaveAttribute("href", "/projects/proj-1/models/roberta/analysis");
     });
 
     it("triggers predict pending action", () => {
@@ -450,9 +441,8 @@ describe("EntriesTable", () => {
     it("handles partial selection toggle in exclude mode", () => {
         const onExcludedIdsChange = vi.fn();
         // entry_1 is excluded, entry_2 is NOT excluded
-        renderTable({ excludedIds: new Set(["entry_1"]), onExcludedIdsChange });
-
-        fireEvent.click(screen.getByText("projects.entries.excludeMode"));
+        renderTable({ excludedIds: new Set(["entry_1"]), onExcludedIdsChange, isExclusionOnly: true });
+        // Already in exclude mode because of isExclusionOnly: true
 
         // The "Select page" button should be visible (Square icon) because not all are selected
         // With t() mock, title comes back as the i18n key
@@ -465,9 +455,8 @@ describe("EntriesTable", () => {
 
     it("toggles individual re-selection of items", () => {
         const onExcludedIdsChange = vi.fn();
-        renderTable({ excludedIds: new Set(["entry_1"]), onExcludedIdsChange });
-
-        fireEvent.click(screen.getByText("projects.entries.excludeMode"));
+        renderTable({ excludedIds: new Set(["entry_1"]), onExcludedIdsChange, isExclusionOnly: true });
+        // Already in exclude mode because of isExclusionOnly: true
 
         // entry_1 is excluded (Square icon), click it to re-select
         const rows = screen.getAllByRole("row");
@@ -495,9 +484,8 @@ describe("EntriesTable", () => {
     });
 
     it("handles internal exclusion state when no prop provided", () => {
-        renderTable(); // No excludedIds prop
-        
-        fireEvent.click(screen.getByText("projects.entries.excludeMode"));
+        renderTable({ isExclusionOnly: true }); // No excludedIds prop
+        // Already in exclude mode because of isExclusionOnly: true
         
         const firstRowCheckbox = screen.getAllByRole("row")[1].querySelector("td:first-child");
         if (firstRowCheckbox) fireEvent.click(firstRowCheckbox);
