@@ -168,6 +168,11 @@
                 "info": "El historial de análisis se mantiene por subproyecto. Puedes generar múltiples informes con diferentes criterios de exclusión para comparar resultados. Los análisis normalmente tardan unos segundos en procesarse."
             },
             "reportModal": {
+                "loading": {
+                    "title": "Cargando reporte",
+                    "desc": "Obteniendo resultados detallados del análisis...",
+                    "fetchError": "Fallo al obtener los datos del reporte"
+                },
                 "processing": {
                     "title": "Procesando análisis",
                     "desc": "Por favor, espera mientras generamos los insights y métricas para esta ejecución."
@@ -301,6 +306,7 @@
             "biasPlaceholder": "Desviación",
             "deselectPage": "Deseleccionar página",
             "selectPage": "Seleccionar página",
+            "selectAll": "Seleccionar todo",
             "selectedLabel": "Seleccionado",
             "exitExcludeMode": "Salir del modo exclusión",
             "excludeMode": "Modo exclusión",
@@ -316,6 +322,8 @@
             "metadataQuoteIsReply": "La cita es una respuesta",
             "verdict": "Veredicto",
             "score": "Puntaje",
+            "analysis": "Análisis",
+            "openAnalysis": "Abrir análisis \u2192",
             "datasetEntries": "Entradas del dataset",
             "predictPending": "Predecir pendientes",
             "predicting": "Prediciendo...",

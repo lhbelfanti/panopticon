@@ -40,11 +40,11 @@ export const AnalysisReportModal = (props: AnalysisReportModalProps) => {
                     // Wait, the run object has subprojectId.
                     // For now, let's assume a simplified fetch or use the runId in the path.
                     const response = await fetch(`/api/v1/projects/0/models/${initialRun.subprojectId}/analysis/${initialRun.id}`);
-                    if (!response.ok) throw new Error("Failed to fetch report data");
+                    if (!response.ok) throw new Error(t('projects.analysis.reportModal.loading.fetchError'));
                     const fullRun = await response.json();
                     setRun(fullRun);
                 } catch (err: any) {
-                    setError(err.message);
+                    setError(err.message || t('common.error'));
                 } finally {
                     setIsLoading(false);
                 }

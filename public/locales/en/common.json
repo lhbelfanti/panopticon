@@ -168,6 +168,11 @@
                 "info": "Analysis history is kept per subproject. You can generate multiple reports with different exclusion criteria to compare results. Analysis runs typically take a few seconds to process."
             },
             "reportModal": {
+                "loading": {
+                    "title": "Loading Report",
+                    "desc": "Fetching detailed analysis results...",
+                    "fetchError": "Failed to fetch report data"
+                },
                 "processing": {
                     "title": "Analysis processing",
                     "desc": "Please wait while we generate the insights and metrics for this run."
@@ -302,6 +307,7 @@
             "biasPlaceholder": "Bias",
             "deselectPage": "Deselect page",
             "selectPage": "Select page",
+            "selectAll": "Select all",
             "selectedLabel": "Selected",
             "exitExcludeMode": "Exit exclude mode",
             "excludeMode": "Exclude mode",
