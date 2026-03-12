@@ -162,9 +162,22 @@ const AnalysisPage = () => {
                         isRefreshing={nav.state === "loading"}
                         onRefresh={() => submit(null, { replace: true })}
                         onViewReport={setSelectedRun}
-                        onDownloadPDF={(runId) => {
+                        onDownloadPDF={async (runId) => {
                             const runData = localHistory.find(r => r.id === runId);
-                            if (runData) generateAnalysisPDF(runData, project.name, t);
+                            if (!runData) return;
+
+                            if (!runData.result) {
+                                try {
+                                    const response = await fetch(`/api/v1/projects/${project.id}/models/${modelId}/analysis/${runId}`);
+                                    if (!response.ok) throw new Error("Failed to fetch full report data");
+                                    const fullRun = await response.json();
+                                    generateAnalysisPDF(fullRun, project.name, t);
+                                } catch (error) {
+                                    console.error("Error downloading PDF:", error);
+                                }
+                            } else {
+                                generateAnalysisPDF(runData, project.name, t);
+                            }
                         }}
                     />
                 </div>
