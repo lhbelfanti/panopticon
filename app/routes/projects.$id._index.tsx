@@ -82,7 +82,7 @@ export default function ProjectDetailsPage() {
           icon={<Trash2 size={28} />}
           title={t("projects.view.deleteProject")}
           description={t("projects.view.deleteProjectDesc", {
-            name: project.name,
+            name: t(`projects.${project.name}`, { defaultValue: project.name }),
           })}
           cancelText={t("sidebar.cancel")}
           confirmText={

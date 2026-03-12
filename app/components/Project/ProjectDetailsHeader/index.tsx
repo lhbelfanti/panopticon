@@ -16,11 +16,11 @@ export const ProjectDetailsHeader = (props: ProjectDetailsHeaderProps) => {
             <div>
                 <h1 className="text-4xl font-extrabold text-white-1 mb-3 tracking-tight flex items-center gap-3">
                     <Folder size={36} className="text-primary" />
-                    {project.name}
+                    {t(`projects.${project.name}`, { defaultValue: project.name })}
                 </h1>
                 {project.description && (
                     <p className="text-light-gray-70 text-lg max-w-4xl mt-7 mb-10 truncate text-balance">
-                        {project.description}
+                        {t(`projects.${project.description}`, { defaultValue: project.description })}
                     </p>
                 )}
 
