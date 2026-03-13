@@ -76,6 +76,10 @@ const EntriesTable = (props: EntriesTableProps) => {
   // Exclusion Mode Logic
   const [isExcludeMode, setIsExcludeMode] = useState(isExclusionOnly);
 
+  // Prediction Selection Mode Logic
+  const [isPredictSelectionMode, setIsPredictSelectionMode] = useState(false);
+  const [selectedPredictionIds, setSelectedPredictionIds] = useState<Set<string>>(new Set());
+
   const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
@@ -94,7 +98,7 @@ const EntriesTable = (props: EntriesTableProps) => {
   }, [localFilterVal, submit, filterVal]);
 
   const isDeleting = nav.formData?.get("intent") === "delete_entry";
-  const isPredicting = nav.formData?.get("intent") === "predict_pending";
+  const isPredicting = nav.formData?.get("intent") === "predict_pending" || nav.formData?.get("intent") === "predict_selected";
 
   useEffect(() => {
     if (nav.state === "idle" && !isDeleting) {
@@ -127,6 +131,15 @@ const EntriesTable = (props: EntriesTableProps) => {
     const formData = new FormData();
     formData.set("intent", "predict_pending");
     submit(formData, { method: "post" });
+  };
+
+  const handlePredictSelected = () => {
+    const formData = new FormData();
+    formData.set("intent", "predict_selected");
+    formData.set("entryIds", JSON.stringify(Array.from(selectedPredictionIds)));
+    submit(formData, { method: "post" });
+    setIsPredictSelectionMode(false);
+    setSelectedPredictionIds(new Set());
   };
 
   // Convention: extract long Tailwind strings into variables
@@ -165,6 +178,32 @@ const EntriesTable = (props: EntriesTableProps) => {
             <button
               onClick={() => setExcludedIds(new Set())}
               className="px-3 py-1.5 text-xs font-bold text-white-1 hover:text-primary transition-colors"
+            >
+              {t("projects.entries.resetSelection", "Reset selection")}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Prediction Selection Banner */}
+      {isPredictSelectionMode && (
+        <div className="bg-yellow-500/10 border border-yellow-500/20 p-4 rounded-xl flex items-center justify-between animate-in fade-in slide-in-from-top-2 duration-300">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-yellow-500/20 flex items-center justify-center text-yellow-400">
+              <MousePointer2 size={20} />
+            </div>
+            <div>
+              <h3 className="text-white-1 font-bold text-sm">{t("projects.entries.selectForPrediction")}</h3>
+              <p className="text-light-gray-60 text-xs mt-0.5">
+                {t("projects.entries.selectForPredictionDesc")}
+                <span className="ml-2 text-yellow-400">{t("projects.entries.selectedCount", { count: selectedPredictionIds.size })}</span>
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setSelectedPredictionIds(new Set())}
+              className="px-3 py-1.5 text-xs font-bold text-white-1 hover:text-yellow-400 transition-colors"
             >
               {t("projects.entries.resetSelection", "Reset selection")}
             </button>
@@ -367,29 +406,46 @@ const EntriesTable = (props: EntriesTableProps) => {
               (nav.state === "loading" ? "opacity-30" : "opacity-100")
             }
           >
-            {isExcludeMode && data.entries.length > 0 && (
+            {(isExcludeMode || isPredictSelectionMode) && data.entries.length > 0 && (
               <div className="bg-white/5 border-b border-white/5 px-4 py-3 flex items-center justify-start">
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => {
-                      const allIdsOnPage = data.entries.map(e => e.id);
-                      // Considered "all selected" if NONE of the ids on this page are in excludedIds
-                      const areAllSelected = !allIdsOnPage.some(id => excludedIds.has(id));
-
-                      const newExcluded = new Set(excludedIds);
-                      if (areAllSelected) {
-                        // User clicked to DESELECT all -> add all to excludedIds
-                        allIdsOnPage.forEach(id => newExcluded.add(id));
+                      if (isExcludeMode) {
+                        const allIdsOnPage = data.entries.map(e => e.id);
+                        const areAllSelected = !allIdsOnPage.some(id => excludedIds.has(id));
+                        const newExcluded = new Set(excludedIds);
+                        if (areAllSelected) {
+                          allIdsOnPage.forEach(id => newExcluded.add(id));
+                        } else {
+                          allIdsOnPage.forEach(id => newExcluded.delete(id));
+                        }
+                        setExcludedIds(newExcluded);
                       } else {
-                        // User clicked to SELECT all -> remove all from excludedIds
-                        allIdsOnPage.forEach(id => newExcluded.delete(id));
+                        const pendingOnPage = data.entries.filter(e => e.verdict === "Pending").map(e => e.id);
+                        if (pendingOnPage.length === 0) return;
+                        const areAllPendingSelected = pendingOnPage.every(id => selectedPredictionIds.has(id));
+                        const newSelected = new Set(selectedPredictionIds);
+                        if (areAllPendingSelected) {
+                          pendingOnPage.forEach(id => newSelected.delete(id));
+                        } else {
+                          pendingOnPage.forEach(id => newSelected.add(id));
+                        }
+                        setSelectedPredictionIds(newSelected);
                       }
-                      setExcludedIds(newExcluded);
                     }}
                     className="hover:text-primary transition-colors flex items-center justify-center p-1 rounded hover:bg-white/5"
-                    title={!data.entries.some(e => excludedIds.has(e.id)) ? t("projects.entries.deselectPage") : t("projects.entries.selectPage")}
+                    title={
+                      isExcludeMode
+                        ? !data.entries.some(e => excludedIds.has(e.id)) ? t("projects.entries.deselectPage") : t("projects.entries.selectPage")
+                        : data.entries.filter(e => e.verdict === "Pending").length > 0 && data.entries.filter(e => e.verdict === "Pending").every(e => selectedPredictionIds.has(e.id)) ? t("projects.entries.deselectPage") : t("projects.entries.selectPage")
+                    }
                   >
-                    {!data.entries.some(e => excludedIds.has(e.id)) ? <CheckSquare size={16} className="text-primary" /> : <Square size={16} className="text-light-gray-50 opacity-40" />}
+                    {isExcludeMode ? (
+                      !data.entries.some(e => excludedIds.has(e.id)) ? <CheckSquare size={16} className="text-primary" /> : <Square size={16} className="text-light-gray-50 opacity-40" />
+                    ) : (
+                      data.entries.filter(e => e.verdict === "Pending").length > 0 && data.entries.filter(e => e.verdict === "Pending").every(e => selectedPredictionIds.has(e.id)) ? <CheckSquare size={16} className="text-primary" /> : <Square size={16} className="text-light-gray-50 opacity-40" />
+                    )}
                   </button>
                   <span className="text-sm font-bold text-white-1">{t("projects.entries.selectAll")}</span>
                 </div>
@@ -398,7 +454,7 @@ const EntriesTable = (props: EntriesTableProps) => {
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className={tableHeaderRowClasses}>
-                  {isExcludeMode && (
+                  {(isExcludeMode || isPredictSelectionMode) && (
                     <th className="py-3 px-4 whitespace-nowrap text-left w-1">
                       <span className="font-bold">{t("projects.entries.selectedLabel")}</span>
                     </th>
@@ -431,25 +487,48 @@ const EntriesTable = (props: EntriesTableProps) => {
                       className="hover:bg-white/5 transition-colors group cursor-pointer"
                       onClick={() => setEntryToView(entry)}
                     >
-                      {isExcludeMode && (
+                      {(isExcludeMode || isPredictSelectionMode) && (
                         <td
                           className="py-2 px-4 whitespace-nowrap"
                           onClick={(e) => {
                             e.stopPropagation();
-                            const newExcluded = new Set(excludedIds);
-                            if (newExcluded.has(entry.id)) {
-                              newExcluded.delete(entry.id);
+                            if (isExcludeMode) {
+                              const newExcluded = new Set(excludedIds);
+                              if (newExcluded.has(entry.id)) {
+                                newExcluded.delete(entry.id);
+                              } else {
+                                newExcluded.add(entry.id);
+                              }
+                              setExcludedIds(newExcluded);
                             } else {
-                              newExcluded.add(entry.id);
+                              if (entry.verdict !== "Pending") return;
+                              const newSelected = new Set(selectedPredictionIds);
+                              if (newSelected.has(entry.id)) {
+                                newSelected.delete(entry.id);
+                              } else {
+                                newSelected.add(entry.id);
+                              }
+                              setSelectedPredictionIds(newSelected);
                             }
-                            setExcludedIds(newExcluded);
                           }}
                         >
                           <div className="flex items-center justify-start">
-                            {!excludedIds.has(entry.id) ? (
-                              <CheckSquare size={18} className="text-primary" />
+                            {isExcludeMode ? (
+                              !excludedIds.has(entry.id) ? (
+                                <CheckSquare size={18} className="text-primary" />
+                              ) : (
+                                <Square size={18} className="text-light-gray-50 opacity-40" />
+                              )
                             ) : (
-                              <Square size={18} className="text-light-gray-50 opacity-40" />
+                              entry.verdict === "Pending" ? (
+                                selectedPredictionIds.has(entry.id) ? (
+                                  <CheckSquare size={18} className="text-primary" />
+                                ) : (
+                                  <Square size={18} className="text-light-gray-50 opacity-40" />
+                                )
+                              ) : (
+                                <Square size={18} className="text-light-gray-50 opacity-10 cursor-not-allowed" />
+                              )
                             )}
                           </div>
                         </td>
@@ -538,8 +617,23 @@ const EntriesTable = (props: EntriesTableProps) => {
         {/* Footer Toolbar: Count, Pagination, Predict Button */}
         <div className="px-6 py-6 border-t border-white/5 bg-black/10 flex items-center justify-between relative">
           {/* Entry Count */}
-          <div className="text-sm text-light-gray-70 font-bold tracking-wide absolute left-6">
-            {t("projects.entries.datasetEntries")}: <span className="text-white-1 text-xl ml-1">{data.total}</span>
+          <div className="flex flex-col absolute left-6">
+            <div className="text-sm text-light-gray-70 font-bold tracking-wide">
+              {data.total !== data.datasetTotal ? (
+                <>
+                  {t("projects.entries.filteredEntries", { total: data.datasetTotal })}: <span className="text-white-1 text-xl ml-1">{data.total}</span>
+                </>
+              ) : (
+                <>
+                  {t("projects.entries.datasetEntries")}: <span className="text-white-1 text-xl ml-1">{data.datasetTotal}</span>
+                </>
+              )}
+            </div>
+            {data.totalPending > 0 && (
+              <div className="text-sm text-light-gray-70 font-bold tracking-wide mt-1">
+                {t("projects.entries.pendingToPredict")}: <span className="text-white-1 text-xl ml-1">{data.totalPending}</span>
+              </div>
+            )}
           </div>
 
           {/* Complex Pagination - Centered */}
@@ -628,17 +722,53 @@ const EntriesTable = (props: EntriesTableProps) => {
           </div>
 
           {/* Predict Pending Button - Absolute Right */}
-          <div className="absolute right-6">
-            {!isExclusionOnly && data.entries.some((e) => e.verdict === "Pending") && (
-              <button
-                type="button"
-                onClick={handlePredictPending}
-                disabled={isPredicting}
-                className="flex items-center gap-2 px-4 py-2 text-sm font-bold text-background-dark bg-yellow-400 hover:bg-yellow-500 rounded-lg transition-all disabled:opacity-50 hover:scale-105 hover:shadow-lg shadow-yellow-500/20"
-              >
-                <Zap size={16} className={isPredicting ? "animate-pulse" : ""} />
-                {isPredicting ? t("projects.entries.predicting") : t("projects.entries.predictPending")}
-              </button>
+          <div className="absolute right-6 flex items-center gap-2">
+            {!isExclusionOnly && data.totalPending > 0 && !isPredictSelectionMode && (
+              <>
+                {data.entries.some((e) => e.verdict === "Pending") && (
+                  <button
+                    type="button"
+                    onClick={() => setIsPredictSelectionMode(true)}
+                    className="px-4 py-2 text-sm font-bold text-light-gray-70 bg-surface-dark border border-white/10 hover:bg-white/5 rounded-lg transition-colors"
+                  >
+                    {t("projects.entries.selectToPredict")}
+                  </button>
+                )}
+                <button
+                  type="button"
+                  onClick={handlePredictPending}
+                  disabled={isPredicting}
+                  className="flex items-center gap-2 px-4 py-2 text-sm font-bold text-background-dark bg-yellow-400 hover:bg-yellow-500 rounded-lg transition-all disabled:opacity-50 hover:scale-105 hover:shadow-lg shadow-yellow-500/20"
+                >
+                  <Zap size={16} className={isPredicting ? "animate-pulse" : ""} />
+                  {isPredicting ? t("projects.entries.predicting") : t("projects.entries.predictPending")}
+                </button>
+              </>
+            )}
+
+            {!isExclusionOnly && isPredictSelectionMode && (
+              <>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsPredictSelectionMode(false);
+                    setSelectedPredictionIds(new Set());
+                  }}
+                  className="px-4 py-2 text-sm font-bold text-light-gray-70 bg-surface-dark border border-white/10 hover:bg-white/5 rounded-lg transition-colors"
+                >
+                  {t("sidebar.cancel")}
+                </button>
+                <button
+                  type="button"
+                  onClick={handlePredictSelected}
+                  disabled={isPredicting || selectedPredictionIds.size === 0}
+                  className="flex items-center gap-2 px-4 py-2 text-sm font-bold text-background-dark bg-yellow-400 hover:bg-yellow-500 rounded-lg transition-all disabled:opacity-50 hover:scale-105 hover:shadow-lg shadow-yellow-500/20"
+                >
+                  <Zap size={16} className={isPredicting ? "animate-pulse" : ""} />
+                  {isPredicting ? t("projects.entries.predicting") : t("projects.entries.predictSelected")}
+                  {selectedPredictionIds.size > 0 && ` (${selectedPredictionIds.size})`}
+                </button>
+              </>
             )}
           </div>
         </div>
