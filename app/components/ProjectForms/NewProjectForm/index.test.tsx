@@ -43,11 +43,9 @@ vi.mock("~/components/ui/CustomCheckbox", () => ({
 describe("NewProjectForm", () => {
     const mockBehaviors = [
         {
-            id: "spam",
+            id: "illicit_drugs",
             name: "Spam",
             description: "Spam desc",
-            iconName: "FileText",
-            color: "red",
             enabled: true,
             availableModels: ["bert_spanish", "roberta_english"],
         }
@@ -76,13 +74,13 @@ describe("NewProjectForm", () => {
     it("toggles behaviors and updates available models", async () => {
         const user = userEvent.setup();
         const behaviors = [
-            { id: "b1", enabled: true, availableModels: ["m1", "m2"], iconName: "Circle", color: "red" },
-            { id: "b2", enabled: true, availableModels: ["m2", "m3"], iconName: "Circle", color: "blue" },
+            { id: "illicit_drugs", enabled: true, availableModels: ["m1", "m2"] },
+            { id: "hate_speech", enabled: true, availableModels: ["m2", "m3"] },
         ];
         renderForm({ behaviorConfigs: behaviors as any });
 
-        const b1 = screen.getByLabelText("projects.behaviors.b1");
-        const b2 = screen.getByLabelText("projects.behaviors.b2");
+        const b1 = screen.getByLabelText("projects.behaviors.illicit_drugs");
+        const b2 = screen.getByLabelText("projects.behaviors.hate_speech");
 
         await user.click(b1);
         expect(screen.getByLabelText("projects.models.m1")).toBeInTheDocument();
@@ -97,12 +95,12 @@ describe("NewProjectForm", () => {
 
     it("handles edit mode and restricts unchecking initial behaviors", async () => {
         const user = userEvent.setup();
-        const behaviors = [{ id: "b1", enabled: true, availableModels: ["m1"], iconName: "Circle", color: "red" }];
-        const initialData = { name: "P1", description: "D1", behaviors: ["b1"], models: ["m1"] };
+        const behaviors = [{ id: "illicit_drugs", enabled: true, availableModels: ["m1"] }];
+        const initialData = { name: "P1", description: "D1", behaviors: ["illicit_drugs"], models: ["m1"] };
         
         renderForm({ mode: "edit", initialData, behaviorConfigs: behaviors as any });
 
-        const b1 = screen.getByLabelText("projects.behaviors.b1") as HTMLInputElement;
+        const b1 = screen.getByLabelText("projects.behaviors.illicit_drugs") as HTMLInputElement;
         expect(b1.checked).toBe(true);
 
         await user.click(b1);
@@ -112,25 +110,25 @@ describe("NewProjectForm", () => {
 
     it("shows incompatible models warning", () => {
         const behaviors = [
-            { id: "b1", enabled: true, availableModels: ["m1"], iconName: "Circle", color: "red" },
-            { id: "b2", enabled: true, availableModels: ["m2"], iconName: "Circle", color: "blue" },
+            { id: "illicit_drugs", enabled: true, availableModels: ["m1"] },
+            { id: "hate_speech", enabled: true, availableModels: ["m2"] },
         ];
         renderForm({ behaviorConfigs: behaviors as any });
 
         // Select b1 and b2 -> intersection is empty
-        fireEvent.click(screen.getByLabelText("projects.behaviors.b1"));
-        fireEvent.click(screen.getByLabelText("projects.behaviors.b2"));
+        fireEvent.click(screen.getByLabelText("projects.behaviors.illicit_drugs"));
+        fireEvent.click(screen.getByLabelText("projects.behaviors.hate_speech"));
 
         expect(screen.getByText("projects.new.noModelsIntersection")).toBeInTheDocument();
     });
 
     it("handles disabled behaviors and shows notAvailableText", () => {
         const behaviors = [
-            { id: "b1", enabled: false, availableModels: ["m1"], iconName: "Circle", color: "red" },
+            { id: "illicit_drugs", enabled: false, availableModels: ["m1"] },
         ];
         renderForm({ behaviorConfigs: behaviors as any });
 
-        const b1 = screen.getByLabelText("projects.behaviors.b1") as HTMLInputElement;
+        const b1 = screen.getByLabelText("projects.behaviors.illicit_drugs") as HTMLInputElement;
         expect(b1.disabled).toBe(true);
     });
 });
