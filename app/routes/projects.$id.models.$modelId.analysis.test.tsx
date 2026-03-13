@@ -265,7 +265,7 @@ describe("AnalysisPage Route Component", () => {
 
     it("handles history table actions", async () => {
         const historyMock = [
-            { id: "run_1", status: "completed", metrics: {}, createdAt: "2024-01-01" }
+            { id: "run_1", status: "completed", result: {}, createdAt: "2024-01-01" }
         ];
         mockUseLoaderData.mockReturnValue({
             ...stabelLoaderData,
@@ -296,6 +296,36 @@ describe("AnalysisPage Route Component", () => {
         await waitFor(() => {
             expect(vi.mocked(generateAnalysisPDF)).toHaveBeenCalled();
         });
+    });
+
+    it("handles fetch failure in onDownloadPDF", async () => {
+        const historyMock = [{ id: "run_1", status: "completed", result: undefined as any, createdAt: "2024" }];
+        mockUseLoaderData.mockReturnValue({
+            ...stabelLoaderData,
+            history: historyMock as any,
+            entriesData: { entries: [], total: 0, page: 1, limit: 10, totalPages: 0 },
+            filterCol: "id",
+            filterVal: "",
+            filterOp: "",
+            filterBias: 0
+        });
+
+        const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+        vi.stubGlobal("fetch", vi.fn(() => Promise.resolve({ ok: false })));
+
+        renderPage();
+        fireEvent.click(screen.getByText("projects.analysis.tabs.history"));
+        
+        await act(async () => {
+            fireEvent.click(screen.getByText("download-pdf"));
+        });
+
+        await waitFor(() => {
+            expect(consoleSpy).toHaveBeenCalledWith("Error downloading PDF:", expect.any(Error));
+        });
+        
+        consoleSpy.mockRestore();
+        vi.unstubAllGlobals();
     });
 
     it("closes the analysis report modal", () => {
