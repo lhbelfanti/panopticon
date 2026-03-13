@@ -57,8 +57,6 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 
 export default function ProjectDetailsPage() {
   const { project } = useOutletContext<ProjectContext>();
-  const rootData = useRouteLoaderData("root") as { behaviorConfigs: any[] };
-  const behaviorConfigs = rootData?.behaviorConfigs || [];
   const { t } = useTranslation();
   const navigation = useNavigation();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -70,7 +68,7 @@ export default function ProjectDetailsPage() {
       <div className="max-w-4xl mx-auto flex flex-col gap-6">
         <BackButton to="/" text={t("sidebar.home")} />
 
-        <ProjectDetailsHeader project={project} behaviorConfigs={behaviorConfigs} />
+        <ProjectDetailsHeader project={project} />
 
         <hr className="border-white/5 animate-in fade-in duration-700" />
 

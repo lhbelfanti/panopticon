@@ -132,43 +132,31 @@ export const BEHAVIOR_CONFIGS: BehaviorConfig[] = [
     id: "illicit_drugs",
     enabled: true,
     availableModels: ["bert_spanish", "llama3_zero_shot"],
-    color: "red",
-    iconName: "Pill",
   },
   {
     id: "hate_speech",
     enabled: true,
     availableModels: ["bert_spanish", "roberta_english", "svm_baseline"],
-    color: "orange",
-    iconName: "MessageSquareWarning",
   },
   {
     id: "cyberbullying",
     enabled: true,
     availableModels: ["roberta_english", "llama3_zero_shot"],
-    color: "purple",
-    iconName: "UserMinus",
   },
   {
     id: "sexism",
     enabled: false,
     availableModels: [],
-    color: "pink",
-    iconName: "Scale",
   },
   {
     id: "suicidal_ideation_depression",
     enabled: true,
     availableModels: ["bert_spanish", "llama3_zero_shot", "svm_baseline"],
-    color: "blue",
-    iconName: "HeartCrack",
   },
   {
     id: "eating_disorders",
     enabled: false,
     availableModels: [],
-    color: "teal",
-    iconName: "UtensilsCrossed",
   },
 ];
 

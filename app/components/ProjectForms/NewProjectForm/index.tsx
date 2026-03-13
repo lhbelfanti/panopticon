@@ -3,8 +3,7 @@ import { Form } from "react-router";
 import { Trans, useTranslation } from "react-i18next";
 import { AdverseBehaviorLabel } from "~/components/AdverseBehaviorLabel";
 import { CustomCheckbox } from "~/components/ui/CustomCheckbox";
-import * as LucideIcons from "lucide-react";
-import { getBehaviorClasses } from "~/utils/behaviorColors";
+import { getBehaviorStyles } from "~/utils/behaviorStyles";
 import type { NewProjectFormProps } from "./types";
 
 export const NewProjectForm = (props: NewProjectFormProps) => {
@@ -120,8 +119,7 @@ export const NewProjectForm = (props: NewProjectFormProps) => {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {behaviorConfigs.map((config) => {
-            const IconComponent =
-              (LucideIcons as any)[config.iconName] || LucideIcons.Circle;
+            const { icon: IconComponent, text: colorText, bg: colorBg } = getBehaviorStyles(config.id);
             const isEnabled = config.enabled;
             const isSelected = selectedBehaviors.includes(config.id);
             const isInitiallySelected = initialData?.behaviors.includes(config.id);
@@ -143,8 +141,6 @@ export const NewProjectForm = (props: NewProjectFormProps) => {
             } else if (!isCompatibleWithModels && !isSelected) {
               notAvailableText = t("projects.new.incompatibleWithModels");
             }
-
-            const { text: colorText, bg: colorBg } = getBehaviorClasses(config.color);
 
             return (
               <CustomCheckbox

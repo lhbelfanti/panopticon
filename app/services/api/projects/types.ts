@@ -15,8 +15,6 @@ export interface BehaviorConfig {
   id: TargetBehavior;
   enabled: boolean;
   availableModels: MLModel[];
-  color: string;
-  iconName: string;
 }
 
 export interface Subproject {

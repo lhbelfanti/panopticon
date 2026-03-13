@@ -1,14 +1,13 @@
 import React from "react";
 import { Link } from "react-router";
 import { Folder, Settings } from "lucide-react";
-import * as LucideIcons from "lucide-react";
 import { Trans, useTranslation } from "react-i18next";
 import { AdverseBehaviorLabel } from "~/components/AdverseBehaviorLabel";
-import { getBehaviorClasses } from "~/utils/behaviorColors";
+import { getBehaviorStyles } from "~/utils/behaviorStyles";
 import type { ProjectDetailsHeaderProps } from "./types";
 
 export const ProjectDetailsHeader = (props: ProjectDetailsHeaderProps) => {
-    const { project, behaviorConfigs } = props;
+    const { project } = props;
     const { t } = useTranslation();
 
     return (
@@ -38,12 +37,8 @@ export const ProjectDetailsHeader = (props: ProjectDetailsHeaderProps) => {
                             <Trans i18nKey="projects.view.behaviorsTracked" components={{ 1: <AdverseBehaviorLabel /> }} />
                         </span>
                         <div className="flex flex-wrap gap-2">
-                            {project.behaviors?.map((b: string) => {
-                                const config = behaviorConfigs.find((c: any) => c.id === b);
-                                if (!config) return null;
-                                const IconNode =
-                                    (LucideIcons as any)[config.iconName] || LucideIcons.Circle;
-                                const { text: colorText, bg: colorBg } = getBehaviorClasses(config.color);
+                            {project.behaviors?.map((b: any) => {
+                                const { icon: IconNode, text: colorText, bg: colorBg } = getBehaviorStyles(b);
 
                                 return (
                                     <div
