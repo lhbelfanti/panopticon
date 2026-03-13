@@ -19,15 +19,10 @@ describe("ProjectDetailsHeader", () => {
     };
 
     it("renders project details correctly", () => {
-        const mockConfigs = [
-            { id: "toxic", color: "red", iconName: "AlertCircle" },
-            { id: "hate", color: "orange", iconName: "Shield" },
-        ];
         render(
             <BrowserRouter>
                 <ProjectDetailsHeader 
                     project={mockProject as any} 
-                    behaviorConfigs={mockConfigs as any} 
                 />
             </BrowserRouter>
         );
