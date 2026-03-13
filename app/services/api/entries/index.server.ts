@@ -120,9 +120,16 @@ export const getEntries = async (
   const end = start + limit;
   const entries = filtered.slice(start, end);
 
+  // Absolute total in the dataset (unfiltered)
+  const datasetTotal = entriesStore[storeKey].length;
+  // Total pending entries in the dataset (unfiltered)
+  const totalPending = entriesStore[storeKey].filter((e) => e.verdict === "Pending").length;
+
   return {
     entries,
     total,
+    datasetTotal,
+    totalPending,
     page,
     limit,
     totalPages,
@@ -234,6 +241,59 @@ export const predictPendingEntries = async (
 
   return count;
 };
+
+export const getPendingCount = async (
+  projectId: number,
+  modelId: string,
+): Promise<number> => {
+  const storeKey = `${projectId}_${modelId}`;
+  if (!entriesStore[storeKey]) return 0;
+  return entriesStore[storeKey].filter((e) => e.verdict === "Pending").length;
+};
+
+export const predictSelectedEntries = async (
+  projectId: number,
+  modelId: string,
+  entryIds: string[],
+): Promise<number> => {
+  await delay(1500);
+  const storeKey = `${projectId}_${modelId}`;
+  if (!entriesStore[storeKey]) return 0;
+
+  let count = 0;
+  const idSet = new Set(entryIds);
+
+  entriesStore[storeKey] = entriesStore[storeKey].map((e) => {
+    if (e.verdict === "Pending" && idSet.has(e.id)) {
+      count++;
+      return {
+        ...e,
+        verdict: "In Progress" as Entry["verdict"],
+        score: undefined,
+      };
+    }
+    return e;
+  });
+
+  if (count > 0) {
+    if (!predictionStore[storeKey]) predictionStore[storeKey] = [];
+    const runId = `run_${Date.now()}`;
+    const run = {
+      id: runId,
+      projectId,
+      modelId,
+      totalEntries: count,
+      processedEntries: 0,
+      status: "Running" as const,
+      createdAt: new Date().toISOString(),
+    };
+    predictionStore[storeKey] = [run, ...predictionStore[storeKey]];
+    simulatePredictionProgress(storeKey, runId, count);
+  }
+
+  return count;
+};
+
 export const addEntriesToProject = async (
   projectId: number,
   modelIds: string[],

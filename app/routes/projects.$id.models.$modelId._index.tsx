@@ -5,7 +5,9 @@ import { useTranslation } from "react-i18next";
 import {
   deleteEntry,
   getEntries,
+  getPendingCount,
   predictPendingEntries,
+  predictSelectedEntries,
 } from "~/services/api/entries/index.server";
 
 import EntriesTable from "~/components/EntriesTable";
@@ -41,6 +43,22 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
   if (intent === "predict_pending") {
     const count = await predictPendingEntries(parseInt(id), modelId);
     return { success: true, count };
+  }
+
+  if (intent === "predict_selected") {
+    const entryIdsStr = formData.get("entryIds");
+    if (typeof entryIdsStr === "string") {
+      const entryIds = JSON.parse(entryIdsStr) as string[];
+      const totalPending = await getPendingCount(parseInt(id), modelId);
+
+      let count = 0;
+      if (entryIds.length === totalPending) {
+        count = await predictPendingEntries(parseInt(id), modelId);
+      } else {
+        count = await predictSelectedEntries(parseInt(id), modelId, entryIds);
+      }
+      return { success: true, count };
+    }
   }
 
   return null;

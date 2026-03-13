@@ -37,7 +37,9 @@ export interface GetEntriesParams {
 
 export interface PaginatedEntries {
   entries: Entry[];
-  total: number;
+  total: number; // This is the filtered total
+  datasetTotal: number; // This is the absolute total in the dataset
+  totalPending: number;
   page: number;
   limit: number;
   totalPages: number;
